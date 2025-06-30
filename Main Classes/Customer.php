@@ -9,6 +9,8 @@ class Customer extends User{
     }
 
     
+
+    
     public function getAllCustomers()
     {
         try {
