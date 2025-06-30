@@ -1,5 +1,3 @@
-
-
 <?php
 include_once 'Main Classes/User.php';
 

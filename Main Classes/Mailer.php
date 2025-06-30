@@ -1,5 +1,3 @@
-
-
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -27,7 +25,7 @@ class Mailer {
         //ilergdrkkdycocoh - madhan password
 
         
-        $this->mail->setFrom('madhan2001ana@gmail.com', 'QuickMatch');
+        $this->mail->setFrom('madhan2001ana@gmail.com', 'GearSphere');
     }
 
     // Set email subject and message
