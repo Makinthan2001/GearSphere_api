@@ -173,39 +173,43 @@ public function registertechnician($name, $email, $password, $contact_number, $a
     $this->specialization = $specialization;
     $this->experience = $experience;
     $this->cv_path = $cv_path;
-    
+
     if ($this->isAlreadyExists()) {
-        // Optionally: throw error or log that user exists
-        // Just returning false here means frontend will show generic message
         return false;
     }
 
     try {
-        $sql = "INSERT INTO users (name, email, password, contact_number, address, user_type, proof, specialization, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(1, $this->name);
-        $stmt->bindParam(2, $this->email);
-        $stmt->bindParam(3, $this->password);
-        $stmt->bindParam(4, $this->contact_number);
-        $stmt->bindParam(5, $this->address);
-        $stmt->bindParam(6, $this->user_type); 
-        $stmt->bindParam(7, $this->cv_path);
-        $stmt->bindParam(8, $this->specialization);
-        $stmt->bindParam(9, $this->experience);
-        $rs = $stmt->execute();
+        // Step 1: Insert into `users` table
+        $sqlUser = "INSERT INTO users (name, email, password, contact_number, address, user_type) 
+                    VALUES (?, ?, ?, ?, ?, ?)";
+        $stmtUser = $this->pdo->prepare($sqlUser);
+        $stmtUser->bindParam(1, $this->name);
+        $stmtUser->bindParam(2, $this->email);
+        $stmtUser->bindParam(3, $this->password);
+        $stmtUser->bindParam(4, $this->contact_number);
+        $stmtUser->bindParam(5, $this->address);
+        $stmtUser->bindParam(6, $this->user_type);
+        $stmtUser->execute();
 
-        if ($rs) {
-            return true;
-        }
-        return false;
+        // Step 2: Get the last inserted user ID
+        $user_id = $this->pdo->lastInsertId();
+
+        // Step 3: Insert into `technician` table
+        $sqlTech = "INSERT INTO technician (user_id, proof, specialization, experience) 
+                    VALUES (?, ?, ?, ?)";
+        $stmtTech = $this->pdo->prepare($sqlTech);
+        $stmtTech->bindParam(1, $user_id);
+        $stmtTech->bindParam(2, $this->cv_path);
+        $stmtTech->bindParam(3, $this->specialization);
+        $stmtTech->bindParam(4, $this->experience);
+        $stmtTech->execute();
+
+        return true;
     } catch (PDOException $e) {
-        // Log error to PHP error log for debugging
-        error_log("PDOException in registerUser: " . $e->getMessage());
-        // Return false after catching exception
+        error_log("PDOException in registertechnician: " . $e->getMessage());
         return false;
     }
 }
-
 
 
     // public function getTotalCount($user_type)
