@@ -26,24 +26,24 @@ abstract class User
         $this->pdo = $db->connect();
     }
 
-    // public function isAlreadyExists()
-    // {
-    //     $query = "SELECT email FROM users WHERE email = :email";
-    //     $stmt = $this->pdo->prepare($query);
-    //     $stmt->bindParam(":email", $this->email);
-    //     $stmt->execute();
-    //     return $stmt->rowCount() > 0;
-    // }
-
     public function isAlreadyExists()
-{
-    $query = "SELECT email FROM users WHERE email = :email AND user_type = :user_type";
-    $stmt = $this->pdo->prepare($query);
-    $stmt->bindParam(":email", $this->email);
-    $stmt->bindParam(":user_type", $this->user_type);
-    $stmt->execute();
-    return $stmt->rowCount() > 0;
-}
+    {
+        $query = "SELECT email FROM users WHERE email = :email";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+//     public function isAlreadyExists()
+// {
+//     $query = "SELECT email FROM users WHERE email = :email AND user_type = :user_type";
+//     $stmt = $this->pdo->prepare($query);
+//     $stmt->bindParam(":email", $this->email);
+//     $stmt->bindParam(":user_type", $this->user_type);
+//     $stmt->execute();
+//     return $stmt->rowCount() > 0;
+// }
 
 
     public function checkEmailExists($email)
