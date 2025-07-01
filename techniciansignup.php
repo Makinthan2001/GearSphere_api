@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require_once './Main Classes/technician.php';
+require_once './Main Classes/Technician.php';
 
 $name = isset($_POST['name']) ? htmlspecialchars(strip_tags($_POST['name'])) : null;
 $email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_SANITIZE_EMAIL) : null;

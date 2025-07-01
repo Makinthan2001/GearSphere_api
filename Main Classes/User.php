@@ -62,46 +62,58 @@ abstract class User
 }
 
 
-    // public function login($email, $password)
-    // {
-    //     $this->email = $email;
-    //     $this->password = $password;
-    //     try {
-    //         $sql = "SELECT id, password, user_type, disable_status FROM users WHERE email = ?";
-    //         $stmt = $this->pdo->prepare($sql);
-    //         $stmt->bindParam(1, $this->email);
-    //         $stmt->execute();
-    //         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    //         if ($user && password_verify($this->password, $user['password'])) {
-    //             if ($user['disable_status'] === 'disabled') {
-    //                 return ['success' => false, 'message' => 'Your account has been disabled. Please contact support.'];
-    //             }
-    //             $this->user_id = $user['id'];
-    //             $this->user_type = $user['user_type'];
-    //             return ['user_type' => $this->user_type, 'user_id' => $this->user_id, 'success' => true, 'message' => 'Login Successful...'];
-    //         }
-    //         return ["success" => false, "message" => "Incorrect email or password..."];
-    //     } catch (PDOException $e) {
-    //         http_response_code(500);
-    //         echo json_encode(["message" => "Failed to login. " . $e->getMessage()]);
-    //     }
-    // }
+     public function login($email, $password)
+    {
+        $this->email = $email;
+        $this->password = $password;
+        try {
+            $sql = "SELECT user_id, password, user_type, disable_status FROM users WHERE email = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(1, $this->email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($user && password_verify($this->password, $user['password'])) {
+                if ($user['disable_status'] === 'disabled') {
+                    return ['success' => false, 'message' => 'Your account has been disabled. Please contact support.'];
+                }
+                $this->user_id = $user['user_id'];
+                $this->user_type = $user['user_type'];
+                return ['user_type' => $this->user_type, 'user_id' => $this->user_id, 'success' => true, 'message' => 'Login Successful...'];
+            }
+            return ["success" => false, "message" => "Incorrect email or password..."];
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to login. " . $e->getMessage()]);
+        }
+    }
 
-    // public function forgotPassword($email, $password)
-    // {
-    //     $this->email = $email;
-    //     $this->password = $password;
-    //     try {
-    //         $sql = "UPDATE users SET password = :password WHERE email = :email";
-    //         $stmt = $this->pdo->prepare($sql);
-    //         $stmt->bindParam(':password', $this->password);
-    //         $stmt->bindParam(':email', $this->email);
-    //         return $stmt->execute();
-    //     } catch (PDOException $e) {
-    //         http_response_code(500);
-    //         echo json_encode(["message" => "Failed to change password. " . $e->getMessage()]);
-    //     }
-    // }
+    public function forgotPassword($email, $password){
+        $this->email = $email;
+        $this->password = $password;
+        try {
+            $sql = "UPDATE users SET password = :password WHERE email = :email";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':password', $this->password);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->execute();
+    
+            error_log("Rows affected: " . $stmt->rowCount());
+    
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                error_log("No rows updated - email may not exist or password unchanged");
+                return false;
+            }
+        } catch (PDOException $e) {
+            error_log("Password reset error: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to change password. " . $e->getMessage()]);
+            return false;
+        }
+    }
+    
+    
 
     // public function registerUser($name, $email, $password, $contact_number, $address)
     // {
@@ -221,6 +233,42 @@ public function registertechnician($name, $email, $password, $contact_number, $a
         return false;
     }
 }
+
+// public function updateDetails($user_id, $username, $name, $phone, $address, $profile_image)
+// {
+//     $this->user_id = $user_id;
+//     $this->name = $name;
+//     $this->phone = $phone;
+//     $this->address = $address;
+//     $this->profile_image = $profile_image;
+
+//     try {
+//         if ($this->profile_image) {
+//             $sql = "UPDATE user SET name = :name,  phone = :phone, address = :address, profile_image = :profile_image WHERE user_id = :user_id";
+//             $stmt = $this->pdo->prepare($sql);
+//             $stmt->execute([
+//                 'name' => $this->name,
+//                 'phone' => $this->phone,
+//                 'address' => $this->address,
+//                 'profile_image' => $this->profile_image,
+//                 'user_id' => $this->user_id,
+//             ]);
+//         } else {
+//             $sql = "UPDATE user SET name = :name,  phone = :phone, address = :address WHERE user_id = :user_id";
+//             $stmt = $this->pdo->prepare($sql);
+//             $stmt->execute([
+//                 'name' => $this->name,
+//                 'phone' => $this->phone,
+//                 'address' => $this->address,
+//                 'user_id' => $this->user_id,
+//             ]);
+//         }
+//         return ['success' => true];
+//     } catch (PDOException $e) {
+//         http_response_code(500);
+//         return ['success' => false, 'message' => $e->getMessage()];
+//     }
+// }
 
 
     // public function getTotalCount($user_type)
