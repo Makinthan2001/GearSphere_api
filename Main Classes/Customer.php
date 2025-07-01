@@ -1,5 +1,3 @@
-
-
 <?php
 include_once 'Main Classes/User.php';
 
@@ -9,6 +7,8 @@ class Customer extends User{
     {
         parent::__construct();
     }
+
+    
 
     
     public function getAllCustomers()

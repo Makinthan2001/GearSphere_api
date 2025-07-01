@@ -1,16 +1,11 @@
-
-
 <?php
-/**
-	* Database Connection
-	*/
 
     class DBConnector {
         private $host = 'localhost';
         private $db = 'gearsphere';
         private $user = 'root';
         private $pass = '';
-        //private $charset = 'utf8mb4'; charset=$this->charset
+        
         private $pdo;
         
         public function connect() {

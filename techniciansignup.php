@@ -1,6 +1,4 @@
-
 <?php
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -10,68 +8,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-require_once './Main Classes/Verification.php';
-require_once './Main Classes/Technician.php';
-require_once './Main Classes/Mailer.php';
+require_once './Main Classes/technician.php';
 
-$data = json_decode(file_get_contents("php://input"));
+$name = isset($_POST['name']) ? htmlspecialchars(strip_tags($_POST['name'])) : null;
+$email = isset($_POST['email']) ? filter_var($_POST['email'], FILTER_SANITIZE_EMAIL) : null;
+$password = isset($_POST['password']) ? $_POST['password'] : null;
+$contact_number = isset($_POST['contact_number']) ? htmlspecialchars(strip_tags($_POST['contact_number'])) : null;
+$address = isset($_POST['address']) ? htmlspecialchars(strip_tags($_POST['address'])) : null;
+$user_type = isset($_POST['userType']) ? $_POST['userType'] : 'customer';
+$specialization = isset($_POST['specialization']) ? htmlspecialchars(strip_tags($_POST['specialization'])) : null;
+$experience = isset($_POST['experience']) ? htmlspecialchars(strip_tags($_POST['experience'])) : null;
+$file = isset($_FILES['cv']) ? $_FILES['cv'] : null;
 
-if ($data === null) {
-    echo json_encode(["success" => false, "message" => "No data received."]);
+if (!$name || !$email || !$password || !$contact_number || !$address ) {
+    http_response_code(400);
+    echo json_encode(["message" => "All fields are required."]);
     exit();
 }
 
-if (isset($data->verify_id)) {
-    $verify_id = $data->verify_id;
-
-    $getVerifyDetail = new Verification();
-    $verificationDetails = $getVerifyDetail->verifyTechnician($verify_id); // Use the correct method name
-
-    if ($verificationDetails) {
-        $verify_id = $verificationDetails['verify_id'];
-        $name = $verificationDetails['provider_name'];
-        $username = $verificationDetails['provider_username'];
-        $email = $verificationDetails['provider_email'];
-        $password = $verificationDetails['provider_password'];
-        $address = $verificationDetails['provider_address'];
-        $specialization = $verificationDetails['service_category'];
-
-        $technician = new Technician();
-
-        $result = $technician->registerTechnician(
-            $name,
-            $email,
-            $password,
-            $username,
-            $address,
-            $verify_id,
-            $specialization
-        );
-
-        if ($result['success']) {
-            $mailer = new Mailer();
-            $mailer->setInfo(
-                $email,
-                'Technician Account Verified',
-                "Dear Technician,<br>Your account has been successfully verified by the admin.<br>You may now log in and offer your services on GearSphere.<br><br>For support, contact support@gearsphere.com."
-            );
-            if ($mailer->send()) {
-                http_response_code(200);
-                echo json_encode(["success" => true, "message" => "Technician has been successfully verified and notified."]);
-            } else {
-                http_response_code(500);
-                echo json_encode(["success" => false, "message" => "Technician registered but email failed to send."]);
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(["success" => false, "message" => $result['message']]);
-        }
-    } else {
-        http_response_code(404);
-        echo json_encode(["success" => false, "message" => "No verification record found for the given ID."]);
-    }
-} else {
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
-    echo json_encode(["success" => false, "message" => "verify_id is required."]);
+    echo json_encode(["message" => "Invalid email format."]);
+    exit();
 }
 
+// Upload file
+$targetDir = "verifypdfs/";
+if (!is_dir($targetDir)) {
+    mkdir($targetDir, 0777, true);
+}
+$uniqueFileName = uniqid() . "_" . basename($file["name"]);
+$targetFile = $targetDir . $uniqueFileName;
+
+if (!move_uploaded_file($file["tmp_name"], $targetFile)) {
+    http_response_code(500);
+    echo json_encode(["message" => "Failed to upload CV."]);
+    exit();
+}
+
+// Hash password
+$hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+// Call technician register
+$TechnicianRegister = new technician();
+$result = $TechnicianRegister->registertechnician(
+    $name,
+    $email,
+    $hashed_password, // ✅ use hashed password
+    $contact_number,
+    $address,
+    $user_type = 'Technician',
+    $specialization,
+    $experience,
+    $uniqueFileName // ✅ just save filename (or full path if needed)
+);
+
+if ($result) {
+    http_response_code(200);
+    echo json_encode(["status" => "success", "message" => "Technician was successfully registered."]);
+} else {
+    http_response_code(400);
+    echo json_encode(["message" => "Unable to register the Technician."]);
+}

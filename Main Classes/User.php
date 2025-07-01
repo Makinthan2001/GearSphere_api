@@ -1,5 +1,3 @@
-
-
 <?php
 require_once 'DbConnector.php';
 
@@ -14,12 +12,13 @@ abstract class User
     protected $user_type;
     protected $status;
     protected $specialization;
-    protected $experience_years;
+    protected $experience;
     protected $hourly_rate;
     protected $cv_path;
     protected $disable_status;
     protected $pdo;
     protected $profile_image;
+    
 
     public function __construct()
     {
@@ -148,6 +147,51 @@ public function registerUser($name, $email, $password, $contact_number, $address
         $stmt->bindParam(4, $this->contact_number);
         $stmt->bindParam(5, $this->address);
         $stmt->bindParam(6, $this->user_type); 
+        $rs = $stmt->execute();
+
+        if ($rs) {
+            return true;
+        }
+        return false;
+    } catch (PDOException $e) {
+        // Log error to PHP error log for debugging
+        error_log("PDOException in registerUser: " . $e->getMessage());
+        // Return false after catching exception
+        return false;
+    }
+}
+
+
+public function registertechnician($name, $email, $password, $contact_number, $address, $user_type = 'Technician', $specialization, $experience, $cv_path)
+{
+    $this->name = $name;
+    $this->email = $email;
+    $this->password = $password;
+    $this->contact_number = $contact_number;
+    $this->address = $address;
+    $this->user_type = $user_type;
+    $this->specialization = $specialization;
+    $this->experience = $experience;
+    $this->cv_path = $cv_path;
+    
+    if ($this->isAlreadyExists()) {
+        // Optionally: throw error or log that user exists
+        // Just returning false here means frontend will show generic message
+        return false;
+    }
+
+    try {
+        $sql = "INSERT INTO users (name, email, password, contact_number, address, user_type, proof, specialization, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(1, $this->name);
+        $stmt->bindParam(2, $this->email);
+        $stmt->bindParam(3, $this->password);
+        $stmt->bindParam(4, $this->contact_number);
+        $stmt->bindParam(5, $this->address);
+        $stmt->bindParam(6, $this->user_type); 
+        $stmt->bindParam(7, $this->cv_path);
+        $stmt->bindParam(8, $this->specialization);
+        $stmt->bindParam(9, $this->experience);
         $rs = $stmt->execute();
 
         if ($rs) {
