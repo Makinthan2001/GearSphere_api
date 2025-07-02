@@ -234,6 +234,21 @@ public function registertechnician($name, $email, $password, $contact_number, $a
     }
 }
 
+public function disableUser($user_id, $disable_status)
+{
+    try {
+        $stmt = $this->pdo->prepare("UPDATE users SET disable_status = :disable_status WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':disable_status', $disable_status);
+        $stmt->execute();
+        return ['success' => true, 'message' => 'User status updated'];
+    } catch (PDOException $e) {
+        echo json_encode(["message" => "Failed to disable user. " . $e->getMessage()]);
+        return ['success' => false];
+    }
+}
+
+
 // public function updateDetails($user_id, $username, $name, $phone, $address, $profile_image)
 // {
 //     $this->user_id = $user_id;

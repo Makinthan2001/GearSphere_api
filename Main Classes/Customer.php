@@ -14,7 +14,7 @@ class Customer extends User{
     public function getAllCustomers()
     {
         try {
-            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_type = 'customer' ORDER BY id DESC");
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE user_type = 'customer' ORDER BY user_id DESC");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $users ?: []; // Returns empty array if no users found
