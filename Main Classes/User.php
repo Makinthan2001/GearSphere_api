@@ -248,6 +248,68 @@ public function disableUser($user_id, $disable_status)
     }
 }
 
+public function getDetails($user_id)
+    {
+        $this->user_id = $user_id;
+        try {
+            $sql = "SELECT * FROM user WHERE user_id = :user_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->execute();
+            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $customer;
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to retrieve customer details. " . $e->getMessage()]);
+            exit;
+        }
+    }
+
+
+    //ithu theve
+    // public function updateDetails($user_id, $username, $name, $phone, $address, $national_id, $profile_image)
+    // {
+    //     $this->user_id = $user_id;
+    //     $this->username = $username;
+    //     $this->name = $name;
+    //     $this->phone = $phone;
+    //     $this->address = $address;
+    //     $this->national_id = $national_id;
+    //     $this->profile_image = $profile_image;
+
+    //     try {
+    //         if ($this->profile_image) {
+    //             $sql = "UPDATE user SET name = :name, username = :username, phone = :phone, address = :address,national_id = :national_id, profile_image = :profile_image WHERE user_id = :user_id";
+    //             $stmt = $this->pdo->prepare($sql);
+    //             $stmt->execute([
+    //                 'name' => $this->name,
+    //                 'username' => $this->username,
+    //                 'phone' => $this->phone,
+    //                 'address' => $this->address,
+    //                 'profile_image' => $this->profile_image,
+    //                 'user_id' => $this->user_id,
+    //                 'national_id' => $this->national_id
+    //             ]);
+    //         } else {
+    //             $sql = "UPDATE user SET name = :name, username = :username, phone = :phone, address = :address, national_id = :national_id WHERE user_id = :user_id";
+    //             $stmt = $this->pdo->prepare($sql);
+    //             $stmt->execute([
+    //                 'name' => $this->name,
+    //                 'username' => $this->username,
+    //                 'phone' => $this->phone,
+    //                 'address' => $this->address,
+    //                 'user_id' => $this->user_id,
+    //                 'national_id' => $this->national_id
+    //             ]);
+    //         }
+    //         return ['success' => true];
+    //     } catch (PDOException $e) {
+    //         http_response_code(500);
+    //         return ['success' => false, 'message' => $e->getMessage()];
+    //     }
+    // }
+
 
 // public function updateDetails($user_id, $username, $name, $phone, $address, $profile_image)
 // {
