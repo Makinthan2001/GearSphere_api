@@ -78,7 +78,20 @@ abstract class User
                 }
                 $this->user_id = $user['user_id'];
                 $this->user_type = $user['user_type'];
-                return ['user_type' => $this->user_type, 'user_id' => $this->user_id, 'success' => true, 'message' => 'Login Successful...'];
+                $response = [
+                    'user_type' => $this->user_type,
+                    'user_id' => $this->user_id,
+                    'success' => true,
+                    'message' => 'Login Successful...'
+                ];
+                // If technician, fetch technician_id and add to response
+                if (strtolower($this->user_type) === 'technician') {
+                    require_once __DIR__ . '/Technician.php';
+                    $tech = new technician();
+                    $technician_id = $tech->getTechnicianId($this->user_id);
+                    $response['technician_id'] = $technician_id;
+                }
+                return $response;
             }
             return ["success" => false, "message" => "Incorrect email or password..."];
         } catch (PDOException $e) {
@@ -248,6 +261,75 @@ public function disableUser($user_id, $disable_status)
     }
 }
 
+public function updateDetails($user_id, $name, $contact_number, $address, $profile_image)
+    {
+        $this->user_id = $user_id;
+        $this->name = $name;
+        $this->contact_number = $contact_number;
+        $this->address = $address;
+        $this->profile_image = $profile_image;
+
+        try {
+            error_log('Updating user_id: ' . $this->user_id . ' with: ' . print_r([
+                'name' => $this->name,
+                'contact_number' => $this->contact_number,
+                'address' => $this->address,
+                'profile_image' => $this->profile_image
+            ], true));
+
+            if ($this->profile_image) {
+                $sql = "UPDATE users SET name = :name,  contact_number = :contact_number, address = :address, profile_image = :profile_image WHERE user_id = :user_id";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    'name' => $this->name,
+                    'contact_number' => $this->contact_number,
+                    'address' => $this->address,
+                    'profile_image' => $this->profile_image,
+                    'user_id' => $this->user_id,
+                ]);
+            } else {
+                $sql = "UPDATE users SET name = :name,  contact_number = :contact_number, address = :address WHERE user_id = :user_id";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    'name' => $this->name,
+                    'contact_number' => $this->contact_number,
+                    'address' => $this->address,
+                    'user_id' => $this->user_id,
+                ]);
+            }
+
+            if ($stmt->rowCount() > 0) {
+                error_log('Update successful for user_id: ' . $this->user_id);
+                return ['success' => true];
+            } else {
+                error_log('No rows updated for user_id: ' . $this->user_id);
+                return ['success' => false, 'message' => 'No rows updated'];
+            }
+        } catch (PDOException $e) {
+            http_response_code(500);
+            error_log('PDOException: ' . $e->getMessage());
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getDetails($user_id)
+    {
+        $this->user_id = $user_id;
+        try {
+            $sql = "SELECT * FROM users WHERE user_id = :user_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':user_id', $this->user_id);
+            $stmt->execute();
+            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $customer;
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to retrieve customer details. " . $e->getMessage()]);
+            exit;
+        }
+    }
+
 
 // public function updateDetails($user_id, $username, $name, $phone, $address, $profile_image)
 // {
@@ -345,4 +427,7 @@ public function disableUser($user_id, $disable_status)
     //         return false;
     //     }
     // }
+
+
+    
 }
