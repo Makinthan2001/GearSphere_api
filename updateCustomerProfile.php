@@ -42,7 +42,7 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLO
 
 $updateCustomerProfile = new Customer();
 
-$result = $updateCustomerProfile->updateDetails($user_id,$name,$contact_number,$address,$profile_image);
+$result = $updateCustomerProfile->updateDetails($user_id, $name, $contact_number, $address, $profile_image);
 
 if ($result) {
     http_response_code(200);

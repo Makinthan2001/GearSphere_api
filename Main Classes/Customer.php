@@ -1,16 +1,17 @@
 <?php
 include_once 'Main Classes/User.php';
 
-class Customer extends User{
+class Customer extends User
+{
 
     public function __construct()
     {
         parent::__construct();
     }
 
-    
 
-    
+
+
     public function getAllCustomers()
     {
         try {
@@ -23,5 +24,10 @@ class Customer extends User{
             echo json_encode(["message" => "Failed to fetch customers. " . $e->getMessage()]);
             exit;
         }
+    }
+
+    public function updateDetails($user_id, $name, $contact_number, $address, $profile_image)
+    {
+        return parent::updateDetails($user_id, $name, $contact_number, $address, $profile_image);
     }
 }
