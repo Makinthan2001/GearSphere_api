@@ -60,39 +60,24 @@ class technician extends User{
         }
     }
 
-   
-    // public function getAllTechnicians() {
-    //     try {
-    //         $stmt = $this->pdo->prepare("SELECT
-    //         user.user_id,
-    //         user.name,
-    //         user.username,
-    //         user.email,
-    //         user.contact_number,
-    //         user.user_type,
-    //         user.address,
-    //         user.disable_status,
-    //         user.national_id,
-    //         user.profile_image,
-    //         technician.technician_id AS technician_id,
-    //         technician.experience AS experience,
-    //         technician.charge_per_day AS charge,
-    //         technician.specialization AS specialization,
-    //         technician.status AS status,
-    //         service.service_name AS service_category
-    //       FROM user 
-    //       INNER JOIN provider ON user.user_id = provider.user_id
-    //       INNER JOIN service ON provider.service_category_id = service.service_category_id
-    //       WHERE user.user_type = 'provider' ORDER BY user.user_id DESC");
-    //         $stmt->execute();
-    //         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         return $users;
-    //     } catch (PDOException $e) {
-    //         http_response_code(500);
-    //         echo json_encode(["message" => "Failed to fetch providers. " . $e->getMessage()]);
-    //         exit;
-    //     }
-    // }
+    public function getAllTechnicians() {
+        try {
+            $stmt = $this->pdo->prepare("SELECT u.*, t.proof, t.charge_per_day, t.specialization, t.experience FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // Ensure every technician has a profile_image value
+            foreach ($users as &$user) {
+                if (empty($user['profile_image'])) {
+                    $user['profile_image'] = 'user_image.jpg'; // default image
+                }
+            }
+            return $users ?: [];
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to fetch technicians. " . $e->getMessage()]);
+            exit;
+        }
+    }
 
     public function updateTechnicianDetails($user_id, $name, $contact_number, $address, $profile_image, $technician_id, $experience, $specialization, $charge_per_day)
     {
