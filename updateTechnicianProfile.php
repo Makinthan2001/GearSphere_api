@@ -23,7 +23,7 @@ $contact_number = isset($_POST['contact_number']) ? htmlspecialchars(strip_tags(
 $address = isset($_POST['address']) ? htmlspecialchars(strip_tags($_POST['address'])) : null;
 $experience = isset($_POST['experience']) ? htmlspecialchars(strip_tags($_POST['experience'])) : null;
 $specialization = isset($_POST['specialization']) ? htmlspecialchars(strip_tags($_POST['specialization'])) : null;
-$charge_per_day = isset($_POST['chargesPerDay']) ? htmlspecialchars(strip_tags($_POST['chargesPerDay'])) : null;
+$charge_per_day = isset($_POST['charge_per_day']) ? htmlspecialchars(strip_tags($_POST['charge_per_day'])) : null;
 $profile_image = null;
 
 if (empty($user_id) || empty($technician_id)) {
@@ -94,4 +94,5 @@ $updateTechnicianProfile = new Technician();
         http_response_code(500);
         echo json_encode(["success" => false, "message" => "Failed to update profile."]);
     }
+    
 }

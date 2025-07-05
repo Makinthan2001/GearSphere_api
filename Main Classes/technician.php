@@ -94,34 +94,56 @@ class technician extends User{
     //     }
     // }
 
-    public function updateTechnicianDetails($user_id, $name, $contact_number, $address, $profile_image, $technician_id, $experience, $specialization, $charge_per_day)
-    {
+    public function updateTechnicianDetails(
+        $user_id,
+        $name,
+        $contact_number,
+        $address,
+        $profile_image,
+        $technician_id,
+        $experience,
+        $specialization,
+        $charge_per_day
+    ) {
         parent::updateDetails($user_id, $name, $contact_number, $address, $profile_image);
-
+    
         $this->technician_id = $technician_id;
         $this->specialization = $specialization;
         $this->experience = $experience;
-        $this->charge_per_day = $charge_per_day;
+        $this->charge_per_day = floatval($charge_per_day); // cast to float
+    
+        error_log("Updating technician_id {$this->technician_id} with charge_per_day: {$this->charge_per_day}");
+    
         try {
-            $sql = "UPDATE technician SET specialization = :specialization, experience = :experience, charge_per_day = :charge_per_day WHERE technician_id = :technician_id";
+            $sql = "UPDATE technician SET specialization = :specialization, experience = :experience, charge_per_day = :charge_per_day WHERE technician_id = :technician_id AND user_id = :user_id";
+    
             $stmt = $this->pdo->prepare($sql);
-            $rs = $stmt->execute([
+    
+            $params = [
                 'specialization' => $this->specialization,
                 'experience' => $this->experience,
                 'charge_per_day' => $this->charge_per_day,
                 'technician_id' => $this->technician_id,
-            ]);
-
+                'user_id' => $user_id,
+            ];
+    
+            $rs = $stmt->execute($params);
+    
             if ($rs) {
+                error_log("Update succeeded.");
                 return ['success' => true];
             } else {
+                error_log("Update failed.");
                 return ['success' => false];
             }
         } catch (PDOException $e) {
+            error_log("PDOException: " . $e->getMessage());
             http_response_code(500);
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
+    
+    
 
 }
 

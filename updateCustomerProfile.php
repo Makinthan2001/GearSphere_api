@@ -14,10 +14,8 @@ require_once './Main Classes/Customer.php';
 
 $user_id = $_POST['user_id'];
 $name = isset($_POST['name']) ? htmlspecialchars(strip_tags($_POST['name'])) : null;
-$username = isset($_POST['username']) ? htmlspecialchars(strip_tags($_POST['username'])) : null;
-$phone = isset($_POST['contactNumber']) ? htmlspecialchars(strip_tags($_POST['contactNumber'])) : null;
-$address = isset($_POST['location']) ? htmlspecialchars(strip_tags($_POST['location'])) : null;
-$national_id = isset($_POST['nationalId']) ? htmlspecialchars(strip_tags($_POST['nationalId'])) : null;
+$contact_number = isset($_POST['contact_number']) ? htmlspecialchars(strip_tags($_POST['contact_number'])) : null;
+$address = isset($_POST['address']) ? htmlspecialchars(strip_tags($_POST['address'])) : null;
 $profile_image = null;
 
 if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLOAD_ERR_OK) {
@@ -44,7 +42,7 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == UPLO
 
 $updateCustomerProfile = new Customer();
 
-$result = $updateCustomerProfile->updateDetails($user_id,$username,$name,$phone,$address,$national_id,$profile_image);
+$result = $updateCustomerProfile->updateDetails($user_id,$name,$contact_number,$address,$profile_image);
 
 if ($result) {
     http_response_code(200);
