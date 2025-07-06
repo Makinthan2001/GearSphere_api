@@ -18,6 +18,7 @@ abstract class User
     protected $disable_status;
     protected $pdo;
     protected $profile_image;
+    
 
 
     public function __construct()
