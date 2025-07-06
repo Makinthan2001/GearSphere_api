@@ -1,12 +1,16 @@
 <?php
 include_once 'Main Classes/User.php';
-class technician extends User{
-
+class technician extends User
+{
+    private $technician_id;
+    private $charge_per_day;
+    
     public function __construct()
     {
         parent::__construct();
     }
-    public function getTechnicianId($user_id) {
+    public function getTechnicianId($user_id)
+    {
         $this->user_id = $user_id;
         try {
             $sql = "SELECT technician_id FROM provider WHERE user_id = :user_id";
@@ -26,7 +30,7 @@ class technician extends User{
         }
     }
 
-     public function getTechnicianDetails($user_id)
+    public function getTechnicianDetails($user_id)
     {
         try {
             $userDetails = parent::getDetails($user_id);
@@ -45,10 +49,11 @@ class technician extends User{
             return ['error' => 'An error occurred while fetching data: ' . $e->getMessage()];
         }
     }
-    public function setStatus($technician_id,$status) {
-         $this->technician_id = $technician_id;
-         $this->status = $status;
-         try {
+    public function setStatus($technician_id, $status)
+    {
+        $this->technician_id = $technician_id;
+        $this->status = $status;
+        try {
             $sql = "UPDATE technician SET status = :status WHERE technician_id = :technician_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":technician_id", $this->technician_id);
@@ -60,7 +65,8 @@ class technician extends User{
         }
     }
 
-    public function getAllTechnicians() {
+    public function getAllTechnicians()
+    {
         try {
             $stmt = $this->pdo->prepare("SELECT u.*, t.proof, t.charge_per_day, t.specialization, t.experience FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
             $stmt->execute();
@@ -86,34 +92,39 @@ class technician extends User{
         $address,
         $profile_image,
         $technician_id,
-        $experience,
-        $specialization,
+        // $experience,
+        // $specialization,
         $charge_per_day
     ) {
         parent::updateDetails($user_id, $name, $contact_number, $address, $profile_image);
-    
+
         $this->technician_id = $technician_id;
-        $this->specialization = $specialization;
-        $this->experience = $experience;
-        $this->charge_per_day = floatval($charge_per_day); // cast to float
-    
+        // $this->specialization = $specialization;
+        // $this->experience = $experience;
+        $this->charge_per_day = $charge_per_day; // cast to float
+
         error_log("Updating technician_id {$this->technician_id} with charge_per_day: {$this->charge_per_day}");
-    
+
         try {
-            $sql = "UPDATE technician SET specialization = :specialization, experience = :experience, charge_per_day = :charge_per_day WHERE technician_id = :technician_id AND user_id = :user_id";
-    
+            $sql = "UPDATE technician SET charge_per_day = :charge_per_day WHERE  technician_id = :technician_id";
+
             $stmt = $this->pdo->prepare($sql);
-    
-            $params = [
-                'specialization' => $this->specialization,
-                'experience' => $this->experience,
+
+            // $params = [
+            //     // 'specialization' => $this->specialization,
+            //     // 'experience' => $this->experience,
+            //     'charge_per_day' => $this->charge_per_day,
+            //     'technician_id' => $this->technician_id,
+            //     'user_id' => $user_id,
+            // ];
+
+            $rs = $stmt->execute([
                 'charge_per_day' => $this->charge_per_day,
                 'technician_id' => $this->technician_id,
-                'user_id' => $user_id,
-            ];
-    
-            $rs = $stmt->execute($params);
-    
+            ]);
+
+            //$rs = $stmt->execute($params);
+
             if ($rs) {
                 error_log("Update succeeded.");
                 return ['success' => true];
@@ -127,9 +138,6 @@ class technician extends User{
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
-    
-    
-
 }
 
 
