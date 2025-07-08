@@ -38,6 +38,16 @@ class ProductManager {
                 }
             }
             
+            // Calculate new status based on stock
+            $newStock = isset($data['stock']) ? (int)$data['stock'] : 0;
+            if ($newStock === 0) {
+                $newStatus = 'Out of Stock';
+            } elseif ($newStock <= 5) {
+                $newStatus = 'Low Stock';
+            } else {
+                $newStatus = 'In Stock';
+            }
+            
             // Update products table
             $sql = "UPDATE products SET 
                     name = :name, 
@@ -70,6 +80,14 @@ class ProductManager {
             
             // Update specific product table
             $this->updateProductSpecific($data, $productId);
+            
+            // Always recalculate and update status after stock update
+            $statusSql = "UPDATE products SET status = :status WHERE product_id = :product_id";
+            $statusStmt = $this->db->prepare($statusSql);
+            $statusStmt->execute([
+                ':status' => $newStatus,
+                ':product_id' => $productId
+            ]);
             
             $this->db->commit();
             
@@ -351,6 +369,19 @@ class ProductManager {
 }
 
 // Handle the request
+if (isset($_GET['fix_all_statuses']) && $_GET['fix_all_statuses'] === '1') {
+    // Batch-fix all product statuses based on current stock
+    require_once 'DbConnector.php';
+    $db = (new DBConnector())->connect();
+    $sql = "UPDATE products SET status = CASE WHEN stock = 0 THEN 'Out of Stock' WHEN stock <= 5 THEN 'Low Stock' ELSE 'In Stock' END";
+    $result = $db->prepare($sql)->execute();
+    if ($result) {
+        echo json_encode(['success' => true, 'message' => 'All product statuses updated based on stock.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to update product statuses.']);
+    }
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POST') {
     $productManager = new ProductManager();
     
@@ -378,6 +409,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POST
     echo json_encode([
         'success' => false,
         'message' => 'Invalid request method'
+    ]);
+}
+
+function setProductStockAndStatus($productId, $newStock) {
+    $db = (new DBConnector())->connect();
+    $newStatus = ($newStock == 0) ? 'Out of Stock' : (($newStock <= 5) ? 'Low Stock' : 'In Stock');
+    $sql = "UPDATE products SET stock = :stock, status = :status WHERE product_id = :product_id";
+    $stmt = $db->prepare($sql);
+    return $stmt->execute([
+        ':stock' => $newStock,
+        ':status' => $newStatus,
+        ':product_id' => $productId
     ]);
 }
 ?> 

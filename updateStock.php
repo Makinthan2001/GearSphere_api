@@ -93,6 +93,11 @@ class StockManager {
                 // Log stock change
                 $this->logStockChange($productId, $oldStock, $newStock, $oldStatus, $finalStatus);
                 
+                // One-time forced fix: set all products with stock = 0 to Out of Stock
+                $fixSql = "UPDATE products SET status = 'Out of Stock' WHERE stock = 0";
+                $fixResult = $this->db->prepare($fixSql)->execute();
+                error_log('Forced status fix for stock=0, result: ' . var_export($fixResult, true));
+                
                 return [
                     'success' => true,
                     'message' => 'Stock, status, and last restock date updated successfully',
@@ -202,7 +207,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get form data
     $productId = $_POST['product_id'] ?? null;
     $newStock = $_POST['stock'] ?? null;
-    $newStatus = $_POST['status'] ?? null;
+    $newStatus = (isset($_POST['status']) && $_POST['status'] === 'Discontinued') ? 'Discontinued' : null;
+    // Force status recalculation except for Discontinued
+    if ($newStatus === null) {
+        $newStatus = '';
+    }
     $lastRestockDate = $_POST['last_restock_date'] ?? null;
     
     // Debug: Log the extracted values

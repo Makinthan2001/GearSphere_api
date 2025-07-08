@@ -38,9 +38,19 @@ class ProductManager {
                 }
             }
             
+            // Calculate status based on stock
+            $stock = isset($data['stock']) ? (int)$data['stock'] : 0;
+            if ($stock === 0) {
+                $status = 'Out of Stock';
+            } elseif ($stock <= 5) {
+                $status = 'Low Stock';
+            } else {
+                $status = 'In Stock';
+            }
+            
             // Insert into products table
-            $sql = "INSERT INTO products (name, category, price, image_url, description, manufacturer, stock) 
-                    VALUES (:name, :category, :price, :image_url, :description, :manufacturer, :stock)";
+            $sql = "INSERT INTO products (name, category, price, image_url, description, manufacturer, stock, status) 
+                    VALUES (:name, :category, :price, :image_url, :description, :manufacturer, :stock, :status)";
             
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
@@ -50,7 +60,8 @@ class ProductManager {
                 ':image_url' => $imageUrl,
                 ':description' => $data['description'] ?? null,
                 ':manufacturer' => $data['manufacturer'],
-                ':stock' => $data['stock'] ?? 0
+                ':stock' => $stock,
+                ':status' => $status
             ]);
             
             $productId = $this->db->lastInsertId();
