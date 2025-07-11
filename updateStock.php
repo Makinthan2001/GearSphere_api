@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/Main Classes/Product.php';
+require_once __DIR__ . '/Main Classes/Notification.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productId = $_POST['product_id'] ?? null;
@@ -36,6 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $product = new Product();
     $result = $product->updateStock($productId, $newStock, $newStatus, $lastRestockDate);
+
+    // Hardcode sellerId since there is only one seller
+    $sellerId = 27;
+    // Fetch product details to get seller_id and product info
+    $productDetails = $product->getProductById($productId);
+    $productName = $productDetails['name'] ?? '';
+    $minStock = 5; // You can make this dynamic if needed
+    if ($newStock == 0 || $newStock <= $minStock) {
+        $notif = new Notification();
+        $message = "Low Stock Alert!\nYou have 1 items that need attention:\n\n$productName - Current Stock: $newStock (Min: $minStock)";
+        $notif->addNotification($sellerId, $message);
+    }
     echo json_encode($result);
 } else {
     echo json_encode([
