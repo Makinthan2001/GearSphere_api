@@ -36,15 +36,7 @@ abstract class User
         return $stmt->rowCount() > 0;
     }
 
-    //     public function isAlreadyExists()
-    // {
-    //     $query = "SELECT email FROM users WHERE email = :email AND user_type = :user_type";
-    //     $stmt = $this->pdo->prepare($query);
-    //     $stmt->bindParam(":email", $this->email);
-    //     $stmt->bindParam(":user_type", $this->user_type);
-    //     $stmt->execute();
-    //     return $stmt->rowCount() > 0;
-    // }
+    
 
 
     public function checkEmailExists($email)
@@ -129,37 +121,6 @@ abstract class User
     }
 
 
-
-    // public function registerUser($name, $email, $password, $contact_number, $address)
-    // {
-    //     $this->name = $name;
-    //     $this->email = $email;
-    //     $this->password = $password;
-    //     $this->contact_number = $contact_number;
-    //     $this->address = $address;
-
-
-    //     if ($this->isAlreadyExists()) return false;
-
-    //     try {
-    //         $sql = "INSERT INTO user (name, email, password, contact_number, address) VALUES (?, ?, ?, ?, ?)";
-    //         $stmt = $this->pdo->prepare($sql);
-    //         $stmt->bindParam(1, $this->name);
-    //         $stmt->bindParam(2, $this->email);
-    //         $stmt->bindParam(3, $this->password);
-    //         $stmt->bindParam(4, $this->contact_number);
-    //         $stmt->bindParam(5, $this->address);
-    //         $rs = $stmt->execute();
-
-    //         if ($rs) {
-    //             return true;
-    //         }
-    //         return false;
-    //     } catch (PDOException $e) {
-    //         http_response_code(500);
-    //         echo json_encode(["message" => "Failed to register. " . $e->getMessage()]);
-    //     }
-    // }
 
     public function registerUser($name, $email, $password, $contact_number, $address, $user_type = 'customer')
     {

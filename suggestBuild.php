@@ -35,12 +35,7 @@ $usageWeights = [
         'cpu' => 0.18, 'gpu' => 0.22, 'ram' => 0.10, 'storage' => 0.10,
         'motherboard' => 0.12, 'psu' => 0.05, 'case' => 0.05,
         'cooler' => 0.03, 'os' => 0.05, 'monitor' => 0.10
-    ],
-    // 'office' => [
-    //     'cpu' => 0.20, 'gpu' => 0.10, 'ram' => 0.12, 'storage' => 0.10,
-    //     'motherboard' => 0.13, 'psu' => 0.05, 'case' => 0.05,
-    //     'cooler' => 0.02, 'os' => 0.08, 'monitor' => 0.15
-    // ]
+    ]
 ];
 
 // Fallback to gaming if usage type is unknown
