@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     if ($result) {
         $mailer = new Mailer();
         $userData = $disableUser->getDetails($user_id);
-        $msg = 'Dear QuickMatch user, <br> Your Account is '.$userData['disable_status'].' now.<br> For more details contact findgearsphere@gmail.com ';
+        $msg = 'Dear GearSphere user, <br> Your Account is '.$userData['disable_status'].' now.<br> For more details contact findgearsphere@gmail.com ';
         $mailer->setInfo($userData['email'],'Account Status Changed',$msg);
         if($mailer->send()) {
         http_response_code(200);
