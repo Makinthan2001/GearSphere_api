@@ -4,7 +4,7 @@ class technician extends User
 {
     private $technician_id;
     private $charge_per_day;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -68,7 +68,7 @@ class technician extends User
     public function getAllTechnicians()
     {
         try {
-            $stmt = $this->pdo->prepare("SELECT u.*, t.proof, t.charge_per_day, t.specialization, t.experience, t.status FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
+            $stmt = $this->pdo->prepare("SELECT t.technician_id, u.*, t.proof, t.charge_per_day, t.specialization, t.experience, t.status FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             // Ensure every technician has a profile_image value
@@ -121,36 +121,32 @@ class technician extends User
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
+
+    public function assignTechnician($customer_id, $technician_id, $instructions = null)
+    {
+        try {
+            $sql = "INSERT INTO technician_assignments (customer_id, technician_id, instructions, status) VALUES (:customer_id, :technician_id, :instructions, 'pending')";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+            $stmt->bindParam(':technician_id', $technician_id, PDO::PARAM_INT);
+            $stmt->bindParam(':instructions', $instructions, PDO::PARAM_STR);
+            $stmt->execute();
+            return ['success' => true, 'assignment_id' => $this->pdo->lastInsertId()];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    public function getTechnicianByTechnicianId($technician_id)
+    {
+        try {
+            $sql = "SELECT t.*, u.email, u.name, u.contact_number, u.address FROM technician t INNER JOIN users u ON t.user_id = u.user_id WHERE t.technician_id = :technician_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':technician_id', $technician_id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
