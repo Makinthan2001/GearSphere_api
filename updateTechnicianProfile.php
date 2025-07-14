@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $specialization = isset($_POST['specialization']) ? htmlspecialchars(strip_tags($_POST['specialization'])) : null;
     $charge_per_day = isset($_POST['charge_per_day']) ? htmlspecialchars(strip_tags($_POST['charge_per_day'])) : null;
     $profile_image = null;
+    $status = isset($_POST['status']) ? $_POST['status'] : 'available';
 
     // Log all received values for debugging
     error_log("[DEBUG] user_id: $user_id, technician_id: $technician_id, name: $name, contact_number: $contact_number, address: $address, experience: $experience, specialization: $specialization, charge_per_day: $charge_per_day");
@@ -91,9 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $address,
         $profile_image,
         $technician_id,
-        // $experience,
-        // $specialization,
-        $charge_per_day
+        $charge_per_day,
+        $status
     );
 
     // Log the result of the update

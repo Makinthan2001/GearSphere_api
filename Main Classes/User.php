@@ -194,8 +194,8 @@ abstract class User
             $user_id = $this->pdo->lastInsertId();
 
             // Step 3: Insert into `technician` table
-            $sqlTech = "INSERT INTO technician (user_id, proof, specialization, experience) 
-                    VALUES (?, ?, ?, ?)";
+            $sqlTech = "INSERT INTO technician (user_id, proof, specialization, experience, status) 
+                    VALUES (?, ?, ?, ?, 'available')";
             $stmtTech = $this->pdo->prepare($sqlTech);
             $stmtTech->bindParam(1, $user_id);
             $stmtTech->bindParam(2, $this->cv_path);
