@@ -427,16 +427,17 @@ CREATE TABLE `technician` (
   `proof` varchar(255) NOT NULL,
   `specialization` varchar(100) NOT NULL,
   `experience` int(11) NOT NULL,
-  `charge_per_day` decimal(10,2) DEFAULT NULL
+  `charge_per_day` decimal(10,2) DEFAULT NULL,
+  `status` ENUM('available','unavailable') NOT NULL DEFAULT 'available'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `technician`
 --
 
-INSERT INTO `technician` (`technician_id`, `user_id`, `proof`, `specialization`, `experience`, `charge_per_day`) VALUES
-(3, 30, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 1000.00),
-(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 0.00);
+INSERT INTO `technician` (`technician_id`, `user_id`, `proof`, `specialization`, `experience`, `charge_per_day`, `status`) VALUES
+(3, 30, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 1000.00, 'available'),
+(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 0.00, 'available');
 
 -- --------------------------------------------------------
 

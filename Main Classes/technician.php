@@ -68,7 +68,7 @@ class technician extends User
     public function getAllTechnicians()
     {
         try {
-            $stmt = $this->pdo->prepare("SELECT u.*, t.proof, t.charge_per_day, t.specialization, t.experience FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
+            $stmt = $this->pdo->prepare("SELECT u.*, t.proof, t.charge_per_day, t.specialization, t.experience, t.status FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             // Ensure every technician has a profile_image value
@@ -92,30 +92,22 @@ class technician extends User
         $address,
         $profile_image,
         $technician_id,
-        
-        $charge_per_day
+        $charge_per_day,
+        $status
     ) {
         parent::updateDetails($user_id, $name, $contact_number, $address, $profile_image);
-
         $this->technician_id = $technician_id;
-        
-        $this->charge_per_day = $charge_per_day; // cast to float
-
-        error_log("Updating technician_id {$this->technician_id} with charge_per_day: {$this->charge_per_day}");
-
+        $this->charge_per_day = $charge_per_day;
+        $this->status = $status;
+        error_log("Updating technician_id {$this->technician_id} with charge_per_day: {$this->charge_per_day} and status: {$this->status}");
         try {
-            $sql = "UPDATE technician SET charge_per_day = :charge_per_day WHERE  technician_id = :technician_id";
-
+            $sql = "UPDATE technician SET charge_per_day = :charge_per_day, status = :status WHERE technician_id = :technician_id";
             $stmt = $this->pdo->prepare($sql);
-
-            
             $rs = $stmt->execute([
                 'charge_per_day' => $this->charge_per_day,
+                'status' => $this->status,
                 'technician_id' => $this->technician_id,
             ]);
-
-            //$rs = $stmt->execute($params);
-
             if ($rs) {
                 error_log("Update succeeded.");
                 return ['success' => true];
