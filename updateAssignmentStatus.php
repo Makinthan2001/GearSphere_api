@@ -6,6 +6,8 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/DbConnector.php';
 require_once __DIR__ . '/Main Classes/Mailer.php';
+require_once __DIR__ . '/Main Classes/Notification.php';
+require_once __DIR__ . '/Main Classes/technician.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -39,11 +41,19 @@ try {
     $stmt->execute();
 
     // Fetch customer email and name
-    $sql2 = "SELECT u.email, u.name FROM technician_assignments ta INNER JOIN users u ON ta.customer_id = u.user_id WHERE ta.assignment_id = :assignment_id";
+    $sql2 = "SELECT ta.customer_id, u.email, u.name, ta.technician_id FROM technician_assignments ta INNER JOIN users u ON ta.customer_id = u.user_id WHERE ta.assignment_id = :assignment_id";
     $stmt2 = $pdo->prepare($sql2);
     $stmt2->bindParam(':assignment_id', $assignment_id, PDO::PARAM_INT);
     $stmt2->execute();
     $customer = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+    // Fetch technician name
+    $technicianName = '';
+    if ($customer && !empty($customer['technician_id'])) {
+        $tech = new technician();
+        $technicianDetails = $tech->getTechnicianByTechnicianId($customer['technician_id']);
+        $technicianName = $technicianDetails['name'] ?? '';
+    }
 
     if ($customer && !empty($customer['email'])) {
         $to = $customer['email'];
@@ -53,6 +63,9 @@ try {
         $mailer = new Mailer();
         $mailer->setInfo($to, $subject, $body);
         $mailer->send();
+        // Add notification for customer
+        $notif = new Notification();
+        $notif->addNotification($customer['customer_id'], "Your request was $status by technician: $technicianName.");
     }
 
     echo json_encode(['success' => true]);
