@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2025 at 08:58 PM
+-- Generation Time: Jul 15, 2025 at 08:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -287,7 +287,8 @@ CREATE TABLE `orders` (
   `order_date` datetime DEFAULT current_timestamp(),
   `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
   `total_amount` decimal(10,2) NOT NULL,
-  `payment_status` enum('pending','paid','failed') DEFAULT 'pending'
+  `payment_status` enum('pending','paid','failed') DEFAULT 'pending',
+  `assignment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -562,6 +563,13 @@ CREATE TABLE `technician_assignments` (
   `instructions` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `technician_assignments`
+--
+
+INSERT INTO `technician_assignments` (`assignment_id`, `customer_id`, `technician_id`, `assigned_at`, `status`, `instructions`) VALUES
+(14, 29, 3, '2025-07-15 06:03:18', 'pending', '');
+
 -- --------------------------------------------------------
 
 --
@@ -589,7 +597,7 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `contact_number`, `
 (27, 'Seller Name', 'seller@gmail.com', '$2y$10$cynhWwNxXqV7Vicbe3KUoOVkdEsZpgUh6ogszFXAKE3JvUv2s3ECy', '0712345678', 'Colombo', 'seller', 'seller_27_1751986885.png', 'active', '2025-07-01 12:00:14'),
 (28, 'admin', 'admin@gmail.com', '$2y$10$yIkI2M1cvRFelSCQ1/6hQe4tfYqIJwL7cMh.hL9tlQASet96hp/kO', '0704079541', 'Jaffna', 'admin', 'admin_28_1751989907.jpg', 'active', '2025-07-01 12:00:14'),
 (29, 'makinthan mdn', 'mahinthan2001a@gmail.com', '$2y$10$ZLU/USlRx4ug9jwLpfp5J.U2UqIUNSnvHiTGjQESMwF0zL8xU3f5.', '0704079547', 'jaffna | Jaffna | 40000', 'customer', 'pp2.png', 'active', '2025-07-04 08:20:26'),
-(30, 'madhan  mdn', 'madhan2001ana@gmail.com', '$2y$10$xJWZjjUaSlWshHLd.E2CqeLSZkugnGU4PkHo4Yb.e4EBv6LXrViSS', '0704079547', 'jaffna | velanai | 40000', 'Technician', 'img_6874eca24587b4.92343666.jpg', 'active', '2025-07-04 16:43:17'),
+(30, 'madhan  mdn', 'madhan2001ana@gmail.com', '$2y$10$xJWZjjUaSlWshHLd.E2CqeLSZkugnGU4PkHo4Yb.e4EBv6LXrViSS', '0704079547', 'Velanai | Jaffna | 40000', 'Technician', 'img_6874eca24587b4.92343666.jpg', 'active', '2025-07-04 16:43:17'),
 (31, 'Pukaliny Rajee', 'ypukaliny@gmail.com', '$2y$10$PYpIwRwiZQvXabqekQmwv.p74GGnXlMSm35Aw2qUkzYo9jBJnOQuW', '0774455666', 'pointpedro | Jaffna | 40000', 'Technician', 'img_686d3f1107a875.61902098.jpg', 'active', '2025-07-05 04:51:23'),
 (32, 'Kowsika kantharuban', 'kantharubankowsika@gmail.com', '$2y$10$ic9jys8F9qbXPTmGEBFhHOv5wEeY1kTRmH49KappZAivvKqwRl4MK', '0775566777', 'udaiyarkaddu | Mullaitivu | 45000', 'customer', 'pp19.png', 'active', '2025-07-05 04:53:28');
 
@@ -711,7 +719,8 @@ ALTER TABLE `operating_system`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `fk_orders_assignment` (`assignment_id`);
 
 --
 -- Indexes for table `order_items`
@@ -837,7 +846,7 @@ ALTER TABLE `technician`
 -- AUTO_INCREMENT for table `technician_assignments`
 --
 ALTER TABLE `technician_assignments`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -902,6 +911,7 @@ ALTER TABLE `operating_system`
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
+  ADD CONSTRAINT `fk_orders_assignment` FOREIGN KEY (`assignment_id`) REFERENCES `technician_assignments` (`assignment_id`),
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
 
 --
