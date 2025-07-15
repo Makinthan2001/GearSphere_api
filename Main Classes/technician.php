@@ -13,7 +13,7 @@ class technician extends User
     {
         $this->user_id = $user_id;
         try {
-            $sql = "SELECT technician_id FROM provider WHERE user_id = :user_id";
+            $sql = "SELECT technician_id FROM technician WHERE user_id = :user_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":user_id", $user_id);
             $stmt->execute();
@@ -147,6 +147,36 @@ class technician extends User
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return null;
+        }
+    }
+
+    public function getBuildRequests($technician_id)
+    {
+        try {
+            $sql = "SELECT 
+                        ta.assignment_id,
+                        ta.assigned_at,
+                        ta.status,
+                        ta.instructions,
+                        u.name AS customer_name,
+                        u.email AS customer_email,
+                        u.contact_number AS customer_phone,
+                        u.address AS customer_address,
+                        u.profile_image AS customer_profile_image
+                    FROM technician_assignments ta
+                    INNER JOIN users u ON ta.customer_id = u.user_id
+                    WHERE ta.technician_id = :technician_id
+                    ORDER BY ta.assigned_at DESC";
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':technician_id', $technician_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results ?: [];
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 }
