@@ -47,7 +47,7 @@ foreach ($items as $item) {
 }
 
 // 3. Add payment
-$payment_id = $paymentObj->addPayment($order_id, $user_id, $total_amount, $payment_method, 'pending');
+$payment_id = $paymentObj->addPayment($order_id, $user_id, $total_amount, $payment_method, 'success');
 if (!$payment_id) {
     echo json_encode(['success' => false, 'message' => 'Failed to add payment.']);
     exit;
