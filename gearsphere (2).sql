@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 15, 2025 at 08:06 AM
+-- Generation Time: Jul 17, 2025 at 04:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -245,6 +245,14 @@ CREATE TABLE `notifications` (
   `date` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`notification_id`, `user_id`, `message`, `date`) VALUES
+(2, 30, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-16 07:53:33'),
+(3, 29, 'Your request was accepted by technician: madhan  mdn.', '2025-07-16 07:54:12');
+
 -- --------------------------------------------------------
 
 --
@@ -287,7 +295,6 @@ CREATE TABLE `orders` (
   `order_date` datetime DEFAULT current_timestamp(),
   `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
   `total_amount` decimal(10,2) NOT NULL,
-  `payment_status` enum('pending','paid','failed') DEFAULT 'pending',
   `assignment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -546,7 +553,9 @@ CREATE TABLE `technician` (
 
 INSERT INTO `technician` (`technician_id`, `user_id`, `proof`, `specialization`, `experience`, `charge_per_day`, `status`) VALUES
 (3, 30, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 2000.00, 'available'),
-(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 0.00, 'available');
+(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 0.00, 'available'),
+(5, 33, '6876665616021_ESD 111-1 Com Skill Assesment 2022.pdf', 'Custom Water Cooling', 3, 2000.00, 'available'),
+(6, 34, '6876696f9be53_ESD 111-1 Com Skill Assesment 2022.pdf', 'Gaming PCs', 3, NULL, 'available');
 
 -- --------------------------------------------------------
 
@@ -568,7 +577,17 @@ CREATE TABLE `technician_assignments` (
 --
 
 INSERT INTO `technician_assignments` (`assignment_id`, `customer_id`, `technician_id`, `assigned_at`, `status`, `instructions`) VALUES
-(14, 29, 3, '2025-07-15 06:03:18', 'pending', '');
+(14, 29, 3, '2025-07-15 06:03:18', 'rejected', ''),
+(15, 29, 3, '2025-07-15 06:24:27', 'accepted', 'hi'),
+(16, 29, 3, '2025-07-15 07:57:30', 'accepted', 'hi madhan'),
+(17, 29, 3, '2025-07-15 08:13:31', 'accepted', 'i need to your help for pc building'),
+(18, 29, 3, '2025-07-15 08:15:53', 'rejected', 'hgftyf'),
+(19, 29, 3, '2025-07-15 08:19:56', 'accepted', 'uhiuwea'),
+(20, 29, 3, '2025-07-15 09:44:06', 'pending', ''),
+(21, 29, 3, '2025-07-15 09:48:08', 'pending', ''),
+(22, 29, 3, '2025-07-15 10:05:58', 'pending', 'gdchdg'),
+(23, 29, 5, '2025-07-15 14:34:33', 'accepted', 'i need to quickly'),
+(24, 29, 3, '2025-07-16 02:23:26', 'accepted', 'hjkl');
 
 -- --------------------------------------------------------
 
@@ -599,7 +618,9 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `contact_number`, `
 (29, 'makinthan mdn', 'mahinthan2001a@gmail.com', '$2y$10$ZLU/USlRx4ug9jwLpfp5J.U2UqIUNSnvHiTGjQESMwF0zL8xU3f5.', '0704079547', 'jaffna | Jaffna | 40000', 'customer', 'pp2.png', 'active', '2025-07-04 08:20:26'),
 (30, 'madhan  mdn', 'madhan2001ana@gmail.com', '$2y$10$xJWZjjUaSlWshHLd.E2CqeLSZkugnGU4PkHo4Yb.e4EBv6LXrViSS', '0704079547', 'Velanai | Jaffna | 40000', 'Technician', 'img_6874eca24587b4.92343666.jpg', 'active', '2025-07-04 16:43:17'),
 (31, 'Pukaliny Rajee', 'ypukaliny@gmail.com', '$2y$10$PYpIwRwiZQvXabqekQmwv.p74GGnXlMSm35Aw2qUkzYo9jBJnOQuW', '0774455666', 'pointpedro | Jaffna | 40000', 'Technician', 'img_686d3f1107a875.61902098.jpg', 'active', '2025-07-05 04:51:23'),
-(32, 'Kowsika kantharuban', 'kantharubankowsika@gmail.com', '$2y$10$ic9jys8F9qbXPTmGEBFhHOv5wEeY1kTRmH49KappZAivvKqwRl4MK', '0775566777', 'udaiyarkaddu | Mullaitivu | 45000', 'customer', 'pp19.png', 'active', '2025-07-05 04:53:28');
+(32, 'Kowsika kantharuban', 'kantharubankowsika@gmail.com', '$2y$10$ic9jys8F9qbXPTmGEBFhHOv5wEeY1kTRmH49KappZAivvKqwRl4MK', '0775566777', 'udaiyarkaddu | Mullaitivu | 45000', 'customer', 'pp19.png', 'active', '2025-07-05 04:53:28'),
+(33, 'suman raj', 'suthasuman20@gmail.com', '$2y$10$2u6DJnlHgoRlJ37YyExXF.w7Z0QA8I5RT68sz2kV.GSpMGQDnUBfG', '0704079588', 'velanai | Jaffna | 40000', 'Technician', 'img_6876669b200f99.38199932.jpg', 'active', '2025-07-15 14:31:50'),
+(34, 'demario benet', 'demariobennet1@gmail.com', '$2y$10$4FIHbfJeQnQlKv/QPy9tNeQs0S7RMhkoCl3p8l8Qogsd0zjN0XSg2', '0704079445', 'velanai | Badulla | 40000', 'Technician', 'user_image.jpg', 'active', '2025-07-15 14:45:03');
 
 -- --------------------------------------------------------
 
@@ -810,7 +831,7 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -840,19 +861,19 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `technician`
 --
 ALTER TABLE `technician`
-  MODIFY `technician_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `technician_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `technician_assignments`
 --
 ALTER TABLE `technician_assignments`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Constraints for dumped tables
