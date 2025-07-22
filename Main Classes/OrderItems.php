@@ -35,4 +35,12 @@ class OrderItems
         $stmt->execute([':order_id' => $order_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getDetailedItemsByOrderId($order_id)
+    {
+        $sql = "SELECT oi.*, p.name, p.image_url, p.category FROM order_items oi JOIN products p ON oi.product_id = p.product_id WHERE oi.order_id = :order_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':order_id' => $order_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
