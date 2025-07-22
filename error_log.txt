@@ -1,0 +1,5 @@
+[22-Jul-2025 20:34:55 Europe/Berlin] Error in addReview: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'target_id' cannot be null
+[22-Jul-2025 21:25:46 Europe/Berlin] addReview params: user_id=32, target_type=system, target_id=, rating=5, comment=hiii
+[22-Jul-2025 21:26:04 Europe/Berlin] addReview params: user_id=32, target_type=system, target_id=, rating=5, comment=hiiii
+[22-Jul-2025 21:32:24 Europe/Berlin] addReview params: user_id=32, target_type=technician, target_id=5, rating=5, comment=12345
+[22-Jul-2025 22:22:31 Europe/Berlin] addReview params: user_id=32, target_type=system, target_id=, rating=5, comment=good system
