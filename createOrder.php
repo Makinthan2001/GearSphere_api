@@ -7,6 +7,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 require_once __DIR__ . '/Main Classes/Orders.php';
 require_once __DIR__ . '/Main Classes/OrderItems.php';
 require_once __DIR__ . '/Main Classes/Payment.php';
+require_once __DIR__ . '/Main Classes/Product.php';
 
 // Get POST data
 $data = json_decode(file_get_contents('php://input'), true);
@@ -25,6 +26,7 @@ $assignment_id = isset($data['assignment_id']) && is_numeric($data['assignment_i
 $orderObj = new Orders();
 $orderItemsObj = new OrderItems();
 $paymentObj = new Payment();
+$productObj = new Product();
 
 // 1. Create order
 $order_id = $orderObj->createOrder($user_id, $total_amount, $assignment_id);
@@ -43,6 +45,12 @@ foreach ($items as $item) {
     if (!$ok) {
         echo json_encode(['success' => false, 'message' => 'Failed to add order item.']);
         exit;
+    }
+    // Reduce stock for this product
+    $product = $productObj->getProductById($item['product_id']);
+    if ($product) {
+        $newStock = max(0, $product['stock'] - $item['quantity']);
+        $productObj->updateStock($item['product_id'], $newStock);
     }
 }
 
