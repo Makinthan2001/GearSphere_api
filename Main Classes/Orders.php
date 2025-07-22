@@ -50,4 +50,13 @@ class Orders
             return false;
         }
     }
+
+    // Fetch all orders for a user
+    public function getOrdersByUserId($user_id)
+    {
+        $sql = "SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
