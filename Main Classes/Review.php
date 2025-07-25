@@ -23,26 +23,25 @@ class Review {
     }
 
     public function getReviews($filters = []) {
-        $sql = "SELECT id, user_id, 
-                       COALESCE(target_type, 'system') AS target_type, 
-                       target_id, rating, comment, status, created_at, updated_at
-                FROM reviews WHERE 1=1";
-    
+        $sql = "SELECT r.*, u.name AS sender_name, u.user_type AS sender_type
+            FROM reviews r
+            JOIN users u ON r.user_id = u.user_id
+            WHERE 1=1";
         $params = [];
         if (isset($filters['user_id'])) {
-            $sql .= " AND user_id = ?";
+            $sql .= " AND r.user_id = ?";
             $params[] = $filters['user_id'];
         }
         if (isset($filters['target_type'])) {
-            $sql .= " AND target_type = ?";
+            $sql .= " AND r.target_type = ?";
             $params[] = $filters['target_type'];
         }
         if (isset($filters['target_id'])) {
-            $sql .= " AND target_id = ?";
+            $sql .= " AND r.target_id = ?";
             $params[] = $filters['target_id'];
         }
         if (isset($filters['status'])) {
-            $sql .= " AND status = ?";
+            $sql .= " AND r.status = ?";
             $params[] = $filters['status'];
         }
         $stmt = $this->pdo->prepare($sql);
@@ -56,5 +55,17 @@ class Review {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$status, $id]);
         return $stmt->rowCount();
+    }
+
+    public function deleteReview($id) {
+        try {
+            $sql = "DELETE FROM reviews WHERE id = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Error in deleteReview: " . $e->getMessage());
+            throw new Exception("Failed to delete review. Please try again later.");
+        }
     }
 }
