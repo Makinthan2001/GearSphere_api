@@ -179,4 +179,38 @@ class technician extends User
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
+
+    public function getLatestTechnicians($limit = 5)
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT t.technician_id, u.*, t.proof, t.charge_per_day, t.specialization, t.experience, t.status FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.created_at DESC LIMIT :limit");
+            $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($users as &$user) {
+                if (empty($user['profile_image'])) {
+                    $user['profile_image'] = 'user_image.jpg';
+                }
+            }
+            return $users ?: [];
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to fetch latest technicians. " . $e->getMessage()]);
+            exit;
+        }
+    }
+
+    public function getTechnicianCount()
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM users WHERE user_type = 'technician'");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? (int)$result['count'] : 0;
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to fetch technician count. " . $e->getMessage()]);
+            exit;
+        }
+    }
 }
