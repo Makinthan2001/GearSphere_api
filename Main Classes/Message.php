@@ -1,15 +1,18 @@
 <?php
 require_once __DIR__ . '/../DbConnector.php';
 
-class Message {
+class Message
+{
     private $pdo;
 
-    public function __construct() {
+    public function __construct()
+    {
         $db = new DBConnector();
         $this->pdo = $db->connect();
     }
 
-    public function addMessage($name, $email, $subject, $message) {
+    public function addMessage($name, $email, $subject, $message)
+    {
         try {
             $fullMessage = "Subject: $subject\nMessage: $message";
             $sql = "INSERT INTO message (name, email, message) VALUES (:name, :email, :message)";
@@ -31,7 +34,8 @@ class Message {
         }
     }
 
-    public function getAllMessages() {
+    public function getAllMessages()
+    {
         try {
             $sql = "SELECT * FROM message ORDER BY date DESC";
             $stmt = $this->pdo->prepare($sql);
@@ -42,7 +46,21 @@ class Message {
         }
     }
 
-    public function deleteMessage($message_id) {
+    public function getLatestMessages($limit = 5)
+    {
+        try {
+            $sql = "SELECT * FROM message ORDER BY date DESC LIMIT :limit";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    public function deleteMessage($message_id)
+    {
         try {
             $sql = "DELETE FROM message WHERE message_id = :message_id";
             $stmt = $this->pdo->prepare($sql);
@@ -65,4 +83,4 @@ class Message {
             ];
         }
     }
-} 
+}
