@@ -59,4 +59,121 @@ class Orders
         $stmt->execute([':user_id' => $user_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // --- Analytics Methods ---
+    public function getTotalRevenue()
+    {
+        $sql = "SELECT SUM(total_amount) as total_revenue FROM orders WHERE status IN ('processing','shipped','delivered')";
+        $stmt = $this->pdo->query($sql);
+        $row = $stmt->fetch();
+        return $row['total_revenue'] ?? 0;
+    }
+
+    public function getTotalOrders()
+    {
+        $sql = "SELECT COUNT(*) as total_orders FROM orders WHERE status IN ('processing','shipped','delivered')";
+        $stmt = $this->pdo->query($sql);
+        $row = $stmt->fetch();
+        return $row['total_orders'] ?? 0;
+    }
+
+    public function getAverageOrderValue()
+    {
+        $sql = "SELECT AVG(total_amount) as avg_order_value FROM orders WHERE status IN ('processing','shipped','delivered')";
+        $stmt = $this->pdo->query($sql);
+        $row = $stmt->fetch();
+        return $row['avg_order_value'] ?? 0;
+    }
+
+    public function getSalesTrend($period = 'month', $user_id = null)
+{
+    // Use payment_date from payment table for sales trend, filtered by user if provided
+    $sql = "SELECT DATE_FORMAT(p.payment_date, '%Y-%m') as period, SUM(p.amount) as revenue, COUNT(*) as orders
+            FROM payment p
+            JOIN orders o ON p.order_id = o.order_id
+            WHERE p.payment_status = 'success'
+              AND o.status IN ('processing','shipped','delivered')";
+    $params = [];
+    if ($user_id !== null) {
+        $sql .= " AND o.user_id = :user_id";
+        $params[':user_id'] = $user_id;
+    }
+    $sql .= " GROUP BY period ORDER BY period DESC";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute($params);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Build a map of period => result
+    $trendMap = [];
+    // DEBUG: Log raw periods from SQL results
+    error_log('getSalesTrend SQL periods: ' . implode(',', array_map(function($r){return $r['period'];}, $results)));
+    foreach ($results as $row) {
+        $trendMap[$row['period']] = $row;
+    }
+    // DEBUG: Log trendMap keys
+    error_log('getSalesTrend trendMap keys: ' . implode(',', array_keys($trendMap)));
+
+    // Determine the latest period (max of DB or current month)
+    $now = new DateTime();
+    $currentPeriod = $now->format('Y-m');
+    $latestPeriod = $currentPeriod;
+    if (!empty($trendMap)) {
+        $dbMax = max(array_keys($trendMap));
+        if ($dbMax > $currentPeriod) {
+            $latestPeriod = $dbMax;
+        }
+    }
+    // Generate 5 months ending at latestPeriod
+    $months = [];
+    $latest = DateTime::createFromFormat('Y-m', $latestPeriod);
+    for ($i = 4; $i >= 0; $i--) {
+        $m = clone $latest;
+        $m->modify("-{$i} months");
+        $period = $m->format('Y-m');
+        // Pad month with leading zero if needed for DB match
+        if (strlen($period) === 6) {
+            $period = substr($period, 0, 5) . '0' . substr($period, 5, 1);
+        }
+        $months[] = [
+            'period' => $period,
+            'revenue' => isset($trendMap[$period]) ? (float)$trendMap[$period]['revenue'] : 0,
+            'orders' => isset($trendMap[$period]) ? (int)$trendMap[$period]['orders'] : 0
+        ];
+    }
+    return $months;
+}
+
+    public function getTopProducts($limit = 3)
+    {
+        $sql = "SELECT p.product_id, p.name, SUM(oi.quantity) as sales, SUM(oi.price * oi.quantity) as revenue
+                FROM order_items oi
+                JOIN products p ON oi.product_id = p.product_id
+                JOIN orders o ON oi.order_id = o.order_id
+                WHERE o.status IN ('processing','shipped','delivered')
+                GROUP BY p.product_id, p.name
+                ORDER BY revenue DESC
+                LIMIT :limit";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getCategoryPerformance()
+    {
+        $sql = "SELECT p.category, SUM(oi.quantity) as sales, SUM(oi.price * oi.quantity) as revenue
+                FROM order_items oi
+                JOIN products p ON oi.product_id = p.product_id
+                JOIN orders o ON oi.order_id = o.order_id
+                WHERE o.status IN ('processing','shipped','delivered')
+                GROUP BY p.category
+                ORDER BY revenue DESC";
+        $stmt = $this->pdo->query($sql);
+        $rows = $stmt->fetchAll();
+        $totalRevenue = array_sum(array_column($rows, 'revenue'));
+        foreach ($rows as &$row) {
+            $row['percentage'] = $totalRevenue > 0 ? round(($row['revenue'] / $totalRevenue) * 100) : 0;
+        }
+        return $rows;
+    }
 }
