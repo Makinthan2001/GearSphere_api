@@ -1,16 +1,19 @@
 <?php
+require_once 'corsConfig.php';
+initializeEndpoint();
+
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . '/Main Classes/Cart.php';
 
-$user_id = $_GET['user_id'] ?? null;
-
-if (!$user_id) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'User ID is required.']);
+// Check if user is logged in via session
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized. Please login first.']);
     exit;
 }
+
+$user_id = $_SESSION['user_id']; // Get from session instead
 
 $cart = new Cart();
 $items = $cart->getCart($user_id);

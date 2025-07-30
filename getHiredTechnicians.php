@@ -1,9 +1,6 @@
 <?php
-ob_clean();
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -27,14 +24,14 @@ if (!$user_id) {
 try {
     $db = new DBConnector();
     $pdo = $db->connect();
-    
+
     $sql = "SELECT t.technician_id AS id, u.name
             FROM technician_assignments ta
             JOIN technician t ON ta.technician_id = t.technician_id
             JOIN users u ON t.user_id = u.user_id
             WHERE ta.customer_id = ? AND ta.status = 'accepted'
             GROUP BY t.technician_id, u.name";
-    
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_id]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
