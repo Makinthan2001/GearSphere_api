@@ -1,12 +1,6 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 require_once './Main Classes/Technician.php';
 
@@ -20,7 +14,7 @@ $specialization = isset($_POST['specialization']) ? htmlspecialchars(strip_tags(
 $experience = isset($_POST['experience']) ? htmlspecialchars(strip_tags($_POST['experience'])) : null;
 $file = isset($_FILES['cv']) ? $_FILES['cv'] : null;
 
-if (!$name || !$email || !$password || !$contact_number || !$address ) {
+if (!$name || !$email || !$password || !$contact_number || !$address) {
     http_response_code(400);
     echo json_encode(["message" => "All fields are required."]);
     exit();

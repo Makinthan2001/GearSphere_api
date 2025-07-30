@@ -1,8 +1,6 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header('Content-Type: application/json');
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 require_once __DIR__ . '/DbConnector.php';
 require_once __DIR__ . '/Main Classes/Mailer.php';

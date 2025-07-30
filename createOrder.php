@@ -1,23 +1,30 @@
 <?php
+require_once 'corsConfig.php';
+initializeEndpoint();
+
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
 require_once __DIR__ . '/Main Classes/Orders.php';
 require_once __DIR__ . '/Main Classes/OrderItems.php';
 require_once __DIR__ . '/Main Classes/Payment.php';
 require_once __DIR__ . '/Main Classes/Product.php';
 
+// Check if user is logged in via session
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized. Please login first.']);
+    exit;
+}
+
 // Get POST data
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['user_id'], $data['items'], $data['total_amount'], $data['payment_method'])) {
+if (!isset($data['items'], $data['total_amount'], $data['payment_method'])) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields.']);
     exit;
 }
 
-$user_id = $data['user_id'];
+$user_id = $_SESSION['user_id']; // Get from session instead
 $items = $data['items']; // array of [product_id, quantity, price]
 $total_amount = $data['total_amount'];
 $payment_method = $data['payment_method'];

@@ -1,25 +1,17 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 require_once __DIR__ . '/Main Classes/Cart.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+// Check if user is logged in via session
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized. Please login first.']);
     exit;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
-
-$user_id = $data['user_id'] ?? null;
-
-if (!$user_id) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'User ID is required.']);
-    exit;
-}
+$user_id = $_SESSION['user_id']; // Get from session instead
 
 $cart = new Cart();
 $success = $cart->clearCart($user_id);

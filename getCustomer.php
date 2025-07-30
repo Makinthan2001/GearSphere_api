@@ -1,24 +1,17 @@
 <?php
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-
-    http_response_code(200);
-    exit();
-}
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 require_once './Main Classes/Customer.php';
 
-$user_id = isset($_GET['user_id']) ? ($_GET['user_id']) : null;
-
-if (!$user_id) {
-    http_response_code(400);
-    echo json_encode(["message" => "User ID is required"]);
+// Check if user is logged in via session
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(["message" => "Unauthorized. Please login first."]);
     exit();
 }
+
+$user_id = $_SESSION['user_id'];
 
 $customerDetail = new Customer();
 

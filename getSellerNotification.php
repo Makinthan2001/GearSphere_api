@@ -1,13 +1,16 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-header('Content-Type: application/json');
-include_once 'Main Classes/Notification.php';
+require_once 'corsConfig.php';
+initializeEndpoint();
+require_once 'sessionConfig.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
 }
+
+include_once 'Main Classes/Notification.php';
 
 $notification = new Notification();
 
@@ -15,28 +18,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     // Parse input for DELETE
     $input = json_decode(file_get_contents('php://input'), true);
     $notification_id = $input['notification_id'] ?? null;
-    $user_id = $input['user_id'] ?? null;
-    if (!$notification_id || !$user_id) {
+    if (!$notification_id) {
         http_response_code(400);
-        echo json_encode(['error' => 'Missing notification_id or user_id.']);
+        echo json_encode(['error' => 'Missing notification_id.']);
         exit;
     }
-    $success = $notification->deleteNotification($notification_id, $user_id);
+    $success = $notification->deleteNotification($notification_id, $_SESSION['user_id']);
     echo json_encode(['success' => $success]);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id']) && isset($_GET['count'])) {
-    $user_id = intval($_GET['user_id']);
-    $count = $notification->getNotificationCount($user_id);
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['count'])) {
+    $count = $notification->getNotificationCount($_SESSION['user_id']);
     echo json_encode(['count' => $count]);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id'])) {
-    $user_id = intval($_GET['user_id']);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
-        $notifications = $notification->getNotifications($user_id);
+        $notifications = $notification->getNotifications($_SESSION['user_id']);
         echo json_encode(['notifications' => $notifications]);
     } catch (Exception $e) {
         http_response_code(500);
@@ -46,4 +46,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id'])) {
 }
 
 http_response_code(405);
-echo json_encode(['error' => 'Method not allowed.']); 
+echo json_encode(['error' => 'Method not allowed.']);

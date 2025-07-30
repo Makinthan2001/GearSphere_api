@@ -1,10 +1,6 @@
 <?php
-
-// Set headers
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 // Include required classes
 require_once "Main Classes/Compare_product.php";
@@ -22,19 +18,40 @@ if ($budget <= 0) {
 // Define usage-based weight distribution
 $usageWeights = [
     'gaming' => [
-        'cpu' => 0.15, 'gpu' => 0.30, 'ram' => 0.10, 'storage' => 0.10,
-        'motherboard' => 0.12, 'psu' => 0.06, 'case' => 0.05,
-        'cooler' => 0.03, 'os' => 0.04, 'monitor' => 0.05
+        'cpu' => 0.15,
+        'gpu' => 0.30,
+        'ram' => 0.10,
+        'storage' => 0.10,
+        'motherboard' => 0.12,
+        'psu' => 0.06,
+        'case' => 0.05,
+        'cooler' => 0.03,
+        'os' => 0.04,
+        'monitor' => 0.05
     ],
     'workstation' => [
-        'cpu' => 0.25, 'gpu' => 0.20, 'ram' => 0.12, 'storage' => 0.12,
-        'motherboard' => 0.12, 'psu' => 0.06, 'case' => 0.04,
-        'cooler' => 0.03, 'os' => 0.03, 'monitor' => 0.03
+        'cpu' => 0.25,
+        'gpu' => 0.20,
+        'ram' => 0.12,
+        'storage' => 0.12,
+        'motherboard' => 0.12,
+        'psu' => 0.06,
+        'case' => 0.04,
+        'cooler' => 0.03,
+        'os' => 0.03,
+        'monitor' => 0.03
     ],
     'multimedia' => [
-        'cpu' => 0.18, 'gpu' => 0.22, 'ram' => 0.10, 'storage' => 0.10,
-        'motherboard' => 0.12, 'psu' => 0.05, 'case' => 0.05,
-        'cooler' => 0.03, 'os' => 0.05, 'monitor' => 0.10
+        'cpu' => 0.18,
+        'gpu' => 0.22,
+        'ram' => 0.10,
+        'storage' => 0.10,
+        'motherboard' => 0.12,
+        'psu' => 0.05,
+        'case' => 0.05,
+        'cooler' => 0.03,
+        'os' => 0.05,
+        'monitor' => 0.10
     ]
 ];
 
@@ -49,7 +66,8 @@ $pdo = $db->connect();
 $compare = new Compare_product($pdo);
 
 // Function to get most expensive product under max price
-function getBestAffordable($pdo, $table, $maxPrice) {
+function getBestAffordable($pdo, $table, $maxPrice)
+{
     $sql = "
         SELECT p.* FROM products p
         JOIN $table t ON t.product_id = p.product_id
@@ -98,17 +116,23 @@ $total = array_sum(array_map(fn($item) => $item['price'] ?? 0, $build));
 $budgetLabel = '';
 switch (true) {
     case $budget >= 100000 && $budget <= 200000:
-        $budgetLabel = 'Entry Level'; break;
+        $budgetLabel = 'Entry Level';
+        break;
     case $budget > 200000 && $budget <= 300000:
-        $budgetLabel = 'Budget'; break;
+        $budgetLabel = 'Budget';
+        break;
     case $budget > 300000 && $budget <= 400000:
-        $budgetLabel = 'Mid-Range'; break;
+        $budgetLabel = 'Mid-Range';
+        break;
     case $budget > 400000 && $budget <= 500000:
-        $budgetLabel = 'High-End'; break;
+        $budgetLabel = 'High-End';
+        break;
     case $budget > 500000 && $budget <= 750000:
-        $budgetLabel = 'Premium'; break;
+        $budgetLabel = 'Premium';
+        break;
     case $budget > 750000:
-        $budgetLabel = 'Ultimate'; break;
+        $budgetLabel = 'Ultimate';
+        break;
     default:
         $budgetLabel = 'Below Minimum';
 }
@@ -128,20 +152,3 @@ if (!empty($debug)) {
 
 // Output JSON
 echo json_encode($response);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

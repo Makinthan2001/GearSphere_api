@@ -1,12 +1,6 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: PUT, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
-}
+require_once 'corsConfig.php';
+initializeEndpoint();
 
 require_once __DIR__ . '/Main Classes/Product.php';
 
@@ -32,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'PUT
     ]);
 }
 
-function setProductStockAndStatus($productId, $newStock) {
+function setProductStockAndStatus($productId, $newStock)
+{
     $db = (new DBConnector())->connect();
     $newStatus = ($newStock == 0) ? 'Out of Stock' : (($newStock <= 5) ? 'Low Stock' : 'In Stock');
     $sql = "UPDATE products SET stock = :stock, status = :status WHERE product_id = :product_id";
@@ -43,4 +38,3 @@ function setProductStockAndStatus($productId, $newStock) {
         ':product_id' => $productId
     ]);
 }
-?> 

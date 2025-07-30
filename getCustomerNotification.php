@@ -1,13 +1,9 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+require_once 'corsConfig.php';
+initializeEndpoint();
+
 header('Content-Type: application/json');
 include_once 'Main Classes/Notification.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
-}
 
 $notification = new Notification();
 
@@ -46,4 +42,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id'])) {
 }
 
 http_response_code(405);
-echo json_encode(['error' => 'Method not allowed.']); 
+echo json_encode(['error' => 'Method not allowed.']);
