@@ -1,48 +1,55 @@
 <?php
 require_once 'corsConfig.php';
 initializeEndpoint();
+require_once 'sessionConfig.php';
 
-require_once 'Main Classes/technician.php';
-require_once 'DbConnector.php';
-require_once 'Main Classes/Mailer.php';
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method Not Allowed']);
-    exit;
-}
+require_once './Main Classes/technician.php';
+require_once './Main Classes/Mailer.php';
+require_once './Main Classes/Notification.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
-$customer_id = $data['customer_id'] ?? null;
-$technician_id = $data['technician_id'] ?? null;
-$instructions = $data['instructions'] ?? null;
+
+$customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : null;
+$technician_id = isset($data['technician_id']) ? (int)$data['technician_id'] : null;
+$instructions = isset($data['instructions']) ? trim($data['instructions']) : '';
 
 if (!$customer_id || !$technician_id) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Missing required fields.']);
+    echo json_encode(['success' => false, 'message' => 'Missing customer_id or technician_id.']);
     exit;
 }
 
-$tech = new technician();
+$tech = new Technician();
 $result = $tech->assignTechnician($customer_id, $technician_id, $instructions);
 
-if ($result['success']) {
-    // Fetch technician details for email
+if ($result && isset($result['assignment_id'])) {
+    // Get technician details for email
     $technician = $tech->getTechnicianByTechnicianId($technician_id);
     // Fetch customer details for notification
     $customerDetails = $tech->getDetails($customer_id);
     $customerName = $customerDetails['name'] ?? '';
     $customerEmail = $customerDetails['email'] ?? '';
+    
     if ($technician && !empty($technician['email'])) {
-        $subject = "New PC Build Assignment from GearSphere";
-        $message = "<p>Dear {$technician['name']},</p>"
-            . "<p>You have been assigned a new PC build project by a customer on GearSphere.</p>"
-            . "<p><strong>Instructions from customer:</strong><br>" . nl2br(htmlspecialchars($instructions)) . "</p>"
-            . "<p>Please log in to your GearSphere account to view more details and contact the customer.</p>"
-            . "<p>Thank you,<br>GearSphere Team</p>";
         $mailer = new Mailer();
-        $mailer->setInfo($technician['email'], $subject, $message);
+        
+        // Create assignment details for template
+        $assignmentDetails = [
+            'assignment_id' => $result['assignment_id'],
+            'customer_name' => $customerName,
+            'customer_email' => $customerEmail,
+            'instructions' => $instructions,
+            'date' => date('F j, Y')
+        ];
+        
+        // Use new technician assignment template
+        $mailer->sendTechnicianAssignmentEmail(
+            $technician['email'], 
+            $technician['name'], 
+            $assignmentDetails
+        );
+        
         $mailer->send();
+        
         // Add notification for technician
         require_once 'Main Classes/Notification.php';
         $technician_user_id = $technician['user_id'];

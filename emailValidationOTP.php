@@ -19,8 +19,8 @@ if (!$email) {
 $otp = random_int(100000, 999999);
 
 $mailer = new Mailer();
-$message = "Dear User, <br> Your verification code is: <strong>$otp</strong><br>Use this 6-digit code to verify and proceed with registration.";
-$mailer->setInfo($email, 'OTP Verification', $message);
+// Use the new OTP template method
+$mailer->sendOTPEmail($email, 'User', $otp, 'verification');
 
 if ($mailer->send()) {
     http_response_code(200);

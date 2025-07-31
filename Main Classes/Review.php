@@ -27,7 +27,7 @@ class Review
 
     public function getReviews($filters = [])
     {
-        $sql = "SELECT r.*, u.name AS sender_name, u.user_type AS sender_type,
+        $sql = "SELECT r.*, u.name AS username, u.name AS sender_name, u.user_type AS sender_type, u.profile_image,
             CASE 
                 WHEN LOWER(r.target_type) = 'technician' THEN (
                     SELECT u2.email FROM technician t2 JOIN users u2 ON t2.user_id = u2.user_id WHERE t2.technician_id = r.target_id LIMIT 1
@@ -57,6 +57,7 @@ class Review
             $sql .= " AND r.status = ?";
             $params[] = $filters['status'];
         }
+        $sql .= " ORDER BY r.created_at DESC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
@@ -86,7 +87,7 @@ class Review
 
     public function getLatestReviews($limit = 5)
     {
-        $sql = "SELECT r.*, u.name AS sender_name, u.user_type AS sender_type,
+        $sql = "SELECT r.*, u.name AS username, u.name AS sender_name, u.user_type AS sender_type, u.profile_image,
             CASE 
                 WHEN LOWER(r.target_type) = 'technician' THEN (
                     SELECT u2.email FROM technician t2 JOIN users u2 ON t2.user_id = u2.user_id WHERE t2.technician_id = r.target_id LIMIT 1
@@ -98,7 +99,7 @@ class Review
             END AS target_email
             FROM reviews r
             JOIN users u ON r.user_id = u.user_id
-            ORDER BY r.id DESC LIMIT :limit";
+            ORDER BY r.created_at DESC LIMIT :limit";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
         $stmt->execute();
