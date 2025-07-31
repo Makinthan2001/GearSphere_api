@@ -17,12 +17,27 @@ if (isset($_GET['id'])) {
     if ($result) {
         $mailer = new Mailer();
         $userData = $disableUser->getDetails($user_id);
-        $msg = 'Dear GearSphere user, <br> Your Account is ' . $userData['disable_status'] . ' now.<br> For more details contact findgearsphere@gmail.com ';
-        $mailer->setInfo($userData['email'], 'Account Status Changed', $msg);
+        
+        // Use the structured account status template
+        $statusMap = [
+            'disabled' => 'disabled',
+            'active' => 'enabled',
+            'suspended' => 'suspended'
+        ];
+        
+        $emailStatus = $statusMap[$disable_status] ?? 'disabled';
+        
+        // Fix: Remove the extra $subject parameter - the method generates its own subject
+        $mailer->sendAccountStatusEmail($userData['email'], $userData['name'] ?? $userData['email'], $emailStatus);
+        
         if ($mailer->send()) {
-            http_response_code(200);
-            echo json_encode($result);
+            error_log("Account status email sent successfully to: " . $userData['email']);
+        } else {
+            error_log("Failed to send account status email to: " . $userData['email']);
         }
+        
+        http_response_code(200);
+        echo json_encode($result);
     } else {
         http_response_code(404);
         echo json_encode($result);
