@@ -4,15 +4,26 @@ initializeEndpoint();
 
 header("Content-Type: application/json");
 
+// Enhanced debugging for session issues
+$debug_info = [
+    'session_id' => session_id(),
+    'session_name' => session_name(),
+    'session_status' => session_status(),
+    'session_save_path' => session_save_path(),
+    'origin' => isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'Not set',
+    'cookies' => $_COOKIE,
+    'session_data_keys' => array_keys($_SESSION ?? [])
+];
+
+// Log session check attempt
+error_log("GearSphere: Session check attempt - Session ID: " . session_id() . ", Has user_id: " . (isset($_SESSION['user_id']) ? 'YES' : 'NO'));
+
 // Check if user is logged in
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
-    // Debug information
-    $debug_info = [
-        'session_id' => session_id(),
-        'session_status' => session_status(),
-        'session_data' => $_SESSION,
-        'cookies' => $_COOKIE
-    ];
+    // Enhanced debug information for troubleshooting
+    $debug_info['session_contents'] = $_SESSION ?? [];
+
+    error_log("GearSphere: Session check failed - No user_id or user_type in session");
 
     http_response_code(401);
     echo json_encode([

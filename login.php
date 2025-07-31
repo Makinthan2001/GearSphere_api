@@ -31,11 +31,14 @@ if ($signinResult['success']) {
         $_SESSION['name'] = $userDetails['name'];
     }
 
-    // Force session write
+    // Force session write and restart for reliability
     session_write_close();
     session_start();
 
-    // Add debug information to response (temporary for troubleshooting)
+    // Log successful login
+    error_log("GearSphere: Login successful - User ID: " . $signinResult['user_id'] . ", Type: " . $signinResult['user_type'] . ", Session ID: " . session_id());
+
+    // Add debug information to response (for troubleshooting)
     $signinResult['session_debug'] = [
         'session_id' => session_id(),
         'session_name' => session_name(),
@@ -44,7 +47,9 @@ if ($signinResult['success']) {
             'user_id' => $_SESSION['user_id'] ?? 'NOT SET',
             'user_type' => $_SESSION['user_type'] ?? 'NOT SET',
             'email' => $_SESSION['email'] ?? 'NOT SET'
-        ]
+        ],
+        'session_status' => session_status(),
+        'session_save_path' => session_save_path()
     ];
 
     http_response_code(200);
