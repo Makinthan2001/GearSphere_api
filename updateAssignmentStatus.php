@@ -3,9 +3,9 @@ require_once 'corsConfig.php';
 initializeEndpoint();
 require_once 'sessionConfig.php';
 
-require_once './Main Classes/technician.php';
-require_once './Main Classes/Notification.php';
-require_once './Main Classes/Mailer.php';
+require_once __DIR__ . '/Main Classes/Technician.php';
+require_once __DIR__ . '/Main Classes/Notification.php';
+require_once __DIR__ . '/Main Classes/Mailer.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -13,12 +13,13 @@ $assignment_id = isset($data['assignment_id']) ? (int)$data['assignment_id'] : n
 $status = isset($data['status']) ? trim($data['status']) : '';
 
 if (!$assignment_id || !$status) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Missing assignment_id or status.']);
     exit;
 }
 
 try {
-    require_once './DbConnector.php';
+    require_once __DIR__ . '/DbConnector.php';
     $pdo = (new DBConnector())->connect();
     
     // Update assignment status
@@ -31,7 +32,7 @@ try {
                tech_user.name as technician_name
         FROM technician_assignments ta 
         JOIN users u ON ta.customer_id = u.user_id 
-        JOIN technicians t ON ta.technician_id = t.technician_id
+        JOIN technician t ON ta.technician_id = t.technician_id
         JOIN users tech_user ON t.user_id = tech_user.user_id
         WHERE ta.assignment_id = :assignment_id
     ");
@@ -58,7 +59,9 @@ try {
     }
 
     echo json_encode(['success' => true]);
-} catch (PDOException $e) {
+} catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    error_log("updateAssignmentStatus Error: " . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Internal server error: ' . $e->getMessage()]);
 }
+?>

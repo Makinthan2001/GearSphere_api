@@ -122,6 +122,17 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
+    // Account Status Email Template
+    public function sendAccountStatusEmail($recipientEmail, $userName, $status) {
+        $subject = "GearSphere - Account Status Update";
+        $message = $this->getAccountStatusTemplate($userName, $status);
+        
+        $this->mail->addAddress($recipientEmail);
+        $this->mail->isHTML(true);
+        $this->mail->Subject = $subject;
+        $this->mail->Body = $message;
+    }
+
     // Base HTML Template
     private function getBaseTemplate($content) {
         return "
@@ -492,6 +503,70 @@ class Mailer {
                     <strong>Assigned Technician:</strong> " . htmlspecialchars($technicianName) . "<br>
                     <strong>Update Date:</strong> " . date('F j, Y') . "
                 </div>
+            </div>";
+        
+        return $this->getBaseTemplate($content);
+    }
+
+    // Account Status Template
+    private function getAccountStatusTemplate($userName, $status) {
+        $statusMessages = [
+            'disabled' => [
+                'icon' => '🚫',
+                'title' => 'Account Temporarily Disabled',
+                'message' => 'Your GearSphere account has been temporarily disabled due to policy violations or security concerns.',
+                'color' => '#dc3545'
+            ],
+            'enabled' => [
+                'icon' => '✅',
+                'title' => 'Account Reactivated',
+                'message' => 'Great news! Your GearSphere account has been reactivated and you can now access all features.',
+                'color' => '#28a745'
+            ],
+            'suspended' => [
+                'icon' => '⏸️',
+                'title' => 'Account Suspended',
+                'message' => 'Your GearSphere account has been suspended pending review. Please contact support for more information.',
+                'color' => '#ffc107'
+            ]
+        ];
+        
+        $statusInfo = $statusMessages[$status] ?? [
+            'icon' => '🔔',
+            'title' => 'Account Status Update',
+            'message' => 'Your account status has been updated.',
+            'color' => '#6c757d'
+        ];
+        
+        $supportSection = $status === 'disabled' || $status === 'suspended' ? "
+            <div class='order-details' style='border-left: 4px solid {$statusInfo['color']};'>
+                <h3 style='color: {$statusInfo['color']}; margin-bottom: 15px;'>📞 Need Help?</h3>
+                <div style='margin-bottom: 15px;'>
+                    If you believe this action was taken in error or if you have questions about your account status, please contact our support team:
+                </div>
+                <div>
+                    <strong>Email:</strong> support@gearsphere.com<br>
+                    <strong>Phone:</strong> +94 (76) 375 3730<br>
+                    <strong>Response Time:</strong> Within 24 hours
+                </div>
+            </div>" : "";
+        
+        $content = "
+            <div class='greeting'>{$statusInfo['icon']} {$statusInfo['title']}</div>
+            <div class='message'>
+                Hi " . htmlspecialchars($userName) . ",<br><br>
+                {$statusInfo['message']}
+            </div>
+            <div class='order-details'>
+                <h3 style='color: {$statusInfo['color']}; margin-bottom: 15px;'>📋 Account Information</h3>
+                <div>
+                    <strong>Account Status:</strong> <span style='color: {$statusInfo['color']}; font-weight: bold; text-transform: uppercase;'>" . ucfirst($status) . "</span><br>
+                    
+                </div>
+            </div>
+            $supportSection
+            <div class='message'>
+                We appreciate your understanding and look forward to serving you better in the future.
             </div>";
         
         return $this->getBaseTemplate($content);
