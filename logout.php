@@ -4,6 +4,9 @@ initializeEndpoint();
 
 header("Content-Type: application/json");
 
+// Start session to access and destroy it
+session_start();
+
 // Destroy session completely
 $_SESSION = array();
 

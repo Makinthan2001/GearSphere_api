@@ -80,21 +80,12 @@ if (!function_exists('getPortSpecificSessionName')) {
 if (!function_exists('initializeEndpoint')) {
     function initializeEndpoint()
     {
-        // Get port-specific session name
+        // Use port-specific session names to allow multiple concurrent logins
         $sessionName = getPortSpecificSessionName();
 
-        // Extract port for cookie path specificity
-        $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-        $port = '';
-        if (preg_match('/localhost:(\d+)/', $origin, $matches)) {
-            $port = $matches[1];
-        } else {
-            $port = '3000';
-        }
-
-        // Configure session settings
+        // Configure session settings with longer lifetime for stability
         session_set_cookie_params([
-            'lifetime' => 0,
+            'lifetime' => 3600, // 1 hour
             'path' => '/',
             'domain' => '',
             'secure' => false,
@@ -102,17 +93,16 @@ if (!function_exists('initializeEndpoint')) {
             'samesite' => 'Lax'
         ]);
 
-        // Set port-specific session name (this creates separate session files)
+        // Set port-specific session name (each port gets its own session)
         session_name($sessionName);
 
         // Start session if not already started
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
 
-            // Store the port in session for debugging
-            if (!isset($_SESSION['session_port'])) {
-                $_SESSION['session_port'] = $port;
-            }
+            // Debug: Log session startup with port info
+            $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'Unknown';
+            error_log("GearSphere: Session started - ID: " . session_id() . ", Name: " . session_name() . ", Origin: " . $origin);
         }
 
         // Set CORS headers
