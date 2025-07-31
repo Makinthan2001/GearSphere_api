@@ -1,69 +1,60 @@
 <?php
 require_once 'corsConfig.php';
 initializeEndpoint();
+require_once 'sessionConfig.php';
 
-require_once __DIR__ . '/DbConnector.php';
-require_once __DIR__ . '/Main Classes/Mailer.php';
-require_once __DIR__ . '/Main Classes/Notification.php';
-require_once __DIR__ . '/Main Classes/technician.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-    exit;
-}
+require_once './Main Classes/technician.php';
+require_once './Main Classes/Notification.php';
+require_once './Main Classes/Mailer.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
-$assignment_id = isset($data['assignment_id']) ? intval($data['assignment_id']) : null;
-$status = isset($data['status']) ? $data['status'] : null;
 
-if (!$assignment_id || !in_array($status, ['accepted', 'rejected'])) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Missing or invalid parameters']);
+$assignment_id = isset($data['assignment_id']) ? (int)$data['assignment_id'] : null;
+$status = isset($data['status']) ? trim($data['status']) : '';
+
+if (!$assignment_id || !$status) {
+    echo json_encode(['success' => false, 'message' => 'Missing assignment_id or status.']);
     exit;
 }
 
 try {
-    $db = new DBConnector();
-    $pdo = $db->connect();
-    // Update status
-    $sql = "UPDATE technician_assignments SET status = :status WHERE assignment_id = :assignment_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':status', $status);
-    $stmt->bindParam(':assignment_id', $assignment_id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    // Fetch customer email and name
-    $sql2 = "SELECT ta.customer_id, u.email, u.name, ta.technician_id FROM technician_assignments ta INNER JOIN users u ON ta.customer_id = u.user_id WHERE ta.assignment_id = :assignment_id";
-    $stmt2 = $pdo->prepare($sql2);
-    $stmt2->bindParam(':assignment_id', $assignment_id, PDO::PARAM_INT);
-    $stmt2->execute();
-    $customer = $stmt2->fetch(PDO::FETCH_ASSOC);
-
-    // Fetch technician name
-    $technicianName = '';
-    if ($customer && !empty($customer['technician_id'])) {
-        $tech = new technician();
-        $technicianDetails = $tech->getTechnicianByTechnicianId($customer['technician_id']);
-        $technicianName = $technicianDetails['name'] ?? '';
-    }
-
-    if ($customer && !empty($customer['email'])) {
-        $to = $customer['email'];
-        $name = $customer['name'];
-        $subject = "Your Build Request Has Been " . ucfirst($status);
-        $body = "Hello $name,<br><br>Your build request has been <b>" . ucfirst($status) . "</b> by the technician.";
+    require_once './DbConnector.php';
+    $pdo = (new DBConnector())->connect();
+    
+    // Update assignment status
+    $stmt = $pdo->prepare("UPDATE technician_assignments SET status = :status WHERE assignment_id = :assignment_id");
+    $stmt->execute([':status' => $status, ':assignment_id' => $assignment_id]);
+    
+    // Get assignment details for email
+    $stmt = $pdo->prepare("
+        SELECT ta.*, u.name as customer_name, u.email as customer_email, u.user_id as customer_id,
+               tech_user.name as technician_name
+        FROM technician_assignments ta 
+        JOIN users u ON ta.customer_id = u.user_id 
+        JOIN technicians t ON ta.technician_id = t.technician_id
+        JOIN users tech_user ON t.user_id = tech_user.user_id
+        WHERE ta.assignment_id = :assignment_id
+    ");
+    $stmt->execute([':assignment_id' => $assignment_id]);
+    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($customer && !empty($customer['customer_email'])) {
+        // Send build request status email using new template
         $mailer = new Mailer();
-        $mailer->setInfo($to, $subject, $body);
+        $mailer->sendBuildRequestStatusEmail(
+            $customer['customer_email'],
+            $customer['customer_name'],
+            $status,
+            $customer['technician_name']
+        );
         $mailer->send();
+        
         // Add notification for customer
         $notif = new Notification();
-        $notif->addNotification($customer['customer_id'], "Your request was $status by technician: $technicianName.");
+        $notif->addNotification(
+            $customer['customer_id'], 
+            "Your request was $status by technician: " . $customer['technician_name'] . "."
+        );
     }
 
     echo json_encode(['success' => true]);

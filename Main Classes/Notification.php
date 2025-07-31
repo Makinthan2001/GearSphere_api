@@ -15,6 +15,28 @@ class Notification {
         return $stmt->execute([$user_id, $message]);
     }
 
+    // Add a notification only if it doesn't already exist (prevents duplicates)
+    public function addUniqueNotification($user_id, $message, $hours_window = 24) {
+        // Check if a similar notification exists within the specified time window
+        $stmt = $this->pdo->prepare("
+            SELECT COUNT(*) as count 
+            FROM notifications 
+            WHERE user_id = ? 
+            AND message = ? 
+            AND date >= DATE_SUB(NOW(), INTERVAL ? HOUR)
+        ");
+        $stmt->execute([$user_id, $message, $hours_window]);
+        $result = $stmt->fetch();
+        
+        // If no similar notification exists, create a new one
+        if ($result['count'] == 0) {
+            return $this->addNotification($user_id, $message);
+        }
+        
+        // Return true but don't create duplicate
+        return true;
+    }
+
     // Get all notifications for a user (seller)
     public function getNotifications($user_id) {
         $stmt = $this->pdo->prepare("SELECT * FROM notifications WHERE user_id = ? ORDER BY date DESC");
@@ -36,4 +58,4 @@ class Notification {
         return $stmt->execute([$notification_id, $user_id]);
     }
 }
-?> 
+?>

@@ -8,6 +8,8 @@ require_once __DIR__ . '/Main Classes/Orders.php';
 require_once __DIR__ . '/Main Classes/OrderItems.php';
 require_once __DIR__ . '/Main Classes/Payment.php';
 require_once __DIR__ . '/Main Classes/Product.php';
+require_once __DIR__ . '/Main Classes/Notification.php';
+require_once __DIR__ . '/Main Classes/Mailer.php';
 
 // Check if user is logged in via session
 if (!isset($_SESSION['user_id'])) {
@@ -34,6 +36,7 @@ $orderObj = new Orders();
 $orderItemsObj = new OrderItems();
 $paymentObj = new Payment();
 $productObj = new Product();
+$notificationObj = new Notification();
 
 // 1. Create order
 $order_id = $orderObj->createOrder($user_id, $total_amount, $assignment_id);
@@ -43,21 +46,40 @@ if (!$order_id) {
 }
 
 // 2. Add order items
+$orderItems = [];
 foreach ($items as $item) {
     if (!isset($item['product_id'], $item['quantity'], $item['price'])) {
         echo json_encode(['success' => false, 'message' => 'Invalid item data.']);
         exit;
     }
+    
     $ok = $orderItemsObj->addOrderItem($order_id, $item['product_id'], $item['quantity'], $item['price']);
     if (!$ok) {
         echo json_encode(['success' => false, 'message' => 'Failed to add order item.']);
         exit;
     }
-    // Reduce stock for this product
+    
+    // Get product details for email
     $product = $productObj->getProductById($item['product_id']);
     if ($product) {
-        $newStock = max(0, $product['stock'] - $item['quantity']);
+        $orderItems[] = [
+            'name' => $product['name'],
+            'quantity' => $item['quantity'],
+            'price' => $item['price']
+        ];
+        
+        // Reduce stock and check for low stock notifications
+        $oldStock = $product['stock'];
+        $newStock = max(0, $oldStock - $item['quantity']);
         $productObj->updateStock($item['product_id'], $newStock);
+        
+        $minStock = 5; // Low stock threshold
+        if ($newStock <= $minStock && $newStock >= 0) {
+            $sellerId = 28; // Admin/Seller user ID
+            $productName = $product['name'] ?? 'Unknown Product';
+            $message = "Low Stock Alert!\nProduct stock reduced due to customer order:\n\n$productName - Current Stock: $newStock (Min: $minStock)\n\nOrder ID: $order_id";
+            $notificationObj->addUniqueNotification($sellerId, $message, 24);
+        }
     }
 }
 
@@ -66,6 +88,36 @@ $payment_id = $paymentObj->addPayment($order_id, $user_id, $total_amount, $payme
 if (!$payment_id) {
     echo json_encode(['success' => false, 'message' => 'Failed to add payment.']);
     exit;
+}
+
+// 4. Send order confirmation email
+try {
+    // Get customer details
+    require_once __DIR__ . '/DbConnector.php';
+    $db = new DBConnector();
+    $pdo = $db->connect();
+    
+    $stmt = $pdo->prepare("SELECT name, email FROM users WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($customer && !empty($customer['email'])) {
+        $mailer = new Mailer();
+        $orderDetails = [
+            'order_id' => $order_id,
+            'total' => $total_amount,
+            'items' => $orderItems
+        ];
+        
+        $mailer->sendOrderConfirmationEmail(
+            $customer['email'],
+            $customer['name'],
+            $orderDetails
+        );
+        $mailer->send();
+    }
+} catch (Exception $e) {
+    error_log("Failed to send order confirmation email: " . $e->getMessage());
 }
 
 echo json_encode(['success' => true, 'order_id' => $order_id, 'payment_id' => $payment_id]);

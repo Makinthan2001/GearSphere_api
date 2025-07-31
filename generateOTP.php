@@ -18,11 +18,11 @@ if (!$email) {
 
 $checkEmail = new Customer();
 
-if ($checkEmail->checkEmailExists($email)) {  // Change this function to only check email existence
+if ($checkEmail->checkEmailExists($email)) {
     $otp = random_int(100000, 999999);
     $mailer = new Mailer();
-    $msg = "Dear User, <br> Your verification code is: <strong>$otp</strong><br>Use this 6-digit code to verify and change your password.";
-    $mailer->setInfo($email, 'OTP Verification', $msg);
+    // Use the new password reset template
+    $mailer->sendPasswordResetEmail($email, 'User', $otp);
 
     if ($mailer->send()) {
         http_response_code(200);
