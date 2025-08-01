@@ -1,40 +1,21 @@
 <?php
-/**
- * Get Build Request Statistics API Endpoint
- * 
- * This script retrieves build request statistics for a specific technician including:
- * - Total build requests count
- * - Pending requests count
- * - Accepted requests count
- * - Recent pending requests with customer details
- * 
- * Method: GET
- * Required parameter: technician_id
- * Returns: Build request statistics and recent pending requests
- */
-
-// Initialize CORS configuration for cross-origin requests
 require_once 'corsConfig.php';
 initializeEndpoint();
 
-// Set JSON response header
 header('Content-Type: application/json');
 require_once __DIR__ . '/DbConnector.php';
 
-// Handle preflight OPTIONS request for CORS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
-// Only allow GET requests
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Method not allowed']);
     exit;
 }
 
-// Extract and validate technician ID from GET parameters
 $technician_id = isset($_GET['technician_id']) ? intval($_GET['technician_id']) : null;
 if (!$technician_id) {
     http_response_code(400);
@@ -43,11 +24,10 @@ if (!$technician_id) {
 }
 
 try {
-    // Establish database connection
     $db = new DBConnector();
     $pdo = $db->connect();
     
-    // Get total build requests count for the technician
+    // Get total build requests count
     $totalQuery = "SELECT COUNT(*) as total FROM technician_assignments WHERE technician_id = :technician_id";
     $stmt = $pdo->prepare($totalQuery);
     $stmt->execute([':technician_id' => $technician_id]);
@@ -87,7 +67,6 @@ try {
     $stmt->execute([':technician_id' => $technician_id]);
     $pendingDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Return comprehensive statistics and recent pending requests
     echo json_encode([
         'success' => true,
         'stats' => [
@@ -99,7 +78,6 @@ try {
     ]);
     
 } catch (Exception $e) {
-    // Handle database or system errors
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }

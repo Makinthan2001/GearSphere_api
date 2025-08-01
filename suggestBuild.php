@@ -1,109 +1,71 @@
 <?php
-
-/**
- * PC Build Suggestion API Endpoint
- * 
- * This endpoint generates personalized PC build recommendations for the GearSphere system.
- * It analyzes budget constraints and usage patterns to suggest optimal component
- * combinations with intelligent weight distribution and compatibility considerations.
- * 
- * @method GET
- * @endpoint /suggestBuild.php
- * @param float $budget Total budget for the PC build
- * @param string $usage Usage type: 'gaming', 'workstation', or 'multimedia'
- */
-
-// Initialize CORS configuration for cross-origin requests
 require_once 'corsConfig.php';
 initializeEndpoint();
 
-// Import required classes for product comparison and database operations
+// Include required classes
 require_once "Main Classes/Compare_product.php";
 require_once "DbConnector.php";
 
-// ====================================================================
-// EXTRACT AND VALIDATE REQUEST PARAMETERS
-// ====================================================================
-
-// Get budget and usage parameters from query string
+// Get budget and usage from query parameters
 $budget = isset($_GET['budget']) ? (float)$_GET['budget'] : 0;
 $usage = isset($_GET['usage']) ? strtolower(trim($_GET['usage'])) : '';
 
-// Validate budget parameter
 if ($budget <= 0) {
     echo json_encode(['success' => false, 'message' => 'Invalid budget']);
     exit;
 }
 
-// ====================================================================
-// USAGE-BASED WEIGHT DISTRIBUTION SYSTEM
-// ====================================================================
-
-// Define intelligent budget allocation weights for different usage scenarios
+// Define usage-based weight distribution
 $usageWeights = [
     'gaming' => [
-        'cpu' => 0.15,          // Moderate CPU for gaming
-        'gpu' => 0.30,          // High GPU allocation for graphics performance
-        'ram' => 0.10,          // Standard RAM allocation
-        'storage' => 0.10,      // Storage for game libraries
-        'motherboard' => 0.12,  // Quality motherboard for stability
-        'psu' => 0.06,          // Adequate power supply
-        'case' => 0.05,         // Basic case requirements
-        'cooler' => 0.03,       // Cooling for gaming sessions
-        'os' => 0.04,           // Operating system
-        'monitor' => 0.05       // Display for gaming experience
+        'cpu' => 0.15,
+        'gpu' => 0.30,
+        'ram' => 0.10,
+        'storage' => 0.10,
+        'motherboard' => 0.12,
+        'psu' => 0.06,
+        'case' => 0.05,
+        'cooler' => 0.03,
+        'os' => 0.04,
+        'monitor' => 0.05
     ],
     'workstation' => [
-        'cpu' => 0.25,          // High CPU allocation for computational tasks
-        'gpu' => 0.20,          // Professional GPU for rendering/CAD
-        'ram' => 0.12,          // Increased RAM for multitasking
-        'storage' => 0.12,      // More storage for work files
-        'motherboard' => 0.12,  // Reliable motherboard for stability
-        'psu' => 0.06,          // Adequate power for workstation components
-        'case' => 0.04,         // Professional case
-        'cooler' => 0.03,       // Cooling for sustained workloads
-        'os' => 0.03,           // Operating system
-        'monitor' => 0.03       // Basic monitor allocation
+        'cpu' => 0.25,
+        'gpu' => 0.20,
+        'ram' => 0.12,
+        'storage' => 0.12,
+        'motherboard' => 0.12,
+        'psu' => 0.06,
+        'case' => 0.04,
+        'cooler' => 0.03,
+        'os' => 0.03,
+        'monitor' => 0.03
     ],
     'multimedia' => [
-        'cpu' => 0.18,          // Balanced CPU for media processing
-        'gpu' => 0.22,          // GPU for video editing and streaming
-        'ram' => 0.10,          // RAM for media applications
-        'storage' => 0.10,      // Storage for media files
-        'motherboard' => 0.12,  // Quality motherboard
-        'psu' => 0.05,          // Power supply
-        'case' => 0.05,         // Case for multimedia setup
-        'cooler' => 0.03,       // Cooling system
-        'os' => 0.05,           // Operating system
-        'monitor' => 0.10       // Higher monitor allocation for content creation
+        'cpu' => 0.18,
+        'gpu' => 0.22,
+        'ram' => 0.10,
+        'storage' => 0.10,
+        'motherboard' => 0.12,
+        'psu' => 0.05,
+        'case' => 0.05,
+        'cooler' => 0.03,
+        'os' => 0.05,
+        'monitor' => 0.10
     ]
 ];
 
-// Apply weight distribution based on usage type (fallback to gaming)
+// Fallback to gaming if usage type is unknown
 $weights = $usageWeights[$usage] ?? $usageWeights['gaming'];
 
-// ====================================================================
-// DATABASE CONNECTION AND HELPER FUNCTIONS
-// ====================================================================
-
-// Connect to database for product queries
+// Connect to database
 $db = new DBConnector();
 $pdo = $db->connect();
 
-// Create comparison instance for future feature enhancements
+// Create compare instance (future use)
 $compare = new Compare_product($pdo);
 
-/**
- * Get the best affordable product within price range
- * 
- * This function finds the most expensive (highest quality) product
- * that fits within the allocated budget for each component category.
- * 
- * @param PDO $pdo Database connection
- * @param string $table Product category table name
- * @param float $maxPrice Maximum price for the component
- * @return array|false Product data or false if none found
- */
+// Function to get most expensive product under max price
 function getBestAffordable($pdo, $table, $maxPrice)
 {
     $sql = "
@@ -118,11 +80,7 @@ function getBestAffordable($pdo, $table, $maxPrice)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// ====================================================================
-// COMPONENT CATEGORY MAPPING
-// ====================================================================
-
-// Map component types to their corresponding database tables
+// Table mapping
 $tableMap = [
     'cpu' => 'cpu',
     'motherboard' => 'motherboard',
@@ -136,22 +94,13 @@ $tableMap = [
     'monitor' => 'monitor'
 ];
 
-// ====================================================================
-// GENERATE PERSONALIZED PC BUILD
-// ====================================================================
-
+// Generate build
 $build = [];
 $debug = [];
-
-// Process each component category with allocated budget
 foreach ($weights as $part => $weight) {
-    // Calculate maximum price for this component (with 10% flexibility)
-    $max = $budget * $weight * 1.1;
+    $max = $budget * $weight * 1.1; // 10% flexibility
     $table = $tableMap[$part];
-    
-    // Find best product within budget
     $item = getBestAffordable($pdo, $table, $max);
-    
     if ($item) {
         $build[$part] = $item;
     } else {
@@ -160,14 +109,10 @@ foreach ($weights as $part => $weight) {
     }
 }
 
-// ====================================================================
-// CALCULATE BUILD TOTAL AND CATEGORIZATION
-// ====================================================================
-
-// Calculate total cost of selected components
+// Calculate total
 $total = array_sum(array_map(fn($item) => $item['price'] ?? 0, $build));
 
-// Categorize build based on budget range
+// Budget label
 $budgetLabel = '';
 switch (true) {
     case $budget >= 100000 && $budget <= 200000:
@@ -192,11 +137,7 @@ switch (true) {
         $budgetLabel = 'Below Minimum';
 }
 
-// ====================================================================
-// RETURN BUILD RECOMMENDATION RESPONSE
-// ====================================================================
-
-// Prepare comprehensive response with build details
+// Final response
 $response = [
     'success' => true,
     'build' => $build,
@@ -205,10 +146,9 @@ $response = [
     'usage' => ucfirst($usage)
 ];
 
-// Include debug information if components couldn't be found
 if (!empty($debug)) {
     $response['debug'] = $debug;
 }
 
-// Return JSON response with build recommendation
+// Output JSON
 echo json_encode($response);

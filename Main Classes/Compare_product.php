@@ -1,52 +1,10 @@
 <?php
-
-/**
- * Product Comparison Management Class
- * 
- * This class extends the Product class to provide specialized functionality
- * for comparing different types of computer hardware components. It fetches
- * detailed specifications for various product categories to enable
- * side-by-side comparisons in the GearSphere system.
- * 
- * Features:
- * - Detailed product retrieval with category-specific specifications
- * - Support for all major PC component categories
- * - Individual product fetching by ID with full details
- * - Bulk product retrieval for comparison views
- * - Database joins for comprehensive product information
- * 
- * Supported Categories:
- * - CPUs (Processors)
- * - GPUs (Video Cards)
- * - Motherboards
- * - Memory (RAM)
- * - Storage (HDD/SSD)
- * - Power Supplies
- * - PC Cases
- * - CPU Coolers
- * - Monitors
- * - Operating Systems
- *
- * @extends Product
- */
-
 require_once __DIR__ . '/Product.php';
 
 class Compare_product extends Product
 {
-    /**
-     * @var PDO Database connection instance
-     */
     private $pdo;
 
-    /**
-     * Compare Product Constructor
-     * 
-     * Initializes the Compare_product class with database connection.
-     * Can accept an existing PDO connection or create a new one.
-     * 
-     * @param PDO|null $pdo Optional existing database connection
-     */
     public function __construct($pdo = null)
     {
         if ($pdo) {
@@ -59,14 +17,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All CPUs with Detailed Specifications
-     * 
-     * Fetches all CPU products with their general product information
-     * and CPU-specific technical specifications for comparison purposes.
-     * 
-     * @return array Array of CPU products with detailed specifications including:
-     *               - series, socket, core_count, thread_count, core_clock,
-     *               - core_boost_clock, tdp, integrated_graphics
+     * Fetch all CPUs with general and CPU-specific details
+     * @return array
      */
     public function getAllCPUsWithDetails()
     {
@@ -80,13 +32,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single CPU by Product ID
-     * 
-     * Fetches a specific CPU product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the CPU product
-     * @return array|null CPU product with specifications or null if not found
+     * Fetch a single CPU by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getCPUById($productId)
     {
@@ -100,14 +48,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All GPUs with Detailed Specifications
-     * 
-     * Fetches all GPU/Video Card products with their general information
-     * and GPU-specific technical specifications for comparison.
-     * 
-     * @return array Array of GPU products with detailed specifications including:
-     *               - chipset, memory, memory_type, core_clock, boost_clock,
-     *               - interface, length, tdp, cooling
+     * Fetch all GPUs with general and GPU-specific details
+     * @return array
      */
     public function getAllGPUsWithDetails()
     {
@@ -121,13 +63,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single GPU by Product ID
-     * 
-     * Fetches a specific GPU product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the GPU product
-     * @return array|null GPU product with specifications or null if not found
+     * Fetch a single GPU by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getGPUById($productId)
     {
@@ -141,14 +79,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Motherboards with Detailed Specifications
-     * 
-     * Fetches all motherboard products with their general information
-     * and motherboard-specific technical specifications for comparison.
-     * 
-     * @return array Array of motherboard products with detailed specifications including:
-     *               - socket, form_factor, chipset, memory_max, memory_slots,
-     *               - memory_type, sata_ports, wifi
+     * Fetch all Motherboards with general and motherboard-specific details
+     * @return array
      */
     public function getAllMotherboardsWithDetails()
     {
@@ -162,13 +94,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Motherboard by Product ID
-     * 
-     * Fetches a specific motherboard product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the motherboard product
-     * @return array|null Motherboard product with specifications or null if not found
+     * Fetch a single Motherboard by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getMotherBoardById($productId)
     {
@@ -182,13 +110,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Memory/RAM with Detailed Specifications
-     * 
-     * Fetches all memory products with their general information
-     * and memory-specific technical specifications for comparison.
-     * 
-     * @return array Array of memory products with detailed specifications including:
-     *               - memory_type, speed, modules, cas_latency, voltage
+     * Fetch all Memory/RAM with general and memory-specific details
+     * @return array
      */
     public function getAllMemoryWithDetails()
     {
@@ -202,13 +125,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Memory/RAM by Product ID
-     * 
-     * Fetches a specific memory product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the memory product
-     * @return array|null Memory product with specifications or null if not found
+     * Fetch a single Memory/RAM by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getMemoryById($productId)
     {
@@ -222,13 +141,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Storage Devices with Detailed Specifications
-     * 
-     * Fetches all storage products with their general information
-     * and storage-specific technical specifications for comparison.
-     * 
-     * @return array Array of storage products with detailed specifications including:
-     *               - storage_type, capacity, interface, form_factor
+     * Fetch all Storage devices with general and storage-specific details
+     * @return array
      */
     public function getAllStorageWithDetails()
     {
@@ -242,13 +156,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Storage Device by Product ID
-     * 
-     * Fetches a specific storage product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the storage product
-     * @return array|null Storage product with specifications or null if not found
+     * Fetch a single Storage device by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getStorageById($productId)
     {
@@ -262,13 +172,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Power Supplies with Detailed Specifications
-     * 
-     * Fetches all power supply products with their general information
-     * and PSU-specific technical specifications for comparison.
-     * 
-     * @return array Array of power supply products with detailed specifications including:
-     *               - wattage, psu_type, efficiency_rating, length, modular, sata_connectors
+     * Fetch all Power Supplies with general and PSU-specific details
+     * @return array
      */
     public function getAllPowerSuppliesWithDetails()
     {
@@ -282,13 +187,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Power Supply by Product ID
-     * 
-     * Fetches a specific power supply product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the power supply product
-     * @return array|null Power supply product with specifications or null if not found
+     * Fetch a single Power Supply by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getPowerSupplyById($productId)
     {
@@ -302,13 +203,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All PC Cases with Detailed Specifications
-     * 
-     * Fetches all PC case products with their general information
-     * and case-specific technical specifications for comparison.
-     * 
-     * @return array Array of PC case products with detailed specifications including:
-     *               - type, side_panel, color, max_gpu_length, volume, dimensions
+     * Fetch all PC Cases with general and case-specific details
+     * @return array
      */
     public function getAllPCCasesWithDetails()
     {
@@ -322,13 +218,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single PC Case by Product ID
-     * 
-     * Fetches a specific PC case product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the PC case product
-     * @return array|null PC case product with specifications or null if not found
+     * Fetch a single PC Case by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getPCCaseById($productId)
     {
@@ -342,13 +234,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All CPU Coolers with Detailed Specifications
-     * 
-     * Fetches all CPU cooler products with their general information
-     * and cooler-specific technical specifications for comparison.
-     * 
-     * @return array Array of CPU cooler products with detailed specifications including:
-     *               - fan_rpm, noise_level, color, height, water_cooled
+     * Fetch all CPU Coolers with general and cooler-specific details
+     * @return array
      */
     public function getAllCPUCoolersWithDetails()
     {
@@ -362,13 +249,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single CPU Cooler by Product ID
-     * 
-     * Fetches a specific CPU cooler product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the CPU cooler product
-     * @return array|null CPU cooler product with specifications or null if not found
+     * Fetch a single CPU Cooler by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getCPUCoolerById($productId)
     {
@@ -382,13 +265,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Monitors with Detailed Specifications
-     * 
-     * Fetches all monitor products with their general information
-     * and monitor-specific technical specifications for comparison.
-     * 
-     * @return array Array of monitor products with detailed specifications including:
-     *               - screen_size, resolution, refresh_rate, panel_type, aspect_ratio, brightness
+     * Fetch all Monitors with general and monitor-specific details
+     * @return array
      */
     public function getAllMonitorsWithDetails()
     {
@@ -402,13 +280,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Monitor by Product ID
-     * 
-     * Fetches a specific monitor product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the monitor product
-     * @return array|null Monitor product with specifications or null if not found
+     * Fetch a single Monitor by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getMonitorById($productId)
     {
@@ -422,13 +296,8 @@ class Compare_product extends Product
     }
 
     /**
-     * Get All Operating Systems with Detailed Specifications
-     * 
-     * Fetches all operating system products with their general information
-     * and OS-specific technical specifications for comparison.
-     * 
-     * @return array Array of operating system products with detailed specifications including:
-     *               - model, mode, version, max_supported_memory
+     * Fetch all Operating Systems with general and OS-specific details
+     * @return array
      */
     public function getAllOperatingSystemsWithDetails()
     {
@@ -442,13 +311,9 @@ class Compare_product extends Product
     }
 
     /**
-     * Get Single Operating System by Product ID
-     * 
-     * Fetches a specific operating system product with complete specifications
-     * for detailed comparison or individual product display.
-     * 
-     * @param int $productId The unique identifier of the operating system product
-     * @return array|null Operating system product with specifications or null if not found
+     * Fetch a single Operating System by product_id
+     * @param int $productId
+     * @return array|null
      */
     public function getOperatingSystemById($productId)
     {

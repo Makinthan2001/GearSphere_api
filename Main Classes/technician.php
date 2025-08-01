@@ -1,41 +1,14 @@
 <?php
-
-/**
- * Technician Management Class
- * 
- * This class handles all technician-specific functionality in the GearSphere system.
- * It extends the base User class and provides methods for technician management,
- * assignment handling, build request tracking, and profile management.
- * @package GearSphere-BackEnd
- */
-
 include_once 'Main Classes/User.php';
-
 class technician extends User
 {
-    private $technician_id;      // Unique technician identifier
-    private $charge_per_day;     // Daily service charge rate
+    private $technician_id;
+    private $charge_per_day;
 
-    /**
-     * Constructor - Initialize technician with database connection
-     * 
-     * Calls the parent User constructor to establish database connection
-     * and inherit all base user functionality.
-     */
     public function __construct()
     {
         parent::__construct();
     }
-    
-    /**
-     * Get technician ID by user ID
-     * 
-     * Retrieves the technician-specific ID for a given user ID.
-     * Used to link user accounts with technician records.
-     * 
-     * @param int $user_id User ID to look up
-     * @return int|null|array Technician ID, null if not found, or error array
-     */
     public function getTechnicianId($user_id)
     {
         $this->user_id = $user_id;
@@ -57,22 +30,11 @@ class technician extends User
         }
     }
 
-    /**
-     * Get complete technician details
-     * 
-     * Combines user details from parent class with technician-specific
-     * information including specialization, experience, and qualifications.
-     * 
-     * @param int $user_id User ID of the technician
-     * @return array Combined user and technician data or error array
-     */
     public function getTechnicianDetails($user_id)
     {
         try {
-            // Get base user details from parent class
             $userDetails = parent::getDetails($user_id);
 
-            // Get technician-specific details
             $sql = "SELECT * FROM technician WHERE user_id = :user_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindParam(":user_id", $user_id);
@@ -80,7 +42,6 @@ class technician extends User
 
             $technicianDetails = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Merge user and technician data
             $result = array_merge($userDetails, $technicianDetails);
 
             return $result;
@@ -88,17 +49,6 @@ class technician extends User
             return ['error' => 'An error occurred while fetching data: ' . $e->getMessage()];
         }
     }
-    
-    /**
-     * Update technician availability status
-     * 
-     * Changes the technician's status (available, busy, unavailable).
-     * Used for managing technician workload and assignment availability.
-     * 
-     * @param int $technician_id ID of the technician
-     * @param string $status New status value
-     * @return bool True if updated successfully, false otherwise
-     */
     public function setStatus($technician_id, $status)
     {
         $this->technician_id = $technician_id;
@@ -115,22 +65,13 @@ class technician extends User
         }
     }
 
-    /**
-     * Retrieve all technicians in the system
-     * 
-     * Fetches complete technician list with user details, qualifications,
-     * and current status. Used for admin management and assignment selection.
-     * 
-     * @return array Array of all technician data with default profile images
-     */
     public function getAllTechnicians()
     {
         try {
             $stmt = $this->pdo->prepare("SELECT t.technician_id, u.*, t.proof, t.charge_per_day, t.specialization, t.experience, t.status, t.approve_status FROM users u INNER JOIN technician t ON u.user_id = t.user_id WHERE u.user_type = 'technician' ORDER BY u.user_id DESC");
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Ensure every technician has a profile image (set default if missing)
+            // Ensure every technician has a profile_image value
             foreach ($users as &$user) {
                 if (empty($user['profile_image'])) {
                     $user['profile_image'] = 'user_image.jpg'; // default image
@@ -144,22 +85,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Update technician profile and service details
-     * 
-     * Updates both user information (via parent class) and technician-specific
-     * data including daily rates and availability status.
-     * 
-     * @param int $user_id User ID of the technician
-     * @param string $name Updated name
-     * @param string $contact_number Updated contact number
-     * @param string $address Updated address
-     * @param string $profile_image Updated profile image path
-     * @param int $technician_id Technician ID
-     * @param float $charge_per_day Daily service charge
-     * @param string $status Availability status
-     * @return array Result array with success status
-     */
     public function updateTechnicianDetails(
         $user_id,
         $name,
@@ -170,17 +95,12 @@ class technician extends User
         $charge_per_day,
         $status
     ) {
-        // Update user details via parent class
         parent::updateDetails($user_id, $name, $contact_number, $address, $profile_image);
-        
         $this->technician_id = $technician_id;
         $this->charge_per_day = $charge_per_day;
         $this->status = $status;
-        
         error_log("Updating technician_id {$this->technician_id} with charge_per_day: {$this->charge_per_day} and status: {$this->status}");
-        
         try {
-            // Update technician-specific details
             $sql = "UPDATE technician SET charge_per_day = :charge_per_day, status = :status WHERE technician_id = :technician_id";
             $stmt = $this->pdo->prepare($sql);
             $rs = $stmt->execute([
@@ -188,7 +108,6 @@ class technician extends User
                 'status' => $this->status,
                 'technician_id' => $this->technician_id,
             ]);
-            
             if ($rs) {
                 error_log("Update succeeded.");
                 return ['success' => true];
@@ -203,17 +122,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Assign technician to customer build request
-     * 
-     * Creates a new assignment linking a customer with a technician
-     * for custom PC build services. Includes optional build instructions.
-     * 
-     * @param int $customer_id ID of the customer requesting service
-     * @param int $technician_id ID of the assigned technician
-     * @param string|null $instructions Special build instructions
-     * @return array Result array with assignment ID or error message
-     */
     public function assignTechnician($customer_id, $technician_id, $instructions = null)
     {
         try {
@@ -229,15 +137,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Get technician information by technician ID
-     * 
-     * Retrieves complete technician profile including user details
-     * for assignment and contact purposes.
-     * 
-     * @param int $technician_id Technician ID to look up
-     * @return array|null Technician data or null if not found
-     */
     public function getTechnicianByTechnicianId($technician_id)
     {
         try {
@@ -251,15 +150,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Get build requests assigned to a technician
-     * 
-     * Retrieves all build assignments for a specific technician including
-     * customer details and project status. Used for technician dashboard.
-     * 
-     * @param int $technician_id ID of the technician
-     * @return array Array of build request data with customer information
-     */
     public function getBuildRequests($technician_id)
     {
         try {
@@ -290,15 +180,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Get recently registered technicians
-     * 
-     * Retrieves the most recently registered technicians for
-     * dashboard displays and administrative monitoring.
-     * 
-     * @param int $limit Maximum number of technicians to return (default: 5)
-     * @return array Array of latest technician data with default profile images
-     */
     public function getLatestTechnicians($limit = 5)
     {
         try {
@@ -306,8 +187,6 @@ class technician extends User
             $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Set default profile images for technicians without images
             foreach ($users as &$user) {
                 if (empty($user['profile_image'])) {
                     $user['profile_image'] = 'user_image.jpg';
@@ -321,14 +200,6 @@ class technician extends User
         }
     }
 
-    /**
-     * Get total count of technicians in the system
-     * 
-     * Returns the total number of registered technicians for
-     * dashboard statistics and administrative reporting.
-     * 
-     * @return int Total number of technicians
-     */
     public function getTechnicianCount()
     {
         try {

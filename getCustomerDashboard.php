@@ -1,26 +1,10 @@
 <?php
-/**
- * Get Customer Dashboard API Endpoint
- * 
- * This script retrieves dashboard data for authenticated customers including:
- * - Order statistics (total, delivered, pending)
- * - Recent system reviews
- * - Customer profile information
- * - Access control for customer-only data
- * 
- * Method: GET/POST
- * Authentication: Required (customer session)
- * Returns: Dashboard statistics and recent activity data
- */
-
-// Initialize CORS configuration for cross-origin requests
 require_once 'corsConfig.php';
 initializeEndpoint();
 
-// Include database connector for direct queries
 require_once 'DbConnector.php';
 
-// Verify user authentication and session data
+// Get user info from session
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
     http_response_code(401);
     echo json_encode([
@@ -30,11 +14,10 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
     exit;
 }
 
-// Extract user information from session
 $userId = $_SESSION['user_id'];
 $userType = $_SESSION['user_type'];
 
-// Restrict access to customers only
+// Only allow customers to access this endpoint
 if (strtolower($userType) !== 'customer') {
     http_response_code(403);
     echo json_encode([
@@ -45,10 +28,9 @@ if (strtolower($userType) !== 'customer') {
 }
 
 try {
-    // Establish database connection
     $pdo = (new DBConnector())->connect();
 
-    // Get total orders count for the customer
+    // Get total orders count
     $totalOrdersQuery = "SELECT COUNT(*) as total_orders FROM orders WHERE user_id = ?";
     $stmt = $pdo->prepare($totalOrdersQuery);
     $stmt->execute([$userId]);
@@ -62,14 +44,14 @@ try {
     $deliveredOrdersResult = $stmt->fetch();
     $deliveredOrders = $deliveredOrdersResult['delivered_orders'];
 
-    // Get pending orders count (includes processing and shipped)
+    // Get pending orders count
     $pendingOrdersQuery = "SELECT COUNT(*) as pending_orders FROM orders WHERE user_id = ? AND status IN ('pending', 'processing', 'shipped')";
     $stmt = $pdo->prepare($pendingOrdersQuery);
     $stmt->execute([$userId]);
     $pendingOrdersResult = $stmt->fetch();
     $pendingOrders = $pendingOrdersResult['pending_orders'];
 
-    // Get last 5 system reviews by the customer
+    // Get last 5 reviews where target_type = 'system'
     $reviewsQuery = "SELECT r.*, p.name as product_name 
                      FROM reviews r 
                      LEFT JOIN products p ON r.target_id = p.product_id 
@@ -79,7 +61,6 @@ try {
     $stmt = $pdo->prepare($reviewsQuery);
     $stmt->execute([$userId]);
 
-    // Format review data for frontend consumption
     $reviews = [];
     while ($row = $stmt->fetch()) {
         $reviews[] = [
@@ -94,13 +75,12 @@ try {
         ];
     }
 
-    // Get customer profile details for additional dashboard info
+    // Get customer details for additional info
     $customerQuery = "SELECT name, email FROM users WHERE user_id = ?";
     $stmt = $pdo->prepare($customerQuery);
     $stmt->execute([$userId]);
     $customerResult = $stmt->fetch();
 
-    // Compile comprehensive dashboard response
     $response = [
         'success' => true,
         'user_id' => $userId,
@@ -118,7 +98,6 @@ try {
 
     echo json_encode($response);
 } catch (Exception $e) {
-    // Handle database or system errors
     http_response_code(500);
     echo json_encode([
         'success' => false,

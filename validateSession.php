@@ -1,28 +1,10 @@
 <?php
-
-/**
- * Session Validation API Endpoint
- * 
- * This endpoint validates user sessions and manages session timeouts for the GearSphere system.
- * It checks session validity, enforces inactivity timeouts, updates activity timestamps,
- * and returns current session data for authentication verification.
- * 
- * @method GET/POST
- * @endpoint /validateSession.php
- */
-
-// Initialize CORS and session configuration
 require_once 'corsConfig.php';
 initializeEndpoint();
 
-// Set JSON response header
 header("Content-Type: application/json");
 
-// ====================================================================
-// SESSION EXISTENCE CHECK
-// ====================================================================
-
-// Check if session exists and contains required authentication data
+// Check if session exists and is valid
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
     http_response_code(401);
     echo json_encode([
@@ -33,25 +15,15 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type'])) {
     exit();
 }
 
-// ====================================================================
-// SESSION ACTIVITY TRACKING INITIALIZATION
-// ====================================================================
-
-// Initialize last activity timestamp if not present
+// Check if session has a last activity timestamp
 if (!isset($_SESSION['last_activity'])) {
     $_SESSION['last_activity'] = time();
 }
 
-// ====================================================================
-// SESSION TIMEOUT VALIDATION
-// ====================================================================
-
-// Define session timeout duration (3 hours = 10800 seconds)
+// Check session timeout (3 hours = 10800 seconds)
 $session_timeout = 10800; // 3 hours
-
-// Check if session has exceeded inactivity timeout
 if (time() - $_SESSION['last_activity'] > $session_timeout) {
-    // Session expired due to inactivity - destroy it
+    // Session expired, destroy it
     session_destroy();
     http_response_code(401);
     echo json_encode([
@@ -62,14 +34,10 @@ if (time() - $_SESSION['last_activity'] > $session_timeout) {
     exit();
 }
 
-// ====================================================================
-// UPDATE SESSION ACTIVITY AND RETURN DATA
-// ====================================================================
-
-// Update last activity timestamp to current time
+// Update last activity timestamp
 $_SESSION['last_activity'] = time();
 
-// Compile session response data
+// Return valid session data
 $response = [
     'success' => true,
     'user_id' => $_SESSION['user_id'],
@@ -79,11 +47,10 @@ $response = [
     'last_activity' => $_SESSION['last_activity']
 ];
 
-// Add technician-specific data if user is a technician
+// Add technician_id if present
 if (isset($_SESSION['technician_id'])) {
     $response['technician_id'] = $_SESSION['technician_id'];
 }
 
-// Return valid session information
 http_response_code(200);
 echo json_encode($response);
