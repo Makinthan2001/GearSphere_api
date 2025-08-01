@@ -45,16 +45,16 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
-    // Welcome Email Template
-    public function sendWelcomeEmail($recipientEmail, $userName, $userType = 'customer') {
-        $subject = "Welcome to GearSphere - Let's Build Your Dream PC!";
-        $message = $this->getWelcomeTemplate($userName, $userType);
+    // // Welcome Email Template
+    // public function sendWelcomeEmail($recipientEmail, $userName, $userType = 'customer') {
+    //     $subject = "Welcome to GearSphere - Let's Build Your Dream PC!";
+    //     $message = $this->getWelcomeTemplate($userName, $userType);
         
-        $this->mail->addAddress($recipientEmail);
-        $this->mail->isHTML(true);
-        $this->mail->Subject = $subject;
-        $this->mail->Body = $message;
-    }
+    //     $this->mail->addAddress($recipientEmail);
+    //     $this->mail->isHTML(true);
+    //     $this->mail->Subject = $subject;
+    //     $this->mail->Body = $message;
+    // }
 
     // Order Confirmation Email Template
     // public function sendOrderConfirmationEmail($recipientEmail, $userName, $orderDetails) {
@@ -90,15 +90,15 @@ class Mailer {
     }
 
     // Technician Application Email Template
-    public function sendTechnicianApplicationEmail($recipientEmail, $userName, $status) {
-        $subject = "GearSphere - Technician Application Update";
-        $message = $this->getTechnicianApplicationTemplate($userName, $status);
+    // public function sendTechnicianApplicationEmail($recipientEmail, $userName, $status) {
+    //     $subject = "GearSphere - Technician Application Update";
+    //     $message = $this->getTechnicianApplicationTemplate($userName, $status);
         
-        $this->mail->addAddress($recipientEmail);
-        $this->mail->isHTML(true);
-        $this->mail->Subject = $subject;
-        $this->mail->Body = $message;
-    }
+    //     $this->mail->addAddress($recipientEmail);
+    //     $this->mail->isHTML(true);
+    //     $this->mail->Subject = $subject;
+    //     $this->mail->Body = $message;
+    // }
 
     // Technician Assignment Email Template
     public function sendTechnicianAssignmentEmail($recipientEmail, $technicianName, $assignmentDetails) {
