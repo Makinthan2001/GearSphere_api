@@ -59,7 +59,7 @@ foreach ($items as $item) {
         exit;
     }
     
-    // Get product details for email
+    // Get product details for low stock notifications
     $product = $productObj->getProductById($item['product_id']);
     if ($product) {
         $orderItems[] = [
@@ -88,36 +88,6 @@ $payment_id = $paymentObj->addPayment($order_id, $user_id, $total_amount, $payme
 if (!$payment_id) {
     echo json_encode(['success' => false, 'message' => 'Failed to add payment.']);
     exit;
-}
-
-// 4. Send order confirmation email
-try {
-    // Get customer details
-    require_once __DIR__ . '/DbConnector.php';
-    $db = new DBConnector();
-    $pdo = $db->connect();
-    
-    $stmt = $pdo->prepare("SELECT name, email FROM users WHERE user_id = ?");
-    $stmt->execute([$user_id]);
-    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($customer && !empty($customer['email'])) {
-        $mailer = new Mailer();
-        $orderDetails = [
-            'order_id' => $order_id,
-            'total' => $total_amount,
-            'items' => $orderItems
-        ];
-        
-        $mailer->sendOrderConfirmationEmail(
-            $customer['email'],
-            $customer['name'],
-            $orderDetails
-        );
-        $mailer->send();
-    }
-} catch (Exception $e) {
-    error_log("Failed to send order confirmation email: " . $e->getMessage());
 }
 
 echo json_encode(['success' => true, 'order_id' => $order_id, 'payment_id' => $payment_id]);

@@ -1,6 +1,7 @@
 <?php
 require_once 'corsConfig.php';
 initializeEndpoint();
+require_once 'sessionConfig.php';
 
 require_once './Main Classes/Technician.php';
 require_once './Main Classes/Mailer.php';
@@ -59,11 +60,6 @@ $result = $TechnicianRegister->registertechnician(
 );
 
 if ($result) {
-    // Send welcome email to new technician
-    $mailer = new Mailer();
-    $mailer->sendWelcomeEmail($email, $name, 'technician');
-    $mailer->send();
-    
     // Create notification for admin when new technician registers
     require_once __DIR__ . '/Main Classes/Notification.php';
     require_once __DIR__ . '/DbConnector.php';

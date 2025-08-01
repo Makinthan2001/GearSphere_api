@@ -57,26 +57,26 @@ class Mailer {
     }
 
     // Order Confirmation Email Template
-    public function sendOrderConfirmationEmail($recipientEmail, $userName, $orderDetails) {
-        $subject = "GearSphere - Order Confirmation #{$orderDetails['order_id']}";
-        $message = $this->getOrderConfirmationTemplate($userName, $orderDetails);
+    // public function sendOrderConfirmationEmail($recipientEmail, $userName, $orderDetails) {
+    //     $subject = "GearSphere - Order Confirmation #{$orderDetails['order_id']}";
+    //     $message = $this->getOrderConfirmationTemplate($userName, $orderDetails);
         
-        $this->mail->addAddress($recipientEmail);
-        $this->mail->isHTML(true);
-        $this->mail->Subject = $subject;
-        $this->mail->Body = $message;
-    }
+    //     $this->mail->addAddress($recipientEmail);
+    //     $this->mail->isHTML(true);
+    //     $this->mail->Subject = $subject;
+    //     $this->mail->Body = $message;
+    // }
 
     // Order Status Update Email Template
-    public function sendOrderStatusEmail($recipientEmail, $userName, $orderDetails, $newStatus) {
-        $subject = "GearSphere - Order Update #{$orderDetails['order_id']}";
-        $message = $this->getOrderStatusTemplate($userName, $orderDetails, $newStatus);
+    // public function sendOrderStatusEmail($recipientEmail, $userName, $orderDetails, $newStatus) {
+    //     $subject = "GearSphere - Order Update #{$orderDetails['order_id']}";
+    //     $message = $this->getOrderStatusTemplate($userName, $orderDetails, $newStatus);
         
-        $this->mail->addAddress($recipientEmail);
-        $this->mail->isHTML(true);
-        $this->mail->Subject = $subject;
-        $this->mail->Body = $message;
-    }
+    //     $this->mail->addAddress($recipientEmail);
+    //     $this->mail->isHTML(true);
+    //     $this->mail->Subject = $subject;
+    //     $this->mail->Body = $message;
+    // }
 
     // Password Reset Email Template
     public function sendPasswordResetEmail($recipientEmail, $userName, $otp) {
@@ -318,99 +318,99 @@ class Mailer {
     }
 
     // Welcome Email Template
-    private function getWelcomeTemplate($userName, $userType) {
-        $typeSpecific = $userType === 'technician' 
-            ? "As a technician, you'll help customers build their dream PCs and provide expert technical support."
-            : "Get ready to explore our vast collection of PC components and build your dream setup!";
+    // private function getWelcomeTemplate($userName, $userType) {
+    //     $typeSpecific = $userType === 'technician' 
+    //         ? "As a technician, you'll help customers build their dream PCs and provide expert technical support."
+    //         : "Get ready to explore our vast collection of PC components and build your dream setup!";
             
-        $content = "
-            <div class='greeting'>Welcome to GearSphere, " . htmlspecialchars($userName) . "! 🎉</div>
-            <div class='message'>
-                Thank you for joining the GearSphere community! We're excited to have you on board.
-            </div>
-            <div class='message'>
-                $typeSpecific
-            </div>
-            <div class='message'>
-                <strong>What's next?</strong><br>
-                🔧 Explore our premium PC components<br>
-                💡 Use our PC Builder tool for custom builds<br>
-                📞 Connect with our expert technicians<br>
-                🎯 Track your orders and build progress
-            </div>
-            <div class='message'>
-                Need help getting started? Our support team is here to assist you 24/7!
-            </div>";
+    //     $content = "
+    //         <div class='greeting'>Welcome to GearSphere, " . htmlspecialchars($userName) . "! 🎉</div>
+    //         <div class='message'>
+    //             Thank you for joining the GearSphere community! We're excited to have you on board.
+    //         </div>
+    //         <div class='message'>
+    //             $typeSpecific
+    //         </div>
+    //         <div class='message'>
+    //             <strong>What's next?</strong><br>
+    //             🔧 Explore our premium PC components<br>
+    //             💡 Use our PC Builder tool for custom builds<br>
+    //             📞 Connect with our expert technicians<br>
+    //             🎯 Track your orders and build progress
+    //         </div>
+    //         <div class='message'>
+    //             Need help getting started? Our support team is here to assist you 24/7!
+    //         </div>";
         
-        return $this->getBaseTemplate($content);
-    }
+    //     return $this->getBaseTemplate($content);
+    // }
 
     // Order Confirmation Template
-    private function getOrderConfirmationTemplate($userName, $orderDetails) {
-        $items = '';
-        foreach ($orderDetails['items'] as $item) {
-            $items .= "
-                <div class='order-item'>
-                    <span>" . htmlspecialchars($item['name']) . " (Qty: {$item['quantity']})</span>
-                    <span>LKR " . number_format($item['price'] * $item['quantity'], 2) . "</span>
-                </div>";
-        }
+    // private function getOrderConfirmationTemplate($userName, $orderDetails) {
+    //     $items = '';
+    //     foreach ($orderDetails['items'] as $item) {
+    //         $items .= "
+    //             <div class='order-item'>
+    //                 <span>" . htmlspecialchars($item['name']) . " (Qty: {$item['quantity']})</span>
+    //                 <span>LKR " . number_format($item['price'] * $item['quantity'], 2) . "</span>
+    //             </div>";
+    //     }
         
-        $content = "
-            <div class='greeting'>Order Confirmed! 🎉</div>
-            <div class='message'>
-                Hi " . htmlspecialchars($userName) . ",<br><br>
-                Great news! Your order has been successfully confirmed and is now being processed.
-            </div>
-            <div class='order-details'>
-                <h3 style='color: #667eea; margin-bottom: 15px;'>📦 Order Details</h3>
-                <div style='margin-bottom: 15px;'>
-                    <strong>Order ID:</strong> #{$orderDetails['order_id']}<br>
-                    <strong>Order Date:</strong> " . date('F j, Y') . "<br>
-                    <strong>Status:</strong> <span class='status-badge status-confirmed'>Confirmed</span>
-                </div>
-                $items
-                <div class='order-item'>
-                    <span><strong>Total Amount</strong></span>
-                    <span><strong>LKR " . number_format($orderDetails['total'], 2) . "</strong></span>
-                </div>
-            </div>
-            <div class='message'>
-                We'll keep you updated via email as your order progresses. You can also track your order status anytime on our website.
-            </div>";
+    //     $content = "
+    //         <div class='greeting'>Order Confirmed! 🎉</div>
+    //         <div class='message'>
+    //             Hi " . htmlspecialchars($userName) . ",<br><br>
+    //             Great news! Your order has been successfully confirmed and is now being processed.
+    //         </div>
+    //         <div class='order-details'>
+    //             <h3 style='color: #667eea; margin-bottom: 15px;'>📦 Order Details</h3>
+    //             <div style='margin-bottom: 15px;'>
+    //                 <strong>Order ID:</strong> #{$orderDetails['order_id']}<br>
+    //                 <strong>Order Date:</strong> " . date('F j, Y') . "<br>
+    //                 <strong>Status:</strong> <span class='status-badge status-confirmed'>Confirmed</span>
+    //             </div>
+    //             $items
+    //             <div class='order-item'>
+    //                 <span><strong>Total Amount</strong></span>
+    //                 <span><strong>LKR " . number_format($orderDetails['total'], 2) . "</strong></span>
+    //             </div>
+    //         </div>
+    //         <div class='message'>
+    //             We'll keep you updated via email as your order progresses. You can also track your order status anytime on our website.
+    //         </div>";
         
-        return $this->getBaseTemplate($content);
-    }
+    //     return $this->getBaseTemplate($content);
+    // }
 
     // Order Status Update Template
-    private function getOrderStatusTemplate($userName, $orderDetails, $newStatus) {
-        $statusMessages = [
-            'processing' => '⚙️ Your order is now being processed by our team.',
-            'shipped' => '🚚 Great news! Your order has been shipped and is on its way.',
-            'delivered' => '✅ Your order has been delivered successfully!',
-            'cancelled' => '❌ Your order has been cancelled.'
-        ];
+    // private function getOrderStatusTemplate($userName, $orderDetails, $newStatus) {
+    //     $statusMessages = [
+    //         'processing' => '⚙️ Your order is now being processed by our team.',
+    //         'shipped' => '🚚 Great news! Your order has been shipped and is on its way.',
+    //         'delivered' => '✅ Your order has been delivered successfully!',
+    //         'cancelled' => '❌ Your order has been cancelled.'
+    //     ];
         
-        $statusClass = "status-$newStatus";
-        $message = $statusMessages[$newStatus] ?? 'Your order status has been updated.';
+    //     $statusClass = "status-$newStatus";
+    //     $message = $statusMessages[$newStatus] ?? 'Your order status has been updated.';
         
-        $content = "
-            <div class='greeting'>Order Update 📋</div>
-            <div class='message'>
-                Hi " . htmlspecialchars($userName) . ",<br><br>
-                $message
-            </div>
-            <div class='order-details'>
-                <h3 style='color: #667eea; margin-bottom: 15px;'>📦 Order Information</h3>
-                <div>
-                    <strong>Order ID:</strong> #{$orderDetails['order_id']}<br>
-                    <strong>Current Status:</strong> <span class='status-badge $statusClass'>" . ucfirst($newStatus) . "</span><br>
-                    <strong>Order Total:</strong> LKR " . number_format($orderDetails['total'], 2) . "
-                </div>
-            </div>";
+    //     $content = "
+    //         <div class='greeting'>Order Update 📋</div>
+    //         <div class='message'>
+    //             Hi " . htmlspecialchars($userName) . ",<br><br>
+    //             $message
+    //         </div>
+    //         <div class='order-details'>
+    //             <h3 style='color: #667eea; margin-bottom: 15px;'>📦 Order Information</h3>
+    //             <div>
+    //                 <strong>Order ID:</strong> #{$orderDetails['order_id']}<br>
+    //                 <strong>Current Status:</strong> <span class='status-badge $statusClass'>" . ucfirst($newStatus) . "</span><br>
+    //                 <strong>Order Total:</strong> LKR " . number_format($orderDetails['total'], 2) . "
+    //             </div>
+    //         </div>";
         
-        return $this->getBaseTemplate($content);
-    }
+    //     return $this->getBaseTemplate($content);
+    // }
 
     // Password Reset Template
     private function getPasswordResetTemplate($userName, $otp) {
@@ -418,36 +418,36 @@ class Mailer {
     }
 
     // Technician Application Template
-    private function getTechnicianApplicationTemplate($userName, $status) {
-        $statusMessages = [
-            'approved' => [
-                'icon' => '✅',
-                'title' => 'Application Approved!',
-                'message' => 'Congratulations! Your technician application has been approved. You can now start helping customers with their PC builds.'
-            ],
-            'rejected' => [
-                'icon' => '❌',
-                'title' => 'Application Update',
-                'message' => 'Thank you for your interest in becoming a GearSphere technician. Unfortunately, we cannot approve your application at this time.'
-            ],
-            'pending' => [
-                'icon' => '⏳',
-                'title' => 'Application Received',
-                'message' => 'We have received your technician application and it is currently under review. We will notify you once a decision has been made.'
-            ]
-        ];
+    // private function getTechnicianApplicationTemplate($userName, $status) {
+    //     $statusMessages = [
+    //         'approved' => [
+    //             'icon' => '✅',
+    //             'title' => 'Application Approved!',
+    //             'message' => 'Congratulations! Your technician application has been approved. You can now start helping customers with their PC builds.'
+    //         ],
+    //         'rejected' => [
+    //             'icon' => '❌',
+    //             'title' => 'Application Update',
+    //             'message' => 'Thank you for your interest in becoming a GearSphere technician. Unfortunately, we cannot approve your application at this time.'
+    //         ],
+    //         'pending' => [
+    //             'icon' => '⏳',
+    //             'title' => 'Application Received',
+    //             'message' => 'We have received your technician application and it is currently under review. We will notify you once a decision has been made.'
+    //         ]
+    //     ];
         
-        $statusInfo = $statusMessages[$status];
+    //     $statusInfo = $statusMessages[$status];
         
-        $content = "
-            <div class='greeting'>{$statusInfo['icon']} {$statusInfo['title']}</div>
-            <div class='message'>
-                Hi " . htmlspecialchars($userName) . ",<br><br>
-                {$statusInfo['message']}
-            </div>";
+    //     $content = "
+    //         <div class='greeting'>{$statusInfo['icon']} {$statusInfo['title']}</div>
+    //         <div class='message'>
+    //             Hi " . htmlspecialchars($userName) . ",<br><br>
+    //             {$statusInfo['message']}
+    //         </div>";
         
-        return $this->getBaseTemplate($content);
-    }
+    //     return $this->getBaseTemplate($content);
+    // }
 
     // Technician Assignment Template
     private function getTechnicianAssignmentTemplate($technicianName, $assignmentDetails) {
