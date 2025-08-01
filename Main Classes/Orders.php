@@ -86,62 +86,60 @@ class Orders
     }
 
     public function getSalesTrend($period = 'month', $user_id = null)
-{
-    // Use payment_date from payment table for sales trend, filtered by user if provided
-    $sql = "SELECT DATE_FORMAT(p.payment_date, '%Y-%m') as period, SUM(p.amount) as revenue, COUNT(*) as orders
+    {
+        // Use payment_date from payment table for sales trend, filtered by user if provided
+        $sql = "SELECT DATE_FORMAT(p.payment_date, '%Y-%m') as period, SUM(p.amount) as revenue, COUNT(*) as orders
             FROM payment p
             JOIN orders o ON p.order_id = o.order_id
             WHERE p.payment_status = 'success'
               AND o.status IN ('processing','shipped','delivered')";
-    $params = [];
-    if ($user_id !== null) {
-        $sql .= " AND o.user_id = :user_id";
-        $params[':user_id'] = $user_id;
-    }
-    $sql .= " GROUP BY period ORDER BY period DESC";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute($params);
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Build a map of period => result
-    $trendMap = [];
-    // DEBUG: Log raw periods from SQL results
-    error_log('getSalesTrend SQL periods: ' . implode(',', array_map(function($r){return $r['period'];}, $results)));
-    foreach ($results as $row) {
-        $trendMap[$row['period']] = $row;
-    }
-    // DEBUG: Log trendMap keys
-    error_log('getSalesTrend trendMap keys: ' . implode(',', array_keys($trendMap)));
+        $params = [];
+        if ($user_id !== null) {
+            $sql .= " AND o.user_id = :user_id";
+            $params[':user_id'] = $user_id;
+        }
+        $sql .= " GROUP BY period ORDER BY period DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Determine the latest period (max of DB or current month)
-    $now = new DateTime();
-    $currentPeriod = $now->format('Y-m');
-    $latestPeriod = $currentPeriod;
-    if (!empty($trendMap)) {
-        $dbMax = max(array_keys($trendMap));
-        if ($dbMax > $currentPeriod) {
-            $latestPeriod = $dbMax;
+        // Build a map of period => result
+        $trendMap = [];
+        // DEBUG: Log raw periods from SQL results
+        error_log('getSalesTrend SQL periods: ' . implode(',', array_map(function ($r) {
+            return $r['period'];
+        }, $results)));
+        foreach ($results as $row) {
+            $trendMap[$row['period']] = $row;
         }
-    }
-    // Generate 5 months ending at latestPeriod
-    $months = [];
-    $latest = DateTime::createFromFormat('Y-m', $latestPeriod);
-    for ($i = 4; $i >= 0; $i--) {
-        $m = clone $latest;
-        $m->modify("-{$i} months");
-        $period = $m->format('Y-m');
-        // Pad month with leading zero if needed for DB match
-        if (strlen($period) === 6) {
-            $period = substr($period, 0, 5) . '0' . substr($period, 5, 1);
+        // DEBUG: Log trendMap keys
+        error_log('getSalesTrend trendMap keys: ' . implode(',', array_keys($trendMap)));
+
+        // Determine the latest period (max of DB or current month)
+        $now = new DateTime();
+        $currentPeriod = $now->format('Y-m');
+        $latestPeriod = $currentPeriod;
+        if (!empty($trendMap)) {
+            $dbMax = max(array_keys($trendMap));
+            if ($dbMax > $currentPeriod) {
+                $latestPeriod = $dbMax;
+            }
         }
-        $months[] = [
-            'period' => $period,
-            'revenue' => isset($trendMap[$period]) ? (float)$trendMap[$period]['revenue'] : 0,
-            'orders' => isset($trendMap[$period]) ? (int)$trendMap[$period]['orders'] : 0
-        ];
+        // Generate 6 months ending at latestPeriod (changed from 5 to 6)
+        $months = [];
+        $latest = DateTime::createFromFormat('Y-m', $latestPeriod);
+        for ($i = 5; $i >= 0; $i--) {  // Changed from 4 to 5
+            $m = clone $latest;
+            $m->modify("-{$i} months");
+            $period = $m->format('Y-m');
+            $months[] = [
+                'period' => $period,
+                'revenue' => isset($trendMap[$period]) ? (float)$trendMap[$period]['revenue'] : 0,
+                'orders' => isset($trendMap[$period]) ? (int)$trendMap[$period]['orders'] : 0
+            ];
+        }
+        return $months;
     }
-    return $months;
-}
 
     public function getTopProducts($limit = 3)
     {
