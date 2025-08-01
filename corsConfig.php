@@ -85,7 +85,7 @@ if (!function_exists('initializeEndpoint')) {
 
         // Configure session settings with longer lifetime for stability
         session_set_cookie_params([
-            'lifetime' => 3600, // 1 hour
+            'lifetime' => 10800, // 3 hours
             'path' => '/',
             'domain' => '',
             'secure' => false,

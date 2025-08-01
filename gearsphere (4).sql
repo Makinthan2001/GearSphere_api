@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2025 at 01:35 PM
+-- Generation Time: Aug 01, 2025 at 05:35 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -164,6 +164,13 @@ CREATE TABLE `message` (
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `message`
+--
+
+INSERT INTO `message` (`message_id`, `name`, `email`, `message`, `date`) VALUES
+(6, 'makinthan sathananthan', 'mahinthan2001a@gmail.com', 'Subject: Technical Support\nMessage: want help', '2025-07-30 14:24:21');
+
 -- --------------------------------------------------------
 
 --
@@ -244,7 +251,26 @@ CREATE TABLE `notifications` (
 INSERT INTO `notifications` (`notification_id`, `user_id`, `message`, `date`) VALUES
 (64, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-30 17:01:03'),
 (65, 42, 'Your request was rejected by technician: madhan sathananthan.', '2025-07-30 17:02:04'),
-(66, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-30 17:02:59');
+(66, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-30 17:02:59'),
+(67, 42, 'Your request was rejected by technician: madhan sathananthan.', '2025-07-30 17:11:13'),
+(68, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-30 17:12:28'),
+(69, 42, 'Your request was accepted by technician: madhan sathananthan.', '2025-07-30 17:12:55'),
+(70, 43, 'You have been assigned to a new customer. Name: Kowsika kantharuban, Email: kantharubankowsika@gmail.com. Please check your dashboard for details.', '2025-07-30 19:17:20'),
+(74, 43, 'You have been assigned to a new customer. Name: madhan mdn2, Email: seller@gmail.com. Please check your dashboard for details.', '2025-07-30 21:03:55'),
+(75, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-30 23:16:40'),
+(76, 27, 'Low Stock Alert!\nYou have 7 items that need attention:\n\nThermalright Assassin King SE ARGB 66.17 CFM - Current Stock: 5 (Min: 5)\nMicrosoft Windows 11 Home Retail - USB 64-bit - Current Stock: 4 (Min: 5)\nGameMax Nova N5 ATX Mid Tower Case - Current Stock: 3 (Min: 5)\nNZXT H9 Flow (2023) ATX Mid Tower Case - Current Stock: 5 (Min: 5)\nCrucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive - Current Stock: 5 (Min: 5)\nCorsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory - Current Stock: 5 (Min: 5)\nASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard - Current Stock: 5 (Min: 5)\n', '2025-07-31 11:19:37'),
+(77, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard - Current Stock: 4 (Min: 5)\n\nOrder ID: 84', '2025-07-31 16:51:13'),
+(78, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nCorsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory - Current Stock: 4 (Min: 5)\n\nOrder ID: 84', '2025-07-31 16:51:13'),
+(79, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nGameMax Nova N5 ATX Mid Tower Case - Current Stock: 2 (Min: 5)\n\nOrder ID: 84', '2025-07-31 16:51:13'),
+(80, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nThermalright Assassin King SE ARGB 66.17 CFM - Current Stock: 4 (Min: 5)\n\nOrder ID: 84', '2025-07-31 16:51:13'),
+(81, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nMicrosoft Windows 11 Home Retail - USB 64-bit - Current Stock: 3 (Min: 5)\n\nOrder ID: 84', '2025-07-31 16:51:13'),
+(82, 43, 'You have been assigned to a new customer. Name: makinthan mdn, Email: mahinthan2001a@gmail.com. Please check your dashboard for details.', '2025-07-31 16:51:37'),
+(83, 27, 'Low Stock Alert!\nYou have 7 items that need attention:\n\nThermalright Assassin King SE ARGB 66.17 CFM - Current Stock: 4 (Min: 5)\nMicrosoft Windows 11 Home Retail - USB 64-bit - Current Stock: 3 (Min: 5)\nGameMax Nova N5 ATX Mid Tower Case - Current Stock: 2 (Min: 5)\nNZXT H9 Flow (2023) ATX Mid Tower Case - Current Stock: 5 (Min: 5)\nCrucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive - Current Stock: 5 (Min: 5)\nCorsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory - Current Stock: 4 (Min: 5)\nASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard - Current Stock: 4 (Min: 5)\n', '2025-07-31 21:07:35'),
+(84, 27, 'Low Stock Alert!\nYou have 5 items that need attention:\n\nGameMax Nova N5 ATX Mid Tower Case - Current Stock: 2 (Min: 5)\nNZXT H9 Flow (2023) ATX Mid Tower Case - Current Stock: 5 (Min: 5)\nCrucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive - Current Stock: 5 (Min: 5)\nCorsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory - Current Stock: 4 (Min: 5)\nASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard - Current Stock: 4 (Min: 5)\n', '2025-07-31 21:36:23'),
+(85, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard - Current Stock: 3 (Min: 5)\n\nOrder ID: 87', '2025-07-31 22:33:28'),
+(86, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nCorsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory - Current Stock: 3 (Min: 5)\n\nOrder ID: 87', '2025-07-31 22:33:28'),
+(87, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nCrucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive - Current Stock: 4 (Min: 5)\n\nOrder ID: 87', '2025-07-31 22:33:28'),
+(88, 28, 'Low Stock Alert!\nProduct stock reduced due to customer order:\n\nGameMax Nova N5 ATX Mid Tower Case - Current Stock: 1 (Min: 5)\n\nOrder ID: 87', '2025-07-31 22:33:28');
 
 -- --------------------------------------------------------
 
@@ -296,8 +322,19 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `user_id`, `order_date`, `status`, `total_amount`, `assignment_id`) VALUES
-(75, 42, '2025-07-30 16:55:33', 'processing', 80000.00, NULL),
-(76, 42, '2025-07-30 17:00:32', 'pending', 489000.00, 69);
+(75, 42, '2025-07-30 16:55:33', 'delivered', 80000.00, NULL),
+(76, 42, '2025-07-30 17:00:32', 'delivered', 489000.00, 70),
+(77, 42, '2025-07-30 17:41:18', 'pending', 20000.00, NULL),
+(78, 32, '2025-07-30 18:54:53', 'shipped', 20000.00, NULL),
+(79, 32, '2025-07-30 19:15:50', 'delivered', 646700.00, 71),
+(80, 32, '2025-07-30 19:19:39', 'processing', 312600.00, 72),
+(81, 27, '2025-07-30 21:03:02', 'shipped', 30000.00, NULL),
+(82, 27, '2025-07-30 21:03:39', 'processing', 369700.00, 73),
+(83, 42, '2025-07-30 23:16:14', 'processing', 244300.00, 74),
+(84, 42, '2025-07-31 16:51:13', 'processing', 254300.00, 75),
+(85, 42, '2025-07-31 16:52:44', 'processing', 6750.00, NULL),
+(86, 42, '2025-07-31 21:41:11', 'shipped', 34000.00, NULL),
+(87, 42, '2025-07-31 22:33:28', 'pending', 244300.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -329,7 +366,75 @@ INSERT INTO `order_items` (`order_item_id`, `order_id`, `product_id`, `quantity`
 (473, 76, 94, 1, 8000.00),
 (474, 76, 100, 1, 9600.00),
 (475, 76, 104, 1, 14000.00),
-(476, 76, 97, 1, 13000.00);
+(476, 76, 97, 1, 13000.00),
+(477, 77, 105, 1, 20000.00),
+(478, 78, 104, 1, 14000.00),
+(479, 78, 103, 1, 6000.00),
+(480, 79, 5, 1, 95000.00),
+(481, 79, 61, 1, 218700.00),
+(482, 79, 19, 1, 70000.00),
+(483, 79, 41, 1, 48700.00),
+(484, 79, 43, 1, 55500.00),
+(485, 79, 21, 1, 40000.00),
+(486, 79, 69, 1, 38700.00),
+(487, 79, 7, 1, 11400.00),
+(488, 79, 28, 1, 36000.00),
+(489, 79, 63, 1, 32700.00),
+(490, 80, 52, 1, 65000.00),
+(491, 80, 56, 1, 76000.00),
+(492, 80, 18, 1, 35000.00),
+(493, 80, 49, 1, 9300.00),
+(494, 80, 47, 1, 26700.00),
+(495, 80, 20, 1, 10000.00),
+(496, 80, 94, 1, 8000.00),
+(497, 80, 100, 1, 9600.00),
+(498, 80, 29, 1, 60000.00),
+(499, 80, 97, 1, 13000.00),
+(500, 81, 106, 1, 30000.00),
+(501, 82, 5, 1, 95000.00),
+(502, 82, 56, 1, 76000.00),
+(503, 82, 14, 1, 45000.00),
+(504, 82, 41, 1, 48700.00),
+(505, 82, 45, 1, 42600.00),
+(506, 82, 23, 1, 24000.00),
+(507, 82, 94, 1, 8000.00),
+(508, 82, 7, 1, 11400.00),
+(509, 82, 103, 1, 6000.00),
+(510, 82, 97, 1, 13000.00),
+(511, 83, 52, 1, 65000.00),
+(512, 83, 93, 1, 40000.00),
+(513, 83, 18, 1, 35000.00),
+(514, 83, 40, 1, 27000.00),
+(515, 83, 46, 1, 37200.00),
+(516, 83, 20, 1, 10000.00),
+(517, 83, 94, 1, 8000.00),
+(518, 83, 100, 1, 9600.00),
+(519, 83, 103, 1, 6000.00),
+(520, 83, 96, 1, 6500.00),
+(521, 84, 50, 1, 35000.00),
+(522, 84, 56, 1, 76000.00),
+(523, 84, 18, 1, 35000.00),
+(524, 84, 40, 1, 27000.00),
+(525, 84, 47, 1, 26700.00),
+(526, 84, 20, 1, 10000.00),
+(527, 84, 94, 1, 8000.00),
+(528, 84, 100, 1, 9600.00),
+(529, 84, 104, 1, 14000.00),
+(530, 84, 97, 1, 13000.00),
+(531, 85, 95, 1, 6000.00),
+(532, 85, 76, 1, 750.00),
+(533, 86, 105, 1, 20000.00),
+(534, 86, 104, 1, 14000.00),
+(535, 87, 52, 1, 65000.00),
+(536, 87, 93, 1, 40000.00),
+(537, 87, 18, 1, 35000.00),
+(538, 87, 40, 1, 27000.00),
+(539, 87, 46, 1, 37200.00),
+(540, 87, 20, 1, 10000.00),
+(541, 87, 94, 1, 8000.00),
+(542, 87, 100, 1, 9600.00),
+(543, 87, 103, 1, 6000.00),
+(544, 87, 96, 1, 6500.00);
 
 -- --------------------------------------------------------
 
@@ -353,7 +458,18 @@ CREATE TABLE `payment` (
 
 INSERT INTO `payment` (`payment_id`, `order_id`, `user_id`, `payment_method`, `payment_date`, `amount`, `payment_status`) VALUES
 (70, 75, 42, 'VISA', '2025-07-30 16:55:33', 80000.00, 'success'),
-(71, 76, 42, 'VISA', '2025-07-30 17:00:32', 489000.00, 'success');
+(71, 76, 42, 'VISA', '2025-07-30 17:00:32', 489000.00, 'success'),
+(72, 77, 42, 'VISA', '2025-07-30 17:41:18', 20000.00, 'success'),
+(73, 78, 32, 'VISA', '2025-07-30 18:54:53', 20000.00, 'success'),
+(74, 79, 32, 'MASTERCARD', '2025-07-30 19:15:50', 646700.00, 'success'),
+(75, 80, 32, 'VISA', '2025-07-30 19:19:39', 312600.00, 'success'),
+(76, 81, 27, 'VISA', '2025-07-30 21:03:02', 30000.00, 'success'),
+(77, 82, 27, 'VISA', '2025-07-30 21:03:39', 369700.00, 'success'),
+(78, 83, 42, 'VISA', '2025-07-30 23:16:14', 244300.00, 'success'),
+(79, 84, 42, 'VISA', '2025-07-31 16:51:13', 254300.00, 'success'),
+(80, 85, 42, 'VISA', '2025-07-31 16:52:44', 6750.00, 'success'),
+(81, 86, 42, 'VISA', '2025-07-31 21:41:11', 34000.00, 'success'),
+(82, 87, 42, 'MASTERCARD', '2025-07-31 22:33:28', 244300.00, 'success');
 
 -- --------------------------------------------------------
 
@@ -438,26 +554,26 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `name`, `category`, `price`, `image_url`, `description`, `rating_count`, `rating_avg`, `manufacturer`, `stock`, `status`, `last_restock_date`) VALUES
-(5, 'AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor', 'CPU', 95000.00, 'uploads/1751900410_AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor.jpg', 'AMD Ryzen 7 9800X3D is a high-performance 8-core processor with a base clock of 4.7 GHz, designed for gaming and multitasking, featuring AMD\'s 3D V-Cache technology for enhanced speed and efficiency.', 0, 0.00, 'AMD', 12, 'In Stock', '2025-07-27 18:30:00'),
+(5, 'AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor', 'CPU', 95000.00, 'uploads/1751900410_AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor.jpg', 'AMD Ryzen 7 9800X3D is a high-performance 8-core processor with a base clock of 4.7 GHz, designed for gaming and multitasking, featuring AMD\'s 3D V-Cache technology for enhanced speed and efficiency.', 0, 0.00, 'AMD', 10, 'In Stock', '2025-07-30 12:03:39'),
 (6, 'AMD Ryzen 7 9800X3D 4.7 GHz 8-Core Processor', 'CPU', 130000.00, 'uploads/1751900624_AMD Ryzen 7 9800X3D 4.7 GHz 8-Core Processor.jpg', 'AMD Ryzen 7 7800X3D is a powerful 8-core processor with a 4.2 GHz base clock, optimized for gaming and productivity, and equipped with 3D V-Cache for improved performance in demanding tasks.', 0, 0.00, 'AMD', 9, 'In Stock', '2025-07-30 08:00:32'),
-(7, 'Thermalright Phantom Spirit 120 SE ARGB 66.17 CFM', 'CPU Cooler', 11400.00, 'uploads/1751900981_Thermalright Phantom Spirit 120 SE ARGB 66.17 CFM CPU Cooler.jpg', '', 0, 0.00, 'Thermalright', 18, 'In Stock', '2025-07-29 11:02:56'),
+(7, 'Thermalright Phantom Spirit 120 SE ARGB 66.17 CFM', 'CPU Cooler', 11400.00, 'uploads/1751900981_Thermalright Phantom Spirit 120 SE ARGB 66.17 CFM CPU Cooler.jpg', '', 0, 0.00, 'Thermalright', 16, 'In Stock', '2025-07-30 12:03:39'),
 (8, 'Noctua NH-D15 chromax.black 82.52 CFM', 'CPU Cooler', 43000.00, 'uploads/1751997698_Noctua NH-D15 chromax.black 82.52 CFM CPU Cooler.jpg', '', 0, 0.00, 'Noctua', 12, 'In Stock', '2025-07-08 12:31:38'),
-(14, 'MSI MAG B650 TOMAHAWK WIFI ATX AM5 Motherboard', 'Motherboard', 45000.00, 'uploads/1752039312_dc9235e0d8052745493eb900bb9df6f6.1600.jpg', 'The **MSI MAG B650 TOMAHAWK WIFI** is an ATX motherboard for AMD AM5 CPUs, supporting DDR5 RAM, PCIe 4.0, Wi-Fi 6E, and fast networking. It offers strong cooling and good connectivity for gaming and productivity.\r\n', 0, 0.00, 'MSI', 12, 'In Stock', '2025-07-27 18:30:00'),
+(14, 'MSI MAG B650 TOMAHAWK WIFI ATX AM5 Motherboard', 'Motherboard', 45000.00, 'uploads/1752039312_dc9235e0d8052745493eb900bb9df6f6.1600.jpg', 'The **MSI MAG B650 TOMAHAWK WIFI** is an ATX motherboard for AMD AM5 CPUs, supporting DDR5 RAM, PCIe 4.0, Wi-Fi 6E, and fast networking. It offers strong cooling and good connectivity for gaming and productivity.\r\n', 0, 0.00, 'MSI', 11, 'In Stock', '2025-07-30 12:03:39'),
 (15, 'MSI B650 GAMING PLUS WIFI ATX AM5 Motherboard', 'Motherboard', 40000.00, 'uploads/1752039603_ff33ebb87ed9f5fa5f9c54d6d316ae82.256p.jpg', 'The **MSI B650 GAMING PLUS WIFI** is an ATX AM5 motherboard with DDR5 support, PCIe 4.0 slots, Wi-Fi 6E, and 2.5G Ethernet. It offers strong power delivery and good cooling for gaming and productivity.\r\n', 0, 0.00, 'MSI', 6, 'In Stock', '2025-07-22 16:30:05'),
 (16, 'Gigabyte B550M K Micro ATX AM4 Motherboard', 'Motherboard', 19000.00, 'uploads/1752055228_f52a9a0b2a28f096b5b1e5bf02707224.1600.jpg', 'The Gigabyte B550M K is a micro ATX motherboard for AMD AM4 CPUs, supporting PCIe 4.0, dual M.2 slots, up to 128GB DDR4 RAM, and features HDMI, DisplayPort, and Gigabit LAN. Ideal for compact Ryzen-based builds.', 0, 0.00, 'Gigabyte', 6, 'In Stock', '2025-07-30 02:25:13'),
 (17, 'MSI B760 GAMING PLUS WIFI ATX LGA1700 Motherboard', 'Motherboard', 45000.00, 'uploads/1752055431_f22d681ccfd01238e756443a474f400b.1600.jpg', 'ATX B760 motherboard with Wi-Fi 6E, DDR5 support, PCIe 4.0, and dual M.2—ideal for Intel 12th–14th Gen CPUs.', 0, 0.00, 'MSI', 8, 'In Stock', '2025-07-08 23:03:51'),
-(18, 'ASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard', 'Motherboard', 35000.00, 'uploads/1752055628_d7893755609db1feb833c99ad9d243bf.1600.jpg', 'A compact AM5 motherboard built for Ryzen 7000 series CPUs, featuring DDR5 support, PCIe 5.0 M.2, Wi-Fi 6E, Bluetooth 5.2, and 2.5Gb LAN. Ideal for high-performance micro ATX builds', 0, 0.00, 'ASRock', 7, 'In Stock', '2025-07-30 08:00:32'),
-(19, 'Gigabyte X870 EAGLE WIFI7 ATX AM5 Motherboard', 'Motherboard', 70000.00, 'uploads/1752055881_a06aef05389e93f5e4de5dc26d807abe.1600.jpg', 'High-performance AM5 ATX board with PCIe 5.0, DDR5, Wi-Fi 7, USB4, and triple M.2 slots—ideal for next-gen Ryzen builds.', 0, 0.00, 'Gigabyte', 8, 'In Stock', '2025-07-29 11:02:56'),
-(20, 'MSI MAG A650BN 650 W 80+ Bronze Certified ATX Power Supply', 'Power Supply', 10000.00, 'uploads/1752056123_3148f884b77b2d7abee3a3e0ad72cf73.1600.jpg', 'MSI MAG A650BN is a 650W 80+ Bronze certified power supply with reliable protection, quiet 120mm fan, and essential connectors—great for mid-range PCs.', 0, 0.00, 'MSI', 14, 'In Stock', '2025-07-30 08:00:32'),
-(21, 'Corsair RM1000e (2023) 1000 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 40000.00, 'uploads/1752056277_ce27e414f67e9e8786401e4260bb85fa.1600.jpg', 'Corsair RM1000e (2023) is a 1000W 80+ Gold fully modular PSU with quiet fan, ATX 3.1 & PCIe 5.1 support, and a 7-year warranty—ideal for high-end builds.', 0, 0.00, 'Corsair', 8, 'In Stock', '2025-07-29 11:02:56'),
+(18, 'ASRock B650M Pro RS WiFi Micro ATX AM5 Motherboard', 'Motherboard', 35000.00, 'uploads/1752055628_d7893755609db1feb833c99ad9d243bf.1600.jpg', 'A compact AM5 motherboard built for Ryzen 7000 series CPUs, featuring DDR5 support, PCIe 5.0 M.2, Wi-Fi 6E, Bluetooth 5.2, and 2.5Gb LAN. Ideal for high-performance micro ATX builds', 0, 0.00, 'ASRock', 3, 'Low Stock', '2025-07-31 13:33:28'),
+(19, 'Gigabyte X870 EAGLE WIFI7 ATX AM5 Motherboard', 'Motherboard', 70000.00, 'uploads/1752055881_a06aef05389e93f5e4de5dc26d807abe.1600.jpg', 'High-performance AM5 ATX board with PCIe 5.0, DDR5, Wi-Fi 7, USB4, and triple M.2 slots—ideal for next-gen Ryzen builds.', 0, 0.00, 'Gigabyte', 7, 'In Stock', '2025-07-30 10:15:50'),
+(20, 'MSI MAG A650BN 650 W 80+ Bronze Certified ATX Power Supply', 'Power Supply', 10000.00, 'uploads/1752056123_3148f884b77b2d7abee3a3e0ad72cf73.1600.jpg', 'MSI MAG A650BN is a 650W 80+ Bronze certified power supply with reliable protection, quiet 120mm fan, and essential connectors—great for mid-range PCs.', 0, 0.00, 'MSI', 10, 'In Stock', '2025-07-31 13:33:28'),
+(21, 'Corsair RM1000e (2023) 1000 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 40000.00, 'uploads/1752056277_ce27e414f67e9e8786401e4260bb85fa.1600.jpg', 'Corsair RM1000e (2023) is a 1000W 80+ Gold fully modular PSU with quiet fan, ATX 3.1 & PCIe 5.1 support, and a 7-year warranty—ideal for high-end builds.', 0, 0.00, 'Corsair', 7, 'In Stock', '2025-07-30 10:15:50'),
 (22, 'MSI MAG A850GL PCIE5 850 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 30000.00, 'uploads/1752056482_79be60ce3783b8918a1c0940d3e4ff19.1600.jpg', 'High-efficiency 850W PSU with 80+ Gold certification, PCIe 5.0 support (up to 600W), fully modular design, and quiet 120mm Fluid Dynamic Bearing fan. Ideal for high-performance builds', 0, 0.00, 'MSI', 7, 'In Stock', '2025-07-08 23:21:22'),
-(23, 'MSI MAG A750GL PCIE5 750 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 24000.00, 'uploads/1752056646_d8f4d13ba49891eb3929bdddc3d87b4b.1600.jpg', 'High-efficiency 750W PSU with 80+ Gold certification, PCIe 5.0 support (up to 450W), fully modular design, and quiet 120mm Fluid Dynamic Bearing fan. Ideal for high-performance builds.', 0, 0.00, 'MSI', 12, 'In Stock', '2025-07-27 18:30:00'),
+(23, 'MSI MAG A750GL PCIE5 750 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 24000.00, 'uploads/1752056646_d8f4d13ba49891eb3929bdddc3d87b4b.1600.jpg', 'High-efficiency 750W PSU with 80+ Gold certification, PCIe 5.0 support (up to 450W), fully modular design, and quiet 120mm Fluid Dynamic Bearing fan. Ideal for high-performance builds.', 0, 0.00, 'MSI', 11, 'In Stock', '2025-07-30 12:03:39'),
 (24, 'Corsair RM850 850 W 80+ Gold Certified Fully Modular ATX Power Supply', 'Power Supply', 35000.00, 'uploads/1752057164_1752baa3ddb162df098cf33b0b6eeae3.1600.jpg', 'Corsair RM850 is an 850W, 80+ Gold certified, fully modular ATX power supply designed for reliable and efficient performance in high-demand PC builds.', 0, 0.00, 'Corsair', 7, 'In Stock', '2025-07-08 23:32:44'),
 (25, 'Corsair CX (2023) 650 W 80+ Bronze Certified ATX Power Supply', 'Power Supply', 21000.00, 'uploads/1752057370_c058ff0ffb542302d5b1c75cf8658ecd.1600.jpg', 'Corsair CX (2023) is a 650W, 80+ Bronze certified ATX power supply offering reliable power delivery with a non-modular design for budget-friendly PC builds.\r\n', 0, 0.00, 'Corsair', 7, 'In Stock', '2025-07-08 23:36:10'),
 (26, 'Asus TUF Gaming VG27AQ 27.0\" 2560 x 1440 165 Hz Monitor', 'Monitor', 60000.00, 'uploads/1752058480_16988d4e994d281aa599d856ecd9f8bd.1600.jpg', 'The Asus TUF Gaming VG27AQ is a 27-inch 2560x1440 QHD gaming monitor with a 165Hz refresh rate, 1ms response time, HDR10 support, and G-SYNC compatibility for smooth, immersive gameplay.\r\n', 0, 0.00, 'Asus', 8, 'In Stock', '2025-07-29 11:02:56'),
 (27, 'LG 65EP5G-B 65.0\" 3840 x 2160 120 Hz Monitor', 'Monitor', 90000.00, 'uploads/1752058733_b01d97e380b0840e5a7f789b31ec3a3f.1600.jpg', 'The LG 65EP5G-B is a 65-inch 4K UHD OLED monitor with a 120Hz refresh rate, 0.1ms response time, HDR10 support, and professional-grade color accuracy for content creation and broadcast use.\r\n', 0, 0.00, 'LG', 7, 'In Stock', '2025-07-08 23:58:53'),
-(28, 'KOORUI 24E3 24.0\" 1920 x 1080 165 Hz Monitor', 'Monitor', 36000.00, 'uploads/1752059178_62a0a3d374d373fe78df925242bd9951.1600.jpg', 'The KOORUI 24E3 is a 24-inch Full HD IPS gaming monitor with a 165Hz refresh rate, 1ms response time, 99% sRGB color, and Adaptive Sync for smooth gameplay.\r\n', 0, 0.00, 'KOORUI', 8, 'In Stock', '2025-07-29 07:48:08'),
-(29, 'MSI MAG 275QF 27.0\" 2560 x 1440 180 Hz Monitor', 'Monitor', 60000.00, 'uploads/1752059372_57207990ab73d40707fd5756f9680995.1600.jpg', 'MSI MAG 275QF is a 27-inch WQHD (2560×1440) gaming monitor with a rapid IPS panel, 180Hz refresh rate, and 0.5ms response time. It supports Adaptive-Sync for smooth gameplay, offers vibrant colors, HDR readiness, and a sleek frameless design—ideal for competitive gaming and immersive visuals.\r\n', 0, 0.00, 'MSI', 7, 'In Stock', '2025-07-09 00:09:32'),
+(28, 'KOORUI 24E3 24.0\" 1920 x 1080 165 Hz Monitor', 'Monitor', 36000.00, 'uploads/1752059178_62a0a3d374d373fe78df925242bd9951.1600.jpg', 'The KOORUI 24E3 is a 24-inch Full HD IPS gaming monitor with a 165Hz refresh rate, 1ms response time, 99% sRGB color, and Adaptive Sync for smooth gameplay.\r\n', 0, 0.00, 'KOORUI', 7, 'In Stock', '2025-07-30 10:15:50'),
+(29, 'MSI MAG 275QF 27.0\" 2560 x 1440 180 Hz Monitor', 'Monitor', 60000.00, 'uploads/1752059372_57207990ab73d40707fd5756f9680995.1600.jpg', 'MSI MAG 275QF is a 27-inch WQHD (2560×1440) gaming monitor with a rapid IPS panel, 180Hz refresh rate, and 0.5ms response time. It supports Adaptive-Sync for smooth gameplay, offers vibrant colors, HDR readiness, and a sleek frameless design—ideal for competitive gaming and immersive visuals.\r\n', 0, 0.00, 'MSI', 6, 'In Stock', '2025-07-30 10:19:39'),
 (30, 'MSI G255F 24.5\" 1920 x 1080 180 Hz Monitor', 'Monitor', 33000.00, 'uploads/1752059580_42806ef6786626615ccf2f7bb7157d3b.1600.jpg', 'The MSI G255F is a 24.5\" Full HD (1920x1080) gaming monitor featuring a fast 180Hz refresh rate and 1ms response time. It uses an IPS panel for vibrant colors and wide viewing angles, supports AMD FreeSync for smooth gameplay, and offers multiple connectivity options including DisplayPort and HDMI. Ideal for competitive gaming with crisp visuals and minimal motion blur.\r\n', 0, 0.00, 'MSI', 8, 'In Stock', '2025-07-09 00:13:00'),
 (31, 'LG 24MR400-B 23.8\" 1920 x 1080 100 Hz Monitor', 'Monitor', 17000.00, 'uploads/1752059775_401ded619278efffb3eb22a19380487d.1600.jpg', 'The LG 24MR400-B is a 23.8\" Full HD (1920x1080) IPS monitor with a 100Hz refresh rate and 5ms response time. It features vibrant colors, wide viewing angles, AMD FreeSync support, and a sleek 3-side borderless design, ideal for smooth gaming and everyday use.\r\n', 0, 0.00, 'LG', 12, 'In Stock', '2025-07-27 18:30:00'),
 (32, 'Phanteks XT PRO ATX Mid Tower Case', 'PC Case', 20000.00, 'uploads/1752060149_4beb27272519c97f098ceab48df1e12c.1600.jpg', 'The Phanteks XT PRO is a sleek ATX mid-tower case featuring tempered glass, excellent airflow with support for up to 10 fans, extensive radiator compatibility, and integrated D-RGB lighting. It offers spacious interior layout, versatile cooling options, and clean cable management for high-performance PC builds.\r\n', 0, 0.00, 'Phanteks', 12, 'In Stock', '2025-07-27 18:30:00'),
@@ -468,41 +584,41 @@ INSERT INTO `products` (`product_id`, `name`, `category`, `price`, `image_url`, 
 (37, 'ARCTIC Liquid Freezer III Pro 360 77 CFM Liquid CPU Cooler', 'CPU Cooler', 25800.00, 'uploads/1752040278_a0b2a92bb4ec2c95b5e492c9513b2c0b.256p.jpg', 'The ARCTIC Liquid Freezer III Pro 360 is a powerful 360mm AIO cooler with three 120mm fans (77 CFM), a thick radiator, and an integrated VRM fan for excellent cooling and quiet performance.\r\n', 0, 0.00, 'ARCTIC', 15, 'In Stock', '2025-07-28 18:30:00'),
 (38, 'Corsair Vengeance LPX 16 GB (2 x 8 GB) DDR4-3200 CL16 Memory', 'Memory', 26700.00, 'uploads/1752046212_fee3ba4d684ea643cc72a1c38f0dbc2f.256p.jpg', 'Corsair Vengeance LPX 16GB (2×8GB) DDR4-3200 CL16 is a high-speed, low-profile RAM kit with reliable performance, aluminum heat spreaders, and XMP 2.0 support for easy overclocking.', 0, 0.00, 'Corsair', 7, 'In Stock', '2025-07-08 20:30:12'),
 (39, 'G.Skill Flare X5 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory', 'Memory', 26700.00, 'uploads/1752046845_fee3ba4d684ea643cc72a1c38f0dbc2f.256p.jpg', 'G.Skill Flare X5 32GB DDR5-6000 CL36 is a fast, low-profile RAM kit with EXPO support, ideal for AMD systems and high-performance builds.\r\n', 0, 0.00, 'G.Skill', 8, 'In Stock', '2025-07-08 20:40:45'),
-(40, 'Corsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory', 'Memory', 27000.00, 'uploads/1752047186_5cdd0dfcd25374317a12808fa7f63c19.1600.jpg', 'Corsair Vengeance RGB 32GB (2×16GB) DDR5-6000 CL36 is a high-speed memory kit with dynamic RGB lighting, XMP/EXPO support, and strong performance for gaming and multitasking.\r\n', 0, 0.00, 'Corsair', 6, 'In Stock', '2025-07-30 08:00:32'),
-(41, 'Corsair Vengeance 32 GB (2 x 16 GB) DDR5-6000 CL30 Memory', 'Memory', 48700.00, 'uploads/1752047538_fe414d3559a9bbb2e092ba5374f6e1ed.256p.jpg', 'Corsair Vengeance 32GB (2×16GB) DDR5-6000 CL30 is a high-performance RAM kit with ultra-low latency, XMP/EXPO support, and a sleek heat spreader—perfect for gaming and productivity.\r\n', 0, 0.00, 'Corsair', 12, 'In Stock', '2025-07-27 18:30:00'),
+(40, 'Corsair Vengeance RGB 32 GB (2 x 16 GB) DDR5-6000 CL36 Memory', 'Memory', 27000.00, 'uploads/1752047186_5cdd0dfcd25374317a12808fa7f63c19.1600.jpg', 'Corsair Vengeance RGB 32GB (2×16GB) DDR5-6000 CL36 is a high-speed memory kit with dynamic RGB lighting, XMP/EXPO support, and strong performance for gaming and multitasking.\r\n', 0, 0.00, 'Corsair', 3, 'Low Stock', '2025-07-31 13:33:28'),
+(41, 'Corsair Vengeance 32 GB (2 x 16 GB) DDR5-6000 CL30 Memory', 'Memory', 48700.00, 'uploads/1752047538_fe414d3559a9bbb2e092ba5374f6e1ed.256p.jpg', 'Corsair Vengeance 32GB (2×16GB) DDR5-6000 CL30 is a high-performance RAM kit with ultra-low latency, XMP/EXPO support, and a sleek heat spreader—perfect for gaming and productivity.\r\n', 0, 0.00, 'Corsair', 10, 'In Stock', '2025-07-30 12:03:39'),
 (42, 'Samsung 870 Evo 1 TB 2.5\" Solid State Drive', 'Storage', 22500.00, 'uploads/1752048526_31ITAX-GoIL.jpg', 'Samsung 870 Evo 1TB is a reliable 2.5\" SATA SSD with fast speeds up to 560 MB/s, 5-year warranty, and broad compatibility for desktops and laptops.\r\n', 0, 0.00, 'Samsung', 7, 'In Stock', '2025-07-08 21:08:46'),
-(43, 'Samsung 990 Pro 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 55500.00, 'uploads/1752049016_4cdbd04a2d7c19789dd2bdc072b4a506.1600.jpg', 'Samsung 990 Pro 2TB is a blazing-fast M.2 NVMe SSD with PCIe 4.0, delivering up to 7,450 MB/s read and 6,900 MB/s write speeds, ideal for gaming and heavy workloads.\r\n', 0, 0.00, 'Samsung', 12, 'In Stock', '2025-07-27 18:30:00'),
+(43, 'Samsung 990 Pro 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 55500.00, 'uploads/1752049016_4cdbd04a2d7c19789dd2bdc072b4a506.1600.jpg', 'Samsung 990 Pro 2TB is a blazing-fast M.2 NVMe SSD with PCIe 4.0, delivering up to 7,450 MB/s read and 6,900 MB/s write speeds, ideal for gaming and heavy workloads.\r\n', 0, 0.00, 'Samsung', 11, 'In Stock', '2025-07-30 10:15:50'),
 (44, 'Sabrent Rocket 4 Plus 8 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 275700.00, 'uploads/1752049839_a1f3e983bdceebc282929dee27df1db3.1600.jpg', 'Sabrent Rocket 4 Plus 8TB is a high-capacity M.2 PCIe 4.0 SSD with speeds up to 7,100 MB/s, ideal for heavy workloads, gaming, and large file storage.\r\n', 0, 0.00, 'Sabrent', 7, 'In Stock', '2025-07-08 21:30:39'),
-(45, 'Western Digital WD_Black SN850X 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 42600.00, 'uploads/1752050008_8e6dbae8a0f3c6572216c8758ce5a0b5.256p.jpg', 'WD Black SN850X 2TB is a fast PCIe 4.0 M.2 SSD with up to 7,300 MB/s read speed, great for gaming and heavy workloads, featuring optional heatsink and 5-year warranty.\r\n', 0, 0.00, 'Western Digital', 20, 'In Stock', '2025-07-27 18:30:00'),
-(46, 'Crucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 37200.00, 'uploads/1752050230_3fd5aee2fd8854d15ef3c81dcd9599f5.256p.jpg', 'Crucial T500 2TB is a fast PCIe 4.0 M.2 SSD with up to 7,400 MB/s read and 7,000 MB/s write speeds, great for gaming and heavy tasks.\r\n', 0, 0.00, 'Crucial', 6, 'In Stock', '2025-07-08 21:37:10'),
-(47, 'Klevv CRAS C910 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 26700.00, 'uploads/1752050424_31dtu8k-RkL.jpg', 'Klevv CRAS C910 2TB is a PCIe 4.0 M.2 SSD with up to 5,200 MB/s read and 4,800 MB/s write speeds, plus a 5-year warranty and optional heatsink.\r\n', 0, 0.00, 'Klevv', 9, 'In Stock', '2025-07-30 08:00:32'),
+(45, 'Western Digital WD_Black SN850X 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 42600.00, 'uploads/1752050008_8e6dbae8a0f3c6572216c8758ce5a0b5.256p.jpg', 'WD Black SN850X 2TB is a fast PCIe 4.0 M.2 SSD with up to 7,300 MB/s read speed, great for gaming and heavy workloads, featuring optional heatsink and 5-year warranty.\r\n', 0, 0.00, 'Western Digital', 19, 'In Stock', '2025-07-30 12:03:39'),
+(46, 'Crucial T500 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 37200.00, 'uploads/1752050230_3fd5aee2fd8854d15ef3c81dcd9599f5.256p.jpg', 'Crucial T500 2TB is a fast PCIe 4.0 M.2 SSD with up to 7,400 MB/s read and 7,000 MB/s write speeds, great for gaming and heavy tasks.\r\n', 0, 0.00, 'Crucial', 4, 'Low Stock', '2025-07-31 13:33:28'),
+(47, 'Klevv CRAS C910 2 TB M.2-2280 PCIe 4.0 X4 NVME Solid State Drive', 'Storage', 26700.00, 'uploads/1752050424_31dtu8k-RkL.jpg', 'Klevv CRAS C910 2TB is a PCIe 4.0 M.2 SSD with up to 5,200 MB/s read and 4,800 MB/s write speeds, plus a 5-year warranty and optional heatsink.\r\n', 0, 0.00, 'Klevv', 7, 'In Stock', '2025-07-31 07:51:13'),
 (48, 'Corsair Vengeance LPX 32 GB (2 x 16 GB) DDR4-3200 CL16 Memory', 'Memory', 22200.00, 'uploads/1752051377_ae9c14173c768f2fa9ad4d3c957e94a0.256p.jpg', 'Corsair Vengeance LPX 32GB (2x16GB) DDR4-3200 CL16 RAM offers reliable, fast performance with low-profile heat spreaders and easy overclocking support.\r\n', 0, 0.00, 'Corsair', 7, 'In Stock', '2025-07-08 21:56:17'),
-(49, 'Silicon Power GAMING 16 GB (2 x 8 GB) DDR4-3200 CL16 Memory', 'Memory', 9300.00, 'uploads/1752051610_62a4ba196f5f165e68619a63ef5d0b70.256p.jpg', 'Silicon Power GAMING 16GB (2x8GB) DDR4-3200 CL16 RAM offers solid performance with heat spreaders and lifetime warranty.\r\n', 0, 0.00, 'Silicon Power', 8, 'In Stock', '2025-07-08 22:00:10'),
-(50, 'AMD Ryzen 5 5600X 3.7 GHz 6-Core Processor', 'CPU', 35000.00, 'uploads/1752235186_1751996013_AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor.jpg', 'The AMD Ryzen 5 5600X is a 6-core, 12-thread processor with a 3.7 GHz base clock, ideal for gaming and multitasking. It offers fast performance and includes a stock cooler.', 0, 0.00, 'AMD', 20, 'In Stock', '2025-07-28 18:30:00'),
-(52, 'AMD Ryzen 7 9700X 3.8 GHz 8-Core Processor', 'CPU', 65000.00, 'uploads/1752038665_a0f5a161d8c7ff3c6b0827423537a029.256p.jpg', 'The AMD Ryzen 7 9700X is an 8-core, 16-thread desktop CPU with a 3.8 GHz base clock, offering strong multi-threaded and gaming performance. It\'s built for users who need high processing power for multitasking, content creation, and heavy workloads.', 0, 0.00, 'AMD', 12, 'In Stock', '2025-07-27 18:30:00'),
+(49, 'Silicon Power GAMING 16 GB (2 x 8 GB) DDR4-3200 CL16 Memory', 'Memory', 9300.00, 'uploads/1752051610_62a4ba196f5f165e68619a63ef5d0b70.256p.jpg', 'Silicon Power GAMING 16GB (2x8GB) DDR4-3200 CL16 RAM offers solid performance with heat spreaders and lifetime warranty.\r\n', 0, 0.00, 'Silicon Power', 7, 'In Stock', '2025-07-30 10:19:39'),
+(50, 'AMD Ryzen 5 5600X 3.7 GHz 6-Core Processor', 'CPU', 35000.00, 'uploads/1752235186_1751996013_AMD Ryzen 7 7800X3D 4.2 GHz 8-Core Processor.jpg', 'The AMD Ryzen 5 5600X is a 6-core, 12-thread processor with a 3.7 GHz base clock, ideal for gaming and multitasking. It offers fast performance and includes a stock cooler.', 0, 0.00, 'AMD', 19, 'In Stock', '2025-07-31 07:51:13'),
+(52, 'AMD Ryzen 7 9700X 3.8 GHz 8-Core Processor', 'CPU', 65000.00, 'uploads/1752038665_a0f5a161d8c7ff3c6b0827423537a029.256p.jpg', 'The AMD Ryzen 7 9700X is an 8-core, 16-thread desktop CPU with a 3.8 GHz base clock, offering strong multi-threaded and gaming performance. It\'s built for users who need high processing power for multitasking, content creation, and heavy workloads.', 0, 0.00, 'AMD', 9, 'In Stock', '2025-07-31 13:33:28'),
 (53, 'Intel Core i5-12400F 2.5 GHz 6-Core Processor Intel Core i9-14900K 3.2 GHz 24-Core Processor Low', 'CPU', 84000.00, 'uploads/1752231652_5fe3c9cc8cbaaa4aa52aed7389d2cc10.1600.jpg', 'The **Intel i5-12400F** is a 6-core CPU for smooth gaming and daily tasks, requiring a GPU. The **Intel i9-14900K** is a 24-core chip built for high-end performance and heavy workloads.\r\n', 0, 0.00, 'Intel', 6, 'In Stock', '2025-07-11 11:00:52'),
 (55, 'MSI B650 GAMING PLUS WIFI ATX AM5 Motherboard', 'Motherboard', 40000.00, 'uploads/1752039603_ff33ebb87ed9f5fa5f9c54d6d316ae82.256p.jpg', 'The **MSI B650 GAMING PLUS WIFI** is an ATX AM5 motherboard with DDR5 support, PCIe 4.0 slots, Wi-Fi 6E, and 2.5G Ethernet. It offers strong power delivery and good cooling for gaming and productivity.\r\n', 0, 0.00, 'MSI', 7, 'In Stock', '2025-07-08 13:10:03'),
-(56, 'MSI GeForce RTX 3060 Ventus 2X 12G GeForce RTX 3060 12GB 12 GB Video Card', 'Video Card', 76000.00, 'uploads/1752055653_dbc81b89efc82ce66fb2e3ab7e0f0658.1600.jpg', 'MSI RTX 3060 Ventus 2X 12G is a compact dual-fan GPU with 12GB GDDR6, ideal for 1080p/1440p gaming with ray tracing and DLSS support.\r\n', 0, 0.00, 'MSI', 16, 'In Stock', '2025-07-30 02:38:26'),
+(56, 'MSI GeForce RTX 3060 Ventus 2X 12G GeForce RTX 3060 12GB 12 GB Video Card', 'Video Card', 76000.00, 'uploads/1752055653_dbc81b89efc82ce66fb2e3ab7e0f0658.1600.jpg', 'MSI RTX 3060 Ventus 2X 12G is a compact dual-fan GPU with 12GB GDDR6, ideal for 1080p/1440p gaming with ray tracing and DLSS support.\r\n', 0, 0.00, 'MSI', 13, 'In Stock', '2025-07-31 07:51:13'),
 (57, 'Gigabyte WINDFORCE OC SFF GeForce RTX 5070 12 GB Video Card', 'Video Card', 154700.00, 'uploads/1752055989_136567e8e098d881d15de177db1e9243.1600.jpg', 'Gigabyte RTX 5070 WINDFORCE OC SFF is a compact 12GB GDDR7 GPU built for smooth 1440p gaming with quiet triple-fan cooling.\r\n', 0, 0.00, 'Gigabyte', 6, 'In Stock', '2025-07-29 11:02:56'),
 (58, 'MSI SHADOW 3X OC GeForce RTX 5070 Ti 16 GB Video Card', 'Video Card', 250000.00, 'uploads/1752056329_0e14bfa5ff48bf5a64a68bd5ccacfbd2.1600.jpg', 'MSI RTX 5070 Ti SHADOW 3X OC is a sleek, powerful 16GB GDDR7 GPU built for high-end 1440p/4K gaming with quiet triple-fan cooling.\r\n', 0, 0.00, 'MSI', 6, 'In Stock', '2025-07-11 07:33:10'),
 (59, 'Sapphire PULSE Radeon RX 9070 XT 16 GB Video Card', 'Video Card', 215700.00, 'uploads/1752056742_476e6143a031380658f2fdb9d5a2126d.256p.jpg', 'Sapphire PULSE RX 9070 XT is a powerful 16GB GDDR6 GPU for smooth 1440p and 4K gaming with efficient triple-fan cooling.\r\n', 0, 0.00, 'Sapphire', 6, 'In Stock', '2025-07-30 08:00:32'),
 (60, 'Asus ROG Astral OC GeForce RTX 5090 32 GB Video Card', 'Video Card', 1007700.00, 'uploads/1752057304_0161407080353d18971dcccd15dc3722.1600.jpg', 'Asus ROG Astral OC RTX 5090 is a flagship 32GB GDDR7 GPU with 21,760 CUDA cores, advanced quad-fan cooling, and top performance for 4K gaming and content creation.\r\n', 0, 0.00, 'Asus', 9, 'In Stock', '2025-07-08 23:35:04'),
-(61, 'Gigabyte GAMING OC Radeon RX 9070 XT 16 GB Video Card', 'Video Card', 218700.00, 'uploads/1752057524_74a2c2cec2f57c4e790633d81b35cd4f.1600.jpg', 'Gigabyte GAMING OC RX 9070 XT is a 16GB GDDR6 GPU with high boost clocks, triple-fan WINDFORCE cooling, and strong 1440p/4K gaming performance.\r\n', 0, 0.00, 'Gigabyte', 7, 'In Stock', '2025-07-08 23:38:44'),
+(61, 'Gigabyte GAMING OC Radeon RX 9070 XT 16 GB Video Card', 'Video Card', 218700.00, 'uploads/1752057524_74a2c2cec2f57c4e790633d81b35cd4f.1600.jpg', 'Gigabyte GAMING OC RX 9070 XT is a 16GB GDDR6 GPU with high boost clocks, triple-fan WINDFORCE cooling, and strong 1440p/4K gaming performance.\r\n', 0, 0.00, 'Gigabyte', 6, 'In Stock', '2025-07-30 10:15:50'),
 (62, 'Microsoft Windows 11 Pro OEM - DVD 64-bit', 'Operating System', 41700.00, 'uploads/1752058543_b06dd204711f15e712f892efcb1dd3df.1600.jpg', 'Windows 11 Pro OEM (DVD, 64-bit) is a one-time install OS for new PCs, offering advanced security, business tools, and modern productivity features.\r\n', 0, 0.00, 'Microsoft', 6, 'In Stock', '2025-07-08 23:55:43'),
-(63, 'Microsoft Windows 11 Home OEM - DVD 64-bit', 'Operating System', 32700.00, 'uploads/1752058703_ab7d4d98513e78fab6b0ca42894bda65.1600.jpg', 'Windows 11 Home OEM (DVD, 64-bit) is a one-time install OS for new PCs, offering essential features, security, and a modern interface for everyday use.\r\n', 0, 0.00, 'Microsoft', 7, 'In Stock', '2025-07-08 23:58:23'),
+(63, 'Microsoft Windows 11 Home OEM - DVD 64-bit', 'Operating System', 32700.00, 'uploads/1752058703_ab7d4d98513e78fab6b0ca42894bda65.1600.jpg', 'Windows 11 Home OEM (DVD, 64-bit) is a one-time install OS for new PCs, offering essential features, security, and a modern interface for everyday use.\r\n', 0, 0.00, 'Microsoft', 6, 'In Stock', '2025-07-30 10:15:50'),
 (64, 'Microsoft Windows 11 Home Retail - USB 64-bit', 'Operating System', 38700.00, 'uploads/1752058934_ed2349ecd618439a2aa96364e9445138.1600.jpg', 'Windows 11 Home Retail (USB, 64-bit) is a user-friendly OS with modern features and a transferable license, ideal for personal use and easy installation via USB.\r\n', 0, 0.00, 'Microsoft', 7, 'In Stock', '2025-07-29 11:02:56'),
 (65, 'Microsoft Windows 11 Pro Retail - Download 64-bit', 'Operating System', 59700.00, 'uploads/1752059133_5975493ee399fce8bc8df92e7acfbbe2.1600.jpg', 'Windows 11 Pro Retail (Download, 64-bit) is a professional OS with advanced features and a transferable license—ideal for business use and easy digital installation.\r\n', 0, 0.00, 'Microsoft', 8, 'In Stock', '2025-07-09 00:05:33'),
 (66, 'Microsoft Windows 10 Pro OEM - DVD 64-bit', 'Operating System', 300000.00, 'uploads/1752059658_e2020af0d40a275d81e0eec3386efa7e.1600.jpg', 'Windows 10 Pro OEM (DVD, 64-bit) is a one-time install operating system for new PCs, offering business features like BitLocker, Remote Desktop, and domain join support.\r\n', 0, 0.00, 'Microsoft', 7, 'In Stock', '2025-07-09 00:14:18'),
 (67, 'Microsoft Windows 10 Pro Retail - USB 32/64-bit', 'Operating System', 300000.00, 'uploads/1752059861_e61db9f11b1551d54cc2635bc9bdbd32.1600.jpg', 'Windows 10 Pro Retail (USB, 32/64-bit) is a versatile OS for professionals, featuring advanced tools like BitLocker, Remote Desktop, and domain join, with a transferable license and easy USB installation.\r\n', 0, 0.00, 'Microsoft', 8, 'In Stock', '2025-07-09 00:17:41'),
 (68, 'Corsair 4000D Airflow ATX Mid Tower Case', 'PC Case', 31200.00, 'uploads/1752060648_bc6e987da3fe22c616898d1d7fa3d227.1600.jpg', 'Corsair 4000D Airflow is a mid-tower PC case with high airflow, roomy interior, easy cable management, and support for large GPUs and radiators.\r\n', 0, 0.00, 'Corsair', 8, 'In Stock', '2025-07-09 00:30:48'),
-(69, 'NZXT H9 Flow (2023) ATX Mid Tower Case', 'PC Case', 38700.00, 'uploads/1752060918_15fb785fb4d0995e7cc7e28a6f2271d9.1600.jpg', 'NZXT H9 Flow (2023) is a sleek ATX mid-tower case with excellent airflow, spacious interior, and strong cooling support.\r\n', 0, 0.00, 'NZXT', 6, 'In Stock', '2025-07-29 11:02:56'),
+(69, 'NZXT H9 Flow (2023) ATX Mid Tower Case', 'PC Case', 38700.00, 'uploads/1752060918_15fb785fb4d0995e7cc7e28a6f2271d9.1600.jpg', 'NZXT H9 Flow (2023) is a sleek ATX mid-tower case with excellent airflow, spacious interior, and strong cooling support.\r\n', 0, 0.00, 'NZXT', 5, 'Low Stock', '2025-07-30 10:15:50'),
 (70, 'Lian Li Lancool 207 ATX Mid Tower Case', 'PC Case', 24300.00, 'uploads/1752061160_393f3d73165045839334a1621040ee20.1600.jpg', 'Lian Li Lancool 207 is a compact ATX mid-tower case with great airflow, ARGB fans, and good cooling support.\r\n', 0, 0.00, 'Lian Li', 7, 'In Stock', '2025-07-09 00:39:20'),
 (71, 'Redragon DEVARAIAS K556 RGB Wired Gaming Keyboard', 'Keyboard', 1500.00, 'uploads/1752071619_41vSWpjgMgL.jpg', 'Redragon DEVARAIAS K556 is a durable mechanical gaming keyboard featuring RGB backlighting, custom mechanical switches for tactile feedback, full metal construction, and anti-ghosting keys for reliable performance during intense gaming sessions.', 0, 0.00, 'Redragon', 13, 'In Stock', '2025-07-09 09:03:39'),
 (72, 'Razer Huntsman Mini RGB Wired Mini Keyboard', 'Keyboard', 2300.00, 'uploads/1752071727_1411d2ffe69ca84f0c740ee5d0df4a0e.256p.jpg', 'Razer Huntsman Mini is a compact 60% mechanical gaming keyboard with ultra-fast optical switches, vibrant customizable RGB lighting, and a sleek, portable design—ideal for minimal setups and competitive gaming.', 0, 0.00, 'Razer', 10, 'In Stock', '2025-07-09 09:05:27'),
 (73, 'SteelSeries Apex 3 TKL RGB Wired Gaming Keyboard', 'Keyboard', 1600.00, 'uploads/1752071822_41tJtjMmKCL.jpg', 'SteelSeries Apex 3 TKL is a compact, tenkeyless gaming keyboard with quiet, whisper-quiet switches, customizable RGB lighting, and water resistance—perfect for streamlined setups and long gaming sessions.', 0, 0.00, 'SteelSeries', 6, 'In Stock', '2025-07-09 09:07:02'),
 (74, 'RK Royal Kludge RK61 Bluetooth/Wireless/Wired Mini Keyboard', 'Keyboard', 1800.00, 'uploads/1752071970_41lgkMJ5btL.jpg', 'RK Royal Kludge RK61 is a compact 60% mechanical keyboard with triple-mode connectivity—Bluetooth, 2.4GHz wireless, and USB-C wired. It features hot-swappable switches, vibrant RGB lighting, and a portable design, making it ideal for both gaming and on-the-go productivity.', 0, 0.00, 'RK Royal Kludge', 7, 'In Stock', '2025-07-09 09:09:30'),
 (75, 'Logitech G305 LIGHTSPEED Wireless/Wired Optical Mouse', 'Mouse', 900.00, 'uploads/1752072181_e5ae54669b6dc857c4d03a26e70ed9d5.256p.jpg', 'Logitech G305 LIGHTSPEED is a wireless gaming mouse with ultra-fast 1ms response time, a HERO 12K sensor for precise tracking, and up to 250 hours of battery life offering top-tier performance in a lightweight, compact design.', 0, 0.00, 'Logitech', 10, 'In Stock', '2025-07-09 09:13:01'),
-(76, 'SteelSeries Rival 3 Wired Optical Mouse', 'Mouse', 750.00, 'uploads/1752072282_24c3004e0bf166466ca2e8cf1ab55490.256p.jpg', 'A lightweight (~77 g), ambidextrous wired gaming mouse featuring the TrueMove Core sensor (100–8,500 CPI) for true 1:1 tracking, durable 60 million-click switches, customizable 3‑zone Prism RGB lighting, and onboard memory—offering excellent performance and comfort in a budget-friendly package .', 0, 0.00, 'SteelSeries', 9, 'In Stock', '2025-07-09 09:14:42'),
+(76, 'SteelSeries Rival 3 Wired Optical Mouse', 'Mouse', 750.00, 'uploads/1752072282_24c3004e0bf166466ca2e8cf1ab55490.256p.jpg', 'A lightweight (~77 g), ambidextrous wired gaming mouse featuring the TrueMove Core sensor (100–8,500 CPI) for true 1:1 tracking, durable 60 million-click switches, customizable 3‑zone Prism RGB lighting, and onboard memory—offering excellent performance and comfort in a budget-friendly package .', 0, 0.00, 'SteelSeries', 8, 'In Stock', '2025-07-31 07:52:44'),
 (77, 'Razer Basilisk V3 Wired Optical Mouse', 'Mouse', 1200.00, 'uploads/1752073722_d662cc7b90e3fd45502f7c77d9b54269.256p.jpg', 'It is an ergonomic wired gaming mouse with a high-precision 26K DPI sensor, customizable 11 buttons, a programmable HyperScroll wheel, and vibrant RGB lighting—designed for comfort and versatile gameplay.', 0, 0.00, 'Razer', 9, 'In Stock', '2025-07-09 09:38:42'),
 (78, 'Razer DeathAdder Essential Wired Optical Mouse', 'Mouse', 649.98, 'uploads/1752073825_d6fd43322f07dedde7c5c3d9e53706d1.256p.jpg', 'It is a wired ergonomic gaming mouse with a 6,400 DPI optical sensor, 5 programmable buttons, and durable build—designed for comfortable and precise gameplay.', 0, 0.00, 'Razer', 10, 'In Stock', '2025-07-09 09:40:25'),
 (79, 'Syba CM-502 Headset', 'Headset', 1499.98, 'uploads/1752074074_41Ak3kL+JJL.jpg', 'Affordable wired stereo headset with adjustable headband, omnidirectional mic, and in-line volume controls.', 0, 0.00, 'Syba', 10, 'In Stock', '2025-07-09 09:44:34'),
@@ -517,19 +633,19 @@ INSERT INTO `products` (`product_id`, `name`, `category`, `price`, `image_url`, 
 (88, 'Syba SY-HUB24047 4 x Gigabit Ethernet ', 'USB Hub', 799.99, 'uploads/1752075180_f0a8b547f7d2f63c7d2d8b91adcbcb39.256p.jpg', '', 0, 0.00, 'Syba', 10, 'In Stock', '2025-07-09 10:03:00'),
 (89, 'Rosewill RNX-N150PCx', 'Network Card', 700.00, 'uploads/1752075362_download.jpg', 'Rosewill RNX-N150PCx is a PCI wireless network card supporting 802.11b/g/n with speeds up to 150Mbps, featuring a detachable antenna for stable, basic Wi-Fi connectivity on desktop PCs.', 0, 0.00, 'Rosewill', 10, 'In Stock', '2025-07-09 10:06:02'),
 (92, 'FanXiang S101 128 GB 2.5\" Solid State Drive', 'Storage', 21000.00, 'uploads/1752214766_41cZpkFrJ3L.jpg', 'FanXiang S101 128 GB 2.5″ SATA III SSD is an internal solid-state drive delivering up to 550 MB/s read and ~500 MB/s write speeds. Featuring 3D NAND TLC, it offers faster boot times, quieter operation, and improved system responsiveness compared to HDDs. Compatible with laptops and desktops via SATA III.', 0, 0.00, 'FanXiang', 10, 'In Stock', '2025-07-11 00:49:26'),
-(93, 'MSI VENTUS 2X OC GeForce RTX 3050 6GB ', 'Video Card', 40000.00, 'uploads/1752215200_f86c8c5780481bd5cfd54e7251ce354e.256p.jpg', 'MSI VENTUS 2X OC GeForce RTX 3050 6GB is a dual‑fan graphics card based on NVIDIA’s Ampere architecture. It features 2,304 CUDA cores, 6 GB GDDR6 memory, and a 1492 MHz boost clock for smooth 1080p gaming, real‑time ray tracing, and AI-enhanced performance in a compact, efficient design.', 0, 0.00, 'MSI', 10, 'In Stock', '2025-07-11 12:47:11'),
-(94, 'GameMax Nova N5 ATX Mid Tower Case', 'PC Case', 8000.00, 'uploads/1752215459_3fe68eb2222eba68bc559d39533233ae.256p.jpg', 'GameMax Nova N5 ATX Mid Tower Case is a stylish mid-tower PC enclosure that supports ATX, Micro‑ATX, and Mini‑ITX motherboards. It features a tempered glass side panel, convenient front I/O ports (USB 3.0 & audio), multiple fan mounts for optimized airflow, and ample space for graphics cards and cooling systems—combining aesthetic appeal with functional flexibility.', 0, 0.00, 'GameMax', 6, 'In Stock', '2025-07-30 08:00:32'),
-(95, 'Thermalright Assassin X 120 Refined SE 66.17 CFM', 'CPU Cooler', 6000.00, 'uploads/1752215675_41aJwdGRuAL.jpg', 'ChatGPT said:\r\nThermalright Assassin X 120 Refined SE is a single-tower CPU air cooler with four 6 mm copper heat pipes and a 120 mm PWM fan delivering up to 66 CFM airflow. It offers quiet operation (≤25.6 dBA), supports modern Intel and AMD sockets, and balances effective cooling and low noise in a compact design.', 0, 0.00, 'Thermalright', 11, 'In Stock', '2025-07-27 08:42:39'),
-(96, 'Microsoft Windows 11 Home OEM - DVD 64-bit', 'Operating System', 6500.00, 'uploads/1752215975_ab7d4d98513e78fab6b0ca42894bda65.256p.jpg', 'Microsoft Windows 11 Home OEM (64-bit DVD) is a licensed OS for new PC builds, offering a modern interface, enhanced security, and essential features—delivered via installation DVD.', 0, 0.00, 'Microsoft', 11, 'In Stock', '2025-07-27 08:42:39'),
-(97, 'Microsoft Windows 11 Home Retail - USB 64-bit', 'Operating System', 13000.00, 'uploads/1752216124_ed2349ecd618439a2aa96364e9445138.256p.jpg', 'Microsoft Windows 11 Home Retail (USB, 64‑bit) is a full-license operating system on a USB installer, offering a modern user interface with features like Snap layouts and widgets, built-in security (TPM 2.0, Secure Boot), and transferable retail licensing—ideal for upgrading or clean-installing on multiple PCs.', 0, 0.00, 'Microsoft', 6, 'In Stock', '2025-07-30 08:00:32'),
+(93, 'MSI VENTUS 2X OC GeForce RTX 3050 6GB ', 'Video Card', 40000.00, 'uploads/1752215200_f86c8c5780481bd5cfd54e7251ce354e.256p.jpg', 'MSI VENTUS 2X OC GeForce RTX 3050 6GB is a dual‑fan graphics card based on NVIDIA’s Ampere architecture. It features 2,304 CUDA cores, 6 GB GDDR6 memory, and a 1492 MHz boost clock for smooth 1080p gaming, real‑time ray tracing, and AI-enhanced performance in a compact, efficient design.', 0, 0.00, 'MSI', 8, 'In Stock', '2025-07-31 13:33:28'),
+(94, 'GameMax Nova N5 ATX Mid Tower Case', 'PC Case', 8000.00, 'uploads/1752215459_3fe68eb2222eba68bc559d39533233ae.256p.jpg', 'GameMax Nova N5 ATX Mid Tower Case is a stylish mid-tower PC enclosure that supports ATX, Micro‑ATX, and Mini‑ITX motherboards. It features a tempered glass side panel, convenient front I/O ports (USB 3.0 & audio), multiple fan mounts for optimized airflow, and ample space for graphics cards and cooling systems—combining aesthetic appeal with functional flexibility.', 0, 0.00, 'GameMax', 1, 'Low Stock', '2025-07-31 13:33:28'),
+(95, 'Thermalright Assassin X 120 Refined SE 66.17 CFM', 'CPU Cooler', 6000.00, 'uploads/1752215675_41aJwdGRuAL.jpg', 'ChatGPT said:\r\nThermalright Assassin X 120 Refined SE is a single-tower CPU air cooler with four 6 mm copper heat pipes and a 120 mm PWM fan delivering up to 66 CFM airflow. It offers quiet operation (≤25.6 dBA), supports modern Intel and AMD sockets, and balances effective cooling and low noise in a compact design.', 0, 0.00, 'Thermalright', 10, 'In Stock', '2025-07-31 07:52:44'),
+(96, 'Microsoft Windows 11 Home OEM - DVD 64-bit', 'Operating System', 6500.00, 'uploads/1752215975_ab7d4d98513e78fab6b0ca42894bda65.256p.jpg', 'Microsoft Windows 11 Home OEM (64-bit DVD) is a licensed OS for new PC builds, offering a modern interface, enhanced security, and essential features—delivered via installation DVD.', 0, 0.00, 'Microsoft', 9, 'In Stock', '2025-07-31 13:33:28'),
+(97, 'Microsoft Windows 11 Home Retail - USB 64-bit', 'Operating System', 13000.00, 'uploads/1752216124_ed2349ecd618439a2aa96364e9445138.256p.jpg', 'Microsoft Windows 11 Home Retail (USB, 64‑bit) is a full-license operating system on a USB installer, offering a modern user interface with features like Snap layouts and widgets, built-in security (TPM 2.0, Secure Boot), and transferable retail licensing—ideal for upgrading or clean-installing on multiple PCs.', 0, 0.00, 'Microsoft', 30, 'In Stock', '2025-07-29 18:30:00'),
 (98, 'Microsoft Windows 10 Home OEM - DVD 32-bit', 'Operating System', 17000.00, 'uploads/1752216243_f5e3c78aadf16d536c31b0fa088c8306.256p.jpg', 'Microsoft Windows 10 Home OEM (DVD, 32‑bit) is a full-version operating system sold on DVD for new PC builds. It offers features like the familiar Start menu, fast startup, built-in security, and compatibility with existing hardware and software. The OEM license is tied to one machine and doesn\'t include Microsoft support.', 0, 0.00, 'Microsoft', 12, 'In Stock', '2025-07-27 18:30:00'),
 (99, 'Microsoft Windows 8.1 Pro OEM 64-bit', 'Operating System', 21500.00, 'uploads/1752216362_41NkygesugL.jpg', 'ChatGPT said:\r\nMicrosoft Windows 8.1 Pro OEM (64‑bit) is a full‑version operating system — ideal for new PC builds — offering enhanced business features like BitLocker encryption, Remote Desktop and domain join, alongside the standard 8.1 interface with Start screen, touch support, and Windows Store access. The OEM version requires a clean install and is licensed per device, but includes all Pro features at a lower cost.', 0, 0.00, 'Microsoft', 12, 'In Stock', '2025-07-27 18:30:00'),
-(100, 'Thermalright Assassin King SE ARGB 66.17 CFM', 'CPU Cooler', 9600.00, 'uploads/1752216506_41oLozsjh1L.jpg', 'Thermalright Assassin King SE ARGB is a single‑tower CPU air cooler featuring five 6 mm heat pipes with anti‑gravity tech, a 120 mm PWM ARGB fan (66 CFM, ≤25.6 dBA), and compatibility with modern Intel & AMD sockets—offering powerful, quiet cooling with vivid lighting.', 0, 0.00, 'Thermalright ', 7, 'In Stock', '2025-07-30 08:00:32'),
+(100, 'Thermalright Assassin King SE ARGB 66.17 CFM', 'CPU Cooler', 9600.00, 'uploads/1752216506_41oLozsjh1L.jpg', 'Thermalright Assassin King SE ARGB is a single‑tower CPU air cooler featuring five 6 mm heat pipes with anti‑gravity tech, a 120 mm PWM ARGB fan (66 CFM, ≤25.6 dBA), and compatibility with modern Intel & AMD sockets—offering powerful, quiet cooling with vivid lighting.', 0, 0.00, 'Thermalright ', 19, 'In Stock', '2025-07-31 13:33:28'),
 (102, 'AMD Ryzen 5 1600 (12nm) 3.2 GHz 6-Core Processor', 'CPU', 30000.00, 'uploads/1752236186_1752234643_2447958ccca245b5827bf05929f870e6.256p.jpg', 'AMD Ryzen 5 1600 (12nm) is a 6-core processor with a base clock of 3.2 GHz, designed for smooth multitasking and entry-level gaming, offering solid performance on a budget with improved efficiency from its 12nm process.', 0, 0.00, 'AMD', 12, 'In Stock', '2025-07-25 18:30:00'),
-(103, 'Planar PLL2210MW 22.0\" 1920 x 1080 Monitor', 'Monitor', 6000.00, 'uploads/1752236829_91251942d23c415292a5b76b2abe8c41.256p.jpg', 'Planar PLL2210MW is a 22-inch Full HD (1920 x 1080) monitor that delivers clear visuals and a widescreen display, ideal for everyday computing, office tasks, and casual media viewing.', 0, 0.00, 'Planar', 12, 'In Stock', '2025-07-24 18:30:00'),
-(104, 'MSI PRO MP223 E2 21.4\" 1920 x 1080 100 Hz Monitor', 'Monitor', 14000.00, 'uploads/1752236979_060e222c360e17b4ecad950111331052.256p.jpg', 'MSI PRO MP223 E2 is a 21.4-inch Full HD (1920 × 1080) monitor with a smooth 100 Hz refresh rate, offering crisp visuals and responsive performance—ideal for productivity and everyday computing.', 0, 0.00, 'MSI', 14, 'In Stock', '2025-07-30 08:00:32'),
-(105, 'MSI GT 710 2GD3H LP GeForce GT 710 2 GB Video Card', 'Video Card', 20000.00, 'uploads/1752238339_a01ec3b624bf22abe8f1831194c4d226.256p.jpg', 'MSI GT 710 2GD3H LP is a low-profile 2GB graphics card ideal for basic tasks like HD video playback, office use, and light multimedia, featuring silent passive cooling and support for up to three displays.', 0, 0.00, 'MSI', 18, 'In Stock', '2025-07-30 07:55:33'),
-(106, 'Zotac ZT-P10300A-10L GeForce GT 1030 2 GB Video Card', 'Video Card', 30000.00, 'uploads/1752238517_2bb607fb81a1937856469da540ad5c82.256p.jpg', 'Zotac ZT‑P10300A‑10L GeForce GT 1030 is a compact, energy-efficient 2 GB graphics card ideal for smooth HD video playback, light gaming, and multi-display setups, featuring passive cooling for silent operation.', 0, 0.00, 'Zotac', 10, 'In Stock', '2025-07-30 07:55:33');
+(103, 'Planar PLL2210MW 22.0\" 1920 x 1080 Monitor', 'Monitor', 6000.00, 'uploads/1752236829_91251942d23c415292a5b76b2abe8c41.256p.jpg', 'Planar PLL2210MW is a 22-inch Full HD (1920 x 1080) monitor that delivers clear visuals and a widescreen display, ideal for everyday computing, office tasks, and casual media viewing.', 0, 0.00, 'Planar', 8, 'In Stock', '2025-07-31 13:33:28'),
+(104, 'MSI PRO MP223 E2 21.4\" 1920 x 1080 100 Hz Monitor', 'Monitor', 14000.00, 'uploads/1752236979_060e222c360e17b4ecad950111331052.256p.jpg', 'MSI PRO MP223 E2 is a 21.4-inch Full HD (1920 × 1080) monitor with a smooth 100 Hz refresh rate, offering crisp visuals and responsive performance—ideal for productivity and everyday computing.', 0, 0.00, 'MSI', 11, 'In Stock', '2025-07-31 12:41:11'),
+(105, 'MSI GT 710 2GD3H LP GeForce GT 710 2 GB Video Card', 'Video Card', 20000.00, 'uploads/1752238339_a01ec3b624bf22abe8f1831194c4d226.256p.jpg', 'MSI GT 710 2GD3H LP is a low-profile 2GB graphics card ideal for basic tasks like HD video playback, office use, and light multimedia, featuring silent passive cooling and support for up to three displays.', 0, 0.00, 'MSI', 16, 'In Stock', '2025-07-31 12:41:11'),
+(106, 'Zotac ZT-P10300A-10L GeForce GT 1030 2 GB Video Card', 'Video Card', 30000.00, 'uploads/1752238517_2bb607fb81a1937856469da540ad5c82.256p.jpg', 'Zotac ZT‑P10300A‑10L GeForce GT 1030 is a compact, energy-efficient 2 GB graphics card ideal for smooth HD video playback, light gaming, and multi-display setups, featuring passive cooling for silent operation.', 0, 0.00, 'Zotac', 9, 'In Stock', '2025-07-30 12:03:02');
 
 -- --------------------------------------------------------
 
@@ -548,6 +664,27 @@ CREATE TABLE `reviews` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `user_id`, `target_type`, `target_id`, `rating`, `comment`, `status`, `created_at`, `updated_at`) VALUES
+(8, 42, 'technician', 13, 5, 'he is a good worker', 'approved', '2025-07-30 17:15:05', '2025-07-30 17:15:40'),
+(9, 42, 'system', NULL, 5, 'i like your website', 'approved', '2025-07-30 17:15:25', '2025-07-30 17:15:44'),
+(10, 42, 'system', NULL, 5, 'awsome', 'approved', '2025-07-30 17:41:58', '2025-07-30 17:53:00'),
+(11, 42, 'system', NULL, 5, 'i love this', 'approved', '2025-07-30 17:42:12', '2025-07-30 17:53:00'),
+(12, 42, 'system', NULL, 3, 'i need to better', 'approved', '2025-07-30 17:42:27', '2025-07-30 17:53:00'),
+(13, 32, 'system', NULL, 1, 'i dont like it', 'approved', '2025-07-30 17:43:48', '2025-07-30 17:53:00'),
+(14, 32, 'system', 1, 4, 'Great platform for PC building! The recommendations are really helpful.', 'approved', '2025-07-30 17:57:58', '2025-07-30 17:57:58'),
+(15, 42, 'system', 1, 5, 'Excellent service and fast delivery. Will definitely recommend to friends.', 'approved', '2025-07-30 17:57:58', '2025-07-30 17:57:58'),
+(16, 32, 'system', 1, 3, 'Good overall experience but could use some UI improvements.', 'approved', '2025-07-30 17:57:58', '2025-07-30 17:57:58'),
+(17, 42, 'system', NULL, 5, 'vankam da mapla', 'approved', '2025-07-30 18:02:08', '2025-07-30 18:02:23'),
+(18, 32, 'technician', 13, 4, 'Hello', 'approved', '2025-07-30 19:53:02', '2025-07-30 19:56:17'),
+(20, 27, 'system', NULL, 5, 'hi', 'approved', '2025-07-30 21:04:16', '2025-07-31 20:51:51'),
+(21, 42, 'technician', 13, 5, 'hi', 'pending', '2025-07-31 16:53:43', '2025-07-31 16:53:43'),
+(22, 42, 'technician', 13, 5, 'aswe', 'pending', '2025-07-31 21:44:14', '2025-07-31 21:44:14'),
+(23, 42, 'system', NULL, 5, 'aaaaaaaa', 'pending', '2025-07-31 21:44:26', '2025-07-31 21:44:26');
 
 -- --------------------------------------------------------
 
@@ -589,22 +726,22 @@ CREATE TABLE `technician` (
   `specialization` varchar(100) NOT NULL,
   `experience` int(11) NOT NULL,
   `charge_per_day` decimal(10,2) DEFAULT NULL,
-  `status` enum('available','unavailable') NOT NULL DEFAULT 'available'
+  `status` enum('available','unavailable') NOT NULL DEFAULT 'available',
+  `approve_status` enum('approved','not approved') NOT NULL DEFAULT 'not approved'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `technician`
 --
 
-INSERT INTO `technician` (`technician_id`, `user_id`, `proof`, `specialization`, `experience`, `charge_per_day`, `status`) VALUES
-(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 2500.00, 'available'),
-(5, 33, '6876665616021_ESD 111-1 Com Skill Assesment 2022.pdf', 'Custom Water Cooling', 3, 2000.00, 'available'),
-(6, 34, '6876696f9be53_ESD 111-1 Com Skill Assesment 2022.pdf', 'Gaming PCs', 3, 2800.00, 'available'),
-(7, 35, '687fe3f37e983_ESD 111-1 Com Skill Assesment 2022.pdf', 'Gaming PCs', 3, 2300.00, 'available'),
-(8, 28, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 2000.00, 'available'),
-(9, 27, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 2500.00, 'available'),
-(11, 39, '68859f9fa0bd8_2021 ESD 111-1 Communication Skills I.pdf', 'Gaming PCs', 2, NULL, 'available'),
-(13, 43, '688a007edf5bf_CST 226 - Assignment 3 (Group Project).pdf', 'Workstations', 2, 2000.00, 'unavailable');
+INSERT INTO `technician` (`technician_id`, `user_id`, `proof`, `specialization`, `experience`, `charge_per_day`, `status`, `approve_status`) VALUES
+(4, 31, '6868af4b8f54d_a1377d3698eff001.pdf', 'Workstations', 10, 2500.00, 'available', 'not approved'),
+(5, 33, '6876665616021_ESD 111-1 Com Skill Assesment 2022.pdf', 'Custom Water Cooling', 3, 2000.00, 'available', 'not approved'),
+(6, 34, '6876696f9be53_ESD 111-1 Com Skill Assesment 2022.pdf', 'Gaming PCs', 3, 2800.00, 'available', 'not approved'),
+(8, 28, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 2000.00, 'available', 'not approved'),
+(9, 27, '686804a510434_Guidelines to write a project progress report.pdf', 'Gaming PCs', 2, 2500.00, 'available', 'not approved'),
+(13, 43, '688a007edf5bf_CST 226 - Assignment 3 (Group Project).pdf', 'Workstations', 2, 2000.00, 'available', 'not approved'),
+(14, 45, '688a1c177fdb7_2021 ESD 111-1 Communication Skills I.pdf', 'Custom Water Cooling', 2, 2000.00, 'available', 'not approved');
 
 -- --------------------------------------------------------
 
@@ -627,7 +764,13 @@ CREATE TABLE `technician_assignments` (
 
 INSERT INTO `technician_assignments` (`assignment_id`, `customer_id`, `technician_id`, `assigned_at`, `status`, `instructions`) VALUES
 (68, 42, 13, '2025-07-30 11:30:58', 'rejected', 'hi i am makinthan'),
-(69, 42, 13, '2025-07-30 11:32:53', 'pending', 'i need to help');
+(69, 42, 13, '2025-07-30 11:32:53', 'rejected', 'i need to help'),
+(70, 42, 13, '2025-07-30 11:42:22', 'accepted', 'please accept the request'),
+(71, 32, 13, '2025-07-30 13:47:13', 'accepted', 'do it fastly, i want it in shourt time'),
+(72, 32, 13, '2025-07-30 13:49:52', 'rejected', 'hello'),
+(73, 27, 13, '2025-07-30 15:33:50', 'pending', ''),
+(74, 42, 13, '2025-07-30 17:46:34', 'pending', 'wwe'),
+(75, 42, 13, '2025-07-31 11:21:32', 'accepted', 'hi');
 
 -- --------------------------------------------------------
 
@@ -654,16 +797,16 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `contact_number`, `address`, `user_type`, `profile_image`, `disable_status`, `created_at`) VALUES
 (27, 'madhan mdn2', 'seller@gmail.com', '$2y$10$cynhWwNxXqV7Vicbe3KUoOVkdEsZpgUh6ogszFXAKE3JvUv2s3ECy', '0712345678', 'Colombo', 'seller', 'seller_27_1751986885.png', 'active', '2025-07-01 12:00:14'),
-(28, 'madhan mdn', 'admin@gmail.com', '$2y$10$p0EWBcF.9NTkHYX5t0U5buAej4.gwtCL6jTBgsEMX6HlbPBJVGvSe', '0704079541', 'Jaffna', 'admin', 'admin_28_1753193926.jpg', 'active', '2025-07-01 12:00:14'),
+(28, 'madhan mdn', 'admin@gmail.com', '$2y$10$O8OHWnqG/nxnzu/ris5UoucqCW3hN4tSDBFvIyhygWEy5hT0.Iole', '0704079541', 'Jaffna', 'admin', 'admin_28_1753193926.jpg', 'active', '2025-07-01 12:00:14'),
 (31, 'Pukaliny Rajee', 'ypukaliny@gmail.com', '$2y$10$PYpIwRwiZQvXabqekQmwv.p74GGnXlMSm35Aw2qUkzYo9jBJnOQuW', '0774455666', 'pointpedro | Jaffna | 40000', 'Technician', 'img_686d3f1107a875.61902098.jpg', 'active', '2025-07-05 04:51:23'),
 (32, 'Kowsika kantharuban', 'kantharubankowsika@gmail.com', '$2y$10$ic9jys8F9qbXPTmGEBFhHOv5wEeY1kTRmH49KappZAivvKqwRl4MK', '0775566777', 'udaiyarkaddu | Mullaitivu | 45000', 'customer', 'pp19.png', 'active', '2025-07-05 04:53:28'),
 (33, 'suman raj', 'suthasuman20@gmail.com', '$2y$10$2u6DJnlHgoRlJ37YyExXF.w7Z0QA8I5RT68sz2kV.GSpMGQDnUBfG', '0704079588', 'velanai | Jaffna | 40000', 'Technician', 'img_687e89fc9d6df3.63685634.png', 'active', '2025-07-15 14:31:50'),
 (34, 'demario benet', 'demariobennet1@gmail.com', '$2y$10$4FIHbfJeQnQlKv/QPy9tNeQs0S7RMhkoCl3p8l8Qogsd0zjN0XSg2', '0704079445', 'velanai | Badulla | 40000', 'Technician', 'img_687e8dc7a00c16.94008900.png', 'active', '2025-07-15 14:45:03'),
-(35, 'abinath inpa', 'abinath157@gmail.com', '$2y$10$yvUbI82syXXOcAwXuVjreO6m6DlqoxI3k01W0uBS7VsaIq89zcsEu', '0705747346', 'nelliyadi | Jaffna | 40000', 'Technician', 'img_687fe445114cc9.03887140.png', 'active', '2025-07-22 19:18:11'),
-(39, 'inparaj abi', 'muralitharanabinath7@gmail.com', '$2y$10$XCvBiGpgVgmRXOM8fvhpTuICtq9yeHsaFUbQ3ARuzkqAeu3AF/3bS', '0704079566', 'jaffna | Matara | 40000', 'Technician', 'user_image.jpg', 'active', '2025-07-27 03:40:15'),
 (40, 'ben asher', 'mbenash961030@gmail.com', '$2y$10$O1mIvu0/kIoXw04TGCxenuzpK5obe3wFF0gjs7f7cmT6ovtqav4WC', '0704079444', 'jaffna | Kandy | 40000', 'customer', 'WhatsApp Image 2025-07-25 at 11.54.25 AM.jpeg', 'active', '2025-07-29 18:15:13'),
 (42, 'makinthan mdn', 'mahinthan2001a@gmail.com', '$2y$10$0Exgoz14W18fLf9xc3eSxur/kxlMhA3dTatRfUuaDzrr3JHkJ17sa', '0704079546', 'velanai | Jaffna | 40000', 'customer', 'IMG_20240512_003632_681.jpg', 'active', '2025-07-30 11:20:48'),
-(43, 'madhan sathananthan', 'madhan2001ana@gmail.com', '$2y$10$wlUswHBOoJMwZCoUZK9DROaGKS62T7CRSqZujtPydKhtWuUFGoQcK', '0704079547', 'velanai | Jaffna | 40000', 'Technician', 'user_image.jpg', 'active', '2025-07-30 11:22:39');
+(43, 'madhan sathananthan', 'madhan2001ana@gmail.com', '$2y$10$wlUswHBOoJMwZCoUZK9DROaGKS62T7CRSqZujtPydKhtWuUFGoQcK', '0704079547', 'velanai | Jaffna | 40000', 'Technician', 'img_688a2d284d1242.12028504.jpg', 'active', '2025-07-30 11:22:39'),
+(44, 'abinath muralitharan', 'abinath157@gmail.com', '$2y$10$N3V8zQjkJG02RR37KD50d./.1f03jQ3zZQsDhlE2QznUSp1yiTE0S', '0771122333', 'Neliyady | Jaffna | 40000', 'customer', 'user_image.jpg', 'active', '2025-07-30 13:12:41'),
+(45, 'Abi Abinath', 'muralitharanabinath7@gmail.com', '$2y$10$Uix.o7BobaXbXzfccOP5UOfMNvcdacEWW1n5ATujVn5ClnliKBXTy', '0704079547', 'Pasara | Badulla | 40000', 'Technician', 'user_image.jpg', 'active', '2025-07-30 13:20:23');
 
 -- --------------------------------------------------------
 
@@ -869,67 +1012,67 @@ ALTER TABLE `video_card`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=477;
+  MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=545;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `technician`
 --
 ALTER TABLE `technician`
-  MODIFY `technician_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `technician_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `technician_assignments`
 --
 ALTER TABLE `technician_assignments`
-  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `assignment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints for dumped tables
@@ -1048,31 +1191,6 @@ ALTER TABLE `technician_assignments`
 ALTER TABLE `video_card`
   ADD CONSTRAINT `video_card_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE;
 COMMIT;
-
-
-
--- System Reviews (General feedback about GearSphere platform)
-INSERT INTO `reviews` (`user_id`, `target_type`, `target_id`, `rating`, `comment`, `status`, `created_at`) VALUES
-(32, 'system', NULL, 5, 'Excellent service! The PC building process was smooth and the technician was very professional. Highly recommend GearSphere for custom PC builds.', 'approved', '2025-07-25 10:30:00'),
-(40, 'system', NULL, 4, 'Great platform for finding quality PC components. The website is easy to navigate and the customer support is responsive. Will definitely use again.', 'approved', '2025-07-26 14:15:00'),
-(42, 'system', NULL, 5, 'Amazing experience! The technician helped me build my dream gaming PC. Everything worked perfectly and the service was top-notch.', 'approved', '2025-07-27 09:45:00'),
-(32, 'system', NULL, 4, 'Good selection of components and competitive prices. The delivery was fast and all items were well packaged. Very satisfied with my purchase.', 'approved', '2025-07-28 16:20:00'),
-(40, 'system', NULL, 5, 'Outstanding customer service! Had an issue with a component and they resolved it quickly. The technical support team is very knowledgeable.', 'approved', '2025-07-29 11:30:00'),
-
--- Technician-specific Reviews (Reviews for specific technicians)
-(42, 'technician', 4, 5, 'Pukaliny was fantastic! Very knowledgeable about workstation builds and completed my project ahead of schedule. Professional and friendly service.', 'approved', '2025-07-25 13:45:00'),
-(32, 'technician', 5, 4, 'Suman did an excellent job with my custom water cooling setup. Attention to detail was impressive and the system runs perfectly cool and quiet.', 'approved', '2025-07-26 17:30:00'),
-(40, 'technician', 6, 5, 'Demario built an amazing gaming PC for me. Great communication throughout the process and the final result exceeded my expectations. Highly recommend!', 'approved', '2025-07-27 12:15:00'),
-(42, 'technician', 7, 4, 'Abinath was very professional and knowledgeable. The gaming PC build was completed efficiently and all components work flawlessly. Good experience overall.', 'approved', '2025-07-28 08:30:00'),
-(32, 'technician', 13, 5, 'Madhan provided excellent service for my workstation build. Very thorough in explaining the process and delivered exactly what I needed for my work requirements.', 'approved', '2025-07-29 15:45:00'),
-
--- Additional System Reviews from different users
-(27, 'system', NULL, 4, 'As a seller on this platform, I appreciate the professional environment and quality customer base. Great platform for PC component business.', 'approved', '2025-07-26 10:00:00'),
-(31, 'system', NULL, 5, 'Being a technician on GearSphere has been rewarding. The platform connects me with customers who truly appreciate quality PC building services.', 'approved', '2025-07-27 14:30:00'),
-(33, 'system', NULL, 4, 'Good platform for technicians. Easy to manage appointments and the customer communication system works well. Happy to be part of GearSphere.', 'approved', '2025-07-28 11:15:00'),
-(34, 'system', NULL, 5, 'Excellent platform! Both as a technician and occasional customer, the experience has been consistently positive. Well-designed system.', 'approved', '2025-07-29 09:00:00'),
-(35, 'system', NULL, 4, 'Great marketplace for PC components and services. The technician assignment system works smoothly and customers are generally well-informed.', 'approved', '2025-07-29 16:45:00');
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

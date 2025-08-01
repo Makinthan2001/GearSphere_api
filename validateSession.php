@@ -20,8 +20,8 @@ if (!isset($_SESSION['last_activity'])) {
     $_SESSION['last_activity'] = time();
 }
 
-// Check session timeout (1 hour = 3600 seconds)
-$session_timeout = 3600; // 1 hour
+// Check session timeout (3 hours = 10800 seconds)
+$session_timeout = 10800; // 3 hours
 if (time() - $_SESSION['last_activity'] > $session_timeout) {
     // Session expired, destroy it
     session_destroy();
