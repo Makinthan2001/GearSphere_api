@@ -1,18 +1,18 @@
 <?php
 require_once 'corsConfig.php';
 initializeEndpoint();
+require_once 'sessionConfig.php';
 
 require_once './Main Classes/Customer.php';
 require_once './Main Classes/Mailer.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
-
-$name = isset($data['name']) ? trim($data['name']) : '';
-$email = isset($data['email']) ? trim($data['email']) : '';
-$password = isset($data['password']) ? trim($data['password']) : '';
-$contact_number = isset($data['contact_number']) ? trim($data['contact_number']) : '';
-$address = isset($data['address']) ? trim($data['address']) : '';
-$user_type = 'customer'; // default user type for customer registration
+// Handle FormData from frontend (same as technician signup)
+$name = isset($_POST['name']) ? trim($_POST['name']) : '';
+$email = isset($_POST['email']) ? trim($_POST['email']) : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
+$contact_number = isset($_POST['contact_number']) ? trim($_POST['contact_number']) : '';
+$address = isset($_POST['address']) ? trim($_POST['address']) : '';
+$user_type = 'customer';
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
@@ -26,10 +26,10 @@ $customerRegister = new Customer();
 $result = $customerRegister->registerUser($name, $email, $hashed_password, $contact_number, $address, $user_type);
 
 if ($result) {
-    // Send welcome email to new customer
-    $mailer = new Mailer();
-    $mailer->sendWelcomeEmail($email, $name, 'customer');
-    $mailer->send();
+    // Clear any verification session
+    if (isset($_SESSION['email_verified'])) {
+        unset($_SESSION['email_verified'], $_SESSION['verification_timestamp']);
+    }
     
     // Create notification for admin when new customer registers
     require_once __DIR__ . '/Main Classes/Notification.php';
@@ -55,8 +55,8 @@ if ($result) {
     }
     
     http_response_code(200);
-    echo json_encode(["status" => "success", "message" => "Customer was successfully registered."]);
+    echo json_encode(["status" => "success", "message" => "Registration successful! Welcome to GearSphere!"]);
 } else {
     http_response_code(400);
-    echo json_encode(["message" => "Unable to register the Customer."]);
+    echo json_encode(["message" => "Unable to register. Email might already exist or registration failed."]);
 }
