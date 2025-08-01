@@ -3,13 +3,13 @@
 function initializeSession()
 {
     if (session_status() === PHP_SESSION_NONE) {
-        // Set session timeout to 1 hour (3600 seconds)
-        ini_set('session.gc_maxlifetime', 3600);
-        ini_set('session.cookie_lifetime', 3600);
+        // Set session timeout to 3 hours (10800 seconds)
+        ini_set('session.gc_maxlifetime', 10800);
+        ini_set('session.cookie_lifetime', 10800);
 
         // Configure session before starting
         session_set_cookie_params([
-            'lifetime' => 3600, // 1 hour
+            'lifetime' => 10800, // 3 hours
             'path' => '/',
             'domain' => '',
             'secure' => false,  // Set to true if using HTTPS
