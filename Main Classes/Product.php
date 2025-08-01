@@ -1,18 +1,47 @@
 <?php
+
+/**
+ * Product Management Class
+ * 
+ * This class handles all product-related operations in the GearSphere system.
+ * It manages the complex product catalog with category-specific attributes,
+ * inventory management, and image handling for all PC components.
+ * 
+ * @author GearSphere Team
+ * @version 1.0
+ */
+
 require_once __DIR__ . '/../DbConnector.php';
 
 class Product {
-    private $pdo;
+    private $pdo;  // Database connection object
 
+    /**
+     * Constructor - Initialize database connection
+     * 
+     * Establishes connection to the database for all product operations
+     */
     public function __construct() {
         $db = new DBConnector();
         $this->pdo = $db->connect();
     }
 
+    /**
+     * Add a new product to the catalog
+     * 
+     * Creates a new product with category-specific attributes and handles
+     * image upload. Uses database transactions to ensure data consistency
+     * across the main products table and category-specific tables.
+     * 
+     * @param array $data Product information including category-specific attributes
+     * @param array|null $imageFile Uploaded image file data from $_FILES
+     * @return array Result array with success status and message
+     */
     public function addProduct($data, $imageFile = null) {
         try {
             $this->pdo->beginTransaction();
-            // Handle image upload
+            
+            // Handle image upload if provided
             $imageUrl = null;
             if ($imageFile && $imageFile['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = 'uploads/';
@@ -25,7 +54,8 @@ class Product {
                     $imageUrl = $targetPath;
                 }
             }
-            // Calculate status based on stock
+            
+            // Calculate product status based on stock levels
             $stock = isset($data['stock']) ? (int)$data['stock'] : 0;
             if ($stock === 0) {
                 $status = 'Out of Stock';
@@ -34,7 +64,8 @@ class Product {
             } else {
                 $status = 'In Stock';
             }
-            // Insert into products table
+            
+            // Insert into main products table
             $sql = "INSERT INTO products (name, category, price, image_url, description, manufacturer, stock, status) 
                     VALUES (:name, :category, :price, :image_url, :description, :manufacturer, :stock, :status)";
             $stmt = $this->pdo->prepare($sql);
@@ -50,9 +81,10 @@ class Product {
             ]);
             $productId = $this->pdo->lastInsertId();
 
-            // Insert into category-specific table
+            // Insert category-specific attributes into appropriate table
             switch ($data['category']) {
                 case 'Operating System':
+                    // Store OS-specific attributes (model, mode, version, memory support)
                     $sql = "INSERT INTO operating_system (product_id, model, mode, version, max_supported_memory)
                             VALUES (:product_id, :model, :mode, :version, :max_supported_memory)";
                     $stmt = $this->pdo->prepare($sql);
@@ -64,7 +96,9 @@ class Product {
                         ':max_supported_memory' => $data['max_supported_memory'] ?? null
                     ]);
                     break;
+                    
                 case 'Power Supply':
+                    // Store PSU-specific attributes (wattage, efficiency, modularity)
                     $sql = "INSERT INTO power_supply (product_id, wattage, type, efficiency_rating, length, modular, sata_connectors)
                             VALUES (:product_id, :wattage, :type, :efficiency_rating, :length, :modular, :sata_connectors)";
                     $stmt = $this->pdo->prepare($sql);
@@ -78,7 +112,9 @@ class Product {
                         ':sata_connectors' => $data['sata_connectors'] ?? null
                     ]);
                     break;
+                    
                 case 'Video Card':
+                    // Store GPU-specific attributes (chipset, memory, clocks)
                     $sql = "INSERT INTO video_card (product_id, chipset, memory, memory_type, core_clock, boost_clock, interface, length, tdp, cooling)
                             VALUES (:product_id, :chipset, :memory, :memory_type, :core_clock, :boost_clock, :interface, :length, :tdp, :cooling)";
                     $stmt = $this->pdo->prepare($sql);
@@ -95,7 +131,9 @@ class Product {
                         ':cooling' => $data['cooling'] ?? null
                     ]);
                     break;
+                    
                 case 'CPU':
+                    // Store CPU-specific attributes (cores, threads, socket, clocks)
                     $sql = "INSERT INTO cpu (product_id, series, socket, core_count, thread_count, core_clock, core_boost_clock, tdp, integrated_graphics)
                             VALUES (:product_id, :series, :socket, :core_count, :thread_count, :core_clock, :core_boost_clock, :tdp, :integrated_graphics)";
                     $stmt = $this->pdo->prepare($sql);
@@ -111,7 +149,9 @@ class Product {
                         ':integrated_graphics' => $data['integrated_graphics'] ?? null
                     ]);
                     break;
+                    
                 case 'CPU Cooler':
+                    // Store cooler-specific attributes (fan RPM, noise, cooling type)
                     $sql = "INSERT INTO cpu_cooler (product_id, fan_rpm, noise_level, color, height, water_cooled)
                             VALUES (:product_id, :fan_rpm, :noise_level, :color, :height, :water_cooled)";
                     $stmt = $this->pdo->prepare($sql);
@@ -124,7 +164,9 @@ class Product {
                         ':water_cooled' => $data['water_cooled'] ?? null
                     ]);
                     break;
+                    
                 case 'Motherboard':
+                    // Store motherboard-specific attributes (socket, form factor, chipset)
                     $sql = "INSERT INTO motherboard (product_id, socket, form_factor, chipset, memory_max, memory_slots, memory_type, sata_ports, wifi)
                             VALUES (:product_id, :socket, :form_factor, :chipset, :memory_max, :memory_slots, :memory_type, :sata_ports, :wifi)";
                     $stmt = $this->pdo->prepare($sql);
@@ -140,7 +182,9 @@ class Product {
                         ':wifi' => $data['wifi'] ?? null
                     ]);
                     break;
+                    
                 case 'Memory':
+                    // Store RAM-specific attributes (type, speed, timings)
                     $sql = "INSERT INTO memory (product_id, memory_type, speed, modules, cas_latency, voltage)
                             VALUES (:product_id, :memory_type, :speed, :modules, :cas_latency, :voltage)";
                     $stmt = $this->pdo->prepare($sql);
@@ -153,7 +197,9 @@ class Product {
                         ':voltage' => $data['voltage'] ?? null
                     ]);
                     break;
+                    
                 case 'Storage':
+                    // Store storage-specific attributes (type, capacity, interface)
                     $sql = "INSERT INTO storage (product_id, storage_type, capacity, interface, form_factor)
                             VALUES (:product_id, :storage_type, :capacity, :interface, :form_factor)";
                     $stmt = $this->pdo->prepare($sql);
@@ -165,7 +211,9 @@ class Product {
                         ':form_factor' => $data['form_factor'] ?? null
                     ]);
                     break;
+                    
                 case 'Monitor':
+                    // Store monitor-specific attributes (size, resolution, refresh rate)
                     $sql = "INSERT INTO monitor (product_id, screen_size, resolution, refresh_rate, panel_type, aspect_ratio, brightness)
                             VALUES (:product_id, :screen_size, :resolution, :refresh_rate, :panel_type, :aspect_ratio, :brightness)";
                     $stmt = $this->pdo->prepare($sql);
@@ -179,7 +227,9 @@ class Product {
                         ':brightness' => $data['brightness'] ?? null
                     ]);
                     break;
+                    
                 case 'PC Case':
+                    // Store case-specific attributes (type, color, dimensions)
                     $sql = "INSERT INTO pc_case (product_id, type, side_panel, color, max_gpu_length, volume, dimensions)
                             VALUES (:product_id, :type, :side_panel, :color, :max_gpu_length, :volume, :dimensions)";
                     $stmt = $this->pdo->prepare($sql);
@@ -194,6 +244,7 @@ class Product {
                     ]);
                     break;
             }
+            
             $this->pdo->commit();
             return [
                 'success' => true,
@@ -209,10 +260,22 @@ class Product {
         }
     }
 
+    /**
+     * Update an existing product's information
+     * 
+     * Updates both the main product data and category-specific attributes.
+     * Handles optional image replacement and recalculates stock status.
+     * 
+     * @param int $productId ID of the product to update
+     * @param array $data Updated product information
+     * @param array|null $imageFile New image file if being replaced
+     * @return array Result array with success status and message
+     */
     public function updateProduct($productId, $data, $imageFile = null) {
         try {
             $this->pdo->beginTransaction();
-            // Handle image upload if new image is provided
+            
+            // Handle new image upload if provided
             $imageUrl = null;
             if ($imageFile && $imageFile['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = 'uploads/';
@@ -225,7 +288,8 @@ class Product {
                     $imageUrl = $targetPath;
                 }
             }
-            // Calculate new status based on stock
+            
+            // Recalculate status based on new stock level
             $newStock = isset($data['stock']) ? (int)$data['stock'] : 0;
             if ($newStock === 0) {
                 $newStatus = 'Out of Stock';
@@ -234,7 +298,8 @@ class Product {
             } else {
                 $newStatus = 'In Stock';
             }
-            // Update products table
+            
+            // Update main products table
             $sql = "UPDATE products SET 
                     name = :name, 
                     category = :category, 
@@ -253,6 +318,8 @@ class Product {
                 ':stock' => $data['stock'] ?? 0,
                 ':status' => $newStatus
             ];
+            
+            // Add image URL to update if new image provided
             if ($imageUrl) {
                 $sql .= ", image_url = :image_url";
                 $params[':image_url'] = $imageUrl;
@@ -261,7 +328,7 @@ class Product {
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($params);
 
-            // Update category-specific table
+            // Update category-specific table based on product category
             switch ($data['category']) {
                 case 'Operating System':
                     $sql = "UPDATE operating_system SET model = :model, mode = :mode, version = :version, max_supported_memory = :max_supported_memory WHERE product_id = :product_id";
@@ -274,6 +341,7 @@ class Product {
                         ':product_id' => $productId
                     ]);
                     break;
+                    
                 case 'Power Supply':
                     $sql = "UPDATE power_supply SET wattage = :wattage, type = :type, efficiency_rating = :efficiency_rating, length = :length, modular = :modular, sata_connectors = :sata_connectors WHERE product_id = :product_id";
                     $stmt = $this->pdo->prepare($sql);
@@ -395,6 +463,7 @@ class Product {
                     ]);
                     break;
             }
+            
             $this->pdo->commit();
             return [
                 'success' => true,
@@ -409,12 +478,25 @@ class Product {
         }
     }
 
+    /**
+     * Update product stock levels and status
+     * 
+     * Updates inventory levels and automatically calculates status based on
+     * stock quantity. Supports manual override for discontinued products.
+     * 
+     * @param int $productId ID of the product to update
+     * @param int $newStock New stock quantity
+     * @param string|null $newStatus Manual status override (for discontinued products)
+     * @param string|null $lastRestockDate Date of last restocking (defaults to current time)
+     * @return array Result array with success status and updated data
+     */
     public function updateStock($productId, $newStock, $newStatus = null, $lastRestockDate = null) {
         try {
-            // Only allow manual override to Discontinued, otherwise auto-calculate
+            // Only allow manual override for Discontinued status, otherwise auto-calculate
             if ($newStatus === 'Discontinued') {
                 $finalStatus = 'Discontinued';
             } else {
+                // Auto-calculate status based on stock levels
                 if ($newStock == 0) {
                     $finalStatus = 'Out of Stock';
                 } elseif ($newStock <= 5) {
@@ -423,7 +505,9 @@ class Product {
                     $finalStatus = 'In Stock';
                 }
             }
+            
             $finalDate = $lastRestockDate ? $lastRestockDate : date('Y-m-d H:i:s');
+            
             $sql = "UPDATE products SET stock = :stock, status = :status, last_restock_date = :last_restock_date WHERE product_id = :product_id";
             $stmt = $this->pdo->prepare($sql);
             $result = $stmt->execute([
@@ -432,6 +516,7 @@ class Product {
                 ':last_restock_date' => $finalDate,
                 ':product_id' => $productId
             ]);
+            
             if ($result) {
                 return [
                     'success' => true,
@@ -457,6 +542,15 @@ class Product {
         }
     }
 
+    /**
+     * Retrieve a specific product by ID
+     * 
+     * Fetches complete product information from the main products table
+     * for display, editing, or API responses.
+     * 
+     * @param int $productId ID of the product to retrieve
+     * @return array|false Product data array or false if not found
+     */
     public function getProductById($productId) {
         $sql = "SELECT * FROM products WHERE product_id = :product_id";
         $stmt = $this->pdo->prepare($sql);
@@ -465,6 +559,14 @@ class Product {
         return $product;
     }
 
+    /**
+     * Retrieve all products from the catalog
+     * 
+     * Fetches all products ordered by ID (newest first) for
+     * admin management and catalog display.
+     * 
+     * @return array Array of all product data
+     */
     public function getAllProducts() {
         $sql = "SELECT * FROM products ORDER BY product_id DESC";
         $stmt = $this->pdo->prepare($sql);
@@ -472,6 +574,15 @@ class Product {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Retrieve products filtered by category
+     * 
+     * Fetches all products in a specific category for
+     * category-based browsing and filtering.
+     * 
+     * @param string $category Product category to filter by
+     * @return array Array of products in the specified category
+     */
     public function getProductsByCategory($category) {
         $sql = "SELECT * FROM products WHERE category = :category ORDER BY product_id DESC";
         $stmt = $this->pdo->prepare($sql);
@@ -479,21 +590,34 @@ class Product {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Delete a product from the catalog
+     * 
+     * Removes a product from both the main products table and its
+     * category-specific table. Also deletes associated image files.
+     * Uses transactions to ensure data consistency.
+     * 
+     * @param int $productId ID of the product to delete
+     * @return array Result array with success status and message
+     */
     public function deleteProduct($productId) {
         try {
             $this->pdo->beginTransaction();
-            // Get product details for category and image
+            
+            // Get product details for category identification and image cleanup
             $sql = "SELECT category, image_url FROM products WHERE product_id = :product_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':product_id' => $productId]);
             $product = $stmt->fetch();
+            
             if (!$product) {
                 return [
                     'success' => false,
                     'message' => 'Product not found'
                 ];
             }
-            // Delete from specific product table based on category
+            
+            // Map categories to their respective database tables
             $tableMap = [
                 'CPU' => 'cpu',
                 'CPU Cooler' => 'cpu_cooler',
@@ -506,20 +630,25 @@ class Product {
                 'Monitor' => 'monitor',
                 'PC Case' => 'pc_case'
             ];
+            
+            // Delete from category-specific table first (foreign key constraint)
             $tableName = $tableMap[$product['category']] ?? null;
             if ($tableName) {
                 $sql = "DELETE FROM $tableName WHERE product_id = :product_id";
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([':product_id' => $productId]);
             }
-            // Delete from products table
+            
+            // Delete from main products table
             $sql = "DELETE FROM products WHERE product_id = :product_id";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([':product_id' => $productId]);
-            // Delete image file if it exists
+            
+            // Delete associated image file if it exists
             if ($product['image_url'] && file_exists($product['image_url'])) {
                 unlink($product['image_url']);
             }
+            
             $this->pdo->commit();
             return [
                 'success' => true,
@@ -533,6 +662,4 @@ class Product {
             ];
         }
     }
-
-    // Add more methods as needed (deleteProduct, etc.)
-} 
+}

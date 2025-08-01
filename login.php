@@ -1,44 +1,66 @@
 <?php
+
+/**
+ * User Authentication API Endpoint
+ * 
+ * This endpoint handles user login authentication for the GearSphere system.
+ * It validates credentials, creates secure sessions, and returns user information
+ * for successful authentication attempts.
+ * 
+ * @method POST
+ * @endpoint /login.php
+ */
+
+// Initialize CORS and session configuration
 require_once 'corsConfig.php';
 initializeEndpoint();
 
+// Import Customer class which provides login functionality
 require_once './Main Classes/Customer.php';
 
+// Get JSON input from request body
 $data = json_decode(file_get_contents("php://input"));
 
+// Sanitize and validate input data
 $email = filter_var($data->email, FILTER_SANITIZE_EMAIL);
 $password = $data->password;
 
+// Create user instance for authentication
 $userLogin = new Customer();
 
+// Attempt user login with provided credentials
 $signinResult = $userLogin->login($email, $password);
 
 if ($signinResult['success']) {
-    // Set PHP session variables
+    // ====================================================================
+    // LOGIN SUCCESSFUL - Create secure session
+    // ====================================================================
+    
+    // Set core session variables for authenticated user
     $_SESSION['user_id'] = $signinResult['user_id'];
     $_SESSION['user_type'] = $signinResult['user_type'];
     $_SESSION['email'] = $email;
-    $_SESSION['last_activity'] = time(); // Set initial last activity timestamp
+    $_SESSION['last_activity'] = time(); // Track session activity for timeout
 
-    // Add technician_id to session if present
+    // Add technician-specific session data if applicable
     if (isset($signinResult['technician_id'])) {
         $_SESSION['technician_id'] = $signinResult['technician_id'];
     }
 
-    // Get user name from database
+    // Fetch and store user's display name in session
     $userDetails = $userLogin->getDetails($signinResult['user_id']);
     if ($userDetails && isset($userDetails['name'])) {
         $_SESSION['name'] = $userDetails['name'];
     }
 
-    // Force session write and restart for reliability
+    // Force session write and restart for reliability across requests
     session_write_close();
     session_start();
 
-    // Log successful login
+    // Log successful authentication for security monitoring
     error_log("GearSphere: Login successful - User ID: " . $signinResult['user_id'] . ", Type: " . $signinResult['user_type'] . ", Session ID: " . session_id());
 
-    // Add debug information to response (for troubleshooting)
+    // Add debugging information to response for troubleshooting
     $signinResult['session_debug'] = [
         'session_id' => session_id(),
         'session_name' => session_name(),
@@ -52,9 +74,13 @@ if ($signinResult['success']) {
         'session_save_path' => session_save_path()
     ];
 
+    // Return success response with user data
     http_response_code(200);
     echo json_encode($signinResult);
 } else {
+    // ====================================================================
+    // LOGIN FAILED - Return error message
+    // ====================================================================
     echo json_encode($signinResult);
 }
-// end of login
+// End of login endpoint

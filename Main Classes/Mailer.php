@@ -1,32 +1,58 @@
 <?php
 
+/**
+ * Email Service Class (Mailer)
+ * 
+ * This class handles all email communications for the GearSphere system.
+ * It uses PHPMailer to send various types of emails including OTP verification,
+ * password resets, order notifications, and status updates with professional
+ * HTML templates.
+ * 
+ */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Import PHPMailer classes
+// Import PHPMailer classes for email functionality
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
 class Mailer {
-    private $mail;
+    private $mail;  // PHPMailer instance
 
+    /**
+     * Constructor - Initialize PHPMailer with SMTP configuration
+     * 
+     * Sets up Gmail SMTP server configuration for sending emails
+     * from the GearSphere system email account.
+     */
     public function __construct() {
         $this->mail = new PHPMailer(true);
 
-        // Server settings
-        $this->mail->isSMTP();
-        $this->mail->Host       = 'smtp.gmail.com';
-        $this->mail->SMTPAuth   = true;
-        $this->mail->Username   = 'madhan2001ana@gmail.com'; // SMTP email
-        $this->mail->Password   = 'ilergdrkkdycocoh'; // SMTP password
-        $this->mail->SMTPSecure = 'ssl';
-        $this->mail->Port       = 465;
+        // Configure SMTP server settings for Gmail
+        $this->mail->isSMTP();                          // Use SMTP protocol
+        $this->mail->Host       = 'smtp.gmail.com';     // Gmail SMTP server
+        $this->mail->SMTPAuth   = true;                 // Enable SMTP authentication
+        $this->mail->Username   = 'madhan2001ana@gmail.com'; // SMTP email account
+        $this->mail->Password   = 'ilergdrkkdycocoh';    // App-specific password
+        $this->mail->SMTPSecure = 'ssl';                // Enable SSL encryption
+        $this->mail->Port       = 465;                  // SSL port for Gmail
         
+        // Set default sender information
         $this->mail->setFrom('madhan2001ana@gmail.com', 'GearSphere');
     }
 
-    // Enhanced method with neat templates
+    /**
+     * Set basic email information (generic method)
+     * 
+     * Configures recipient, subject, and message for basic email sending.
+     * Used for simple notifications without specific templates.
+     * 
+     * @param string $recipientEmail Email address of recipient
+     * @param string $subject Email subject line
+     * @param string $message Email content (HTML supported)
+     */
     public function setInfo($recipientEmail, $subject, $message) {
         $this->mail->addAddress($recipientEmail);
         $this->mail->isHTML(true);
@@ -34,7 +60,17 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
-    // OTP Email Template
+    /**
+     * Send OTP verification email
+     * 
+     * Sends a professionally formatted email containing a one-time password
+     * for email verification or password reset purposes.
+     * 
+     * @param string $recipientEmail Email address to send OTP to
+     * @param string $userName Name of the user for personalization
+     * @param string $otp 6-digit verification code
+     * @param string $purpose Purpose of OTP ('verification' or 'password_reset')
+     */
     public function sendOTPEmail($recipientEmail, $userName, $otp, $purpose = 'verification') {
         $subject = "GearSphere - Email Verification Code";
         $message = $this->getOTPTemplate($userName, $otp, $purpose);
@@ -111,7 +147,17 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
-    // Build Request Status Email Template
+    /**
+     * Send build request status update
+     * 
+     * Notifies customers about changes to their PC build request status
+     * including technician assignment and project progress.
+     * 
+     * @param string $recipientEmail Customer's email address
+     * @param string $customerName Name of the customer
+     * @param string $status New status of the build request
+     * @param string $technicianName Name of assigned technician (if applicable)
+     */
     public function sendBuildRequestStatusEmail($recipientEmail, $customerName, $status, $technicianName = '') {
         $subject = "GearSphere - Build Request Update";
         $message = $this->getBuildRequestStatusTemplate($customerName, $status, $technicianName);
@@ -122,7 +168,16 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
-    // Account Status Email Template
+    /**
+     * Send account status notification
+     * 
+     * Notifies users about changes to their account status such as
+     * enabling, disabling, or suspension with appropriate support information.
+     * 
+     * @param string $recipientEmail User's email address
+     * @param string $userName Name of the user
+     * @param string $status New account status (enabled/disabled/suspended)
+     */
     public function sendAccountStatusEmail($recipientEmail, $userName, $status) {
         $subject = "GearSphere - Account Status Update";
         $message = $this->getAccountStatusTemplate($userName, $status);
@@ -133,7 +188,16 @@ class Mailer {
         $this->mail->Body = $message;
     }
 
-    // Base HTML Template
+    /**
+     * Generate base HTML template for all emails
+     * 
+     * Creates a professional, responsive email template with GearSphere
+     * branding, styling, and footer information. Used by all specific
+     * email templates for consistent design.
+     * 
+     * @param string $content HTML content to insert into the template
+     * @return string Complete HTML email template
+     */
     private function getBaseTemplate($content) {
         return "
         <!DOCTYPE html>
@@ -143,6 +207,7 @@ class Mailer {
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
             <title>GearSphere</title>
             <style>
+                /* Reset and base styles */
                 * {
                     margin: 0;
                     padding: 0;
@@ -154,12 +219,16 @@ class Mailer {
                     color: #333;
                     background-color: #f4f4f4;
                 }
+                
+                /* Main container styling */
                 .email-container {
                     max-width: 600px;
                     margin: 0 auto;
                     background-color: #ffffff;
                     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
                 }
+                
+                /* Header with gradient background */
                 .header {
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     color: white;
@@ -176,6 +245,8 @@ class Mailer {
                     font-size: 14px;
                     opacity: 0.9;
                 }
+                
+                /* Content area styling */
                 .content {
                     padding: 40px 30px;
                 }
@@ -190,6 +261,8 @@ class Mailer {
                     margin-bottom: 30px;
                     color: #555;
                 }
+                
+                /* Call-to-action button styling */
                 .cta-button {
                     display: inline-block;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -204,6 +277,8 @@ class Mailer {
                 .cta-button:hover {
                     transform: translateY(-2px);
                 }
+                
+                /* OTP display styling */
                 .otp-box {
                     background-color: #f8f9fa;
                     border: 2px dashed #667eea;
@@ -219,6 +294,8 @@ class Mailer {
                     letter-spacing: 5px;
                     margin: 10px 0;
                 }
+                
+                /* Footer styling */
                 .footer {
                     background-color: #2c3e50;
                     color: white;
@@ -235,6 +312,8 @@ class Mailer {
                     margin-top: 20px;
                     line-height: 1.5;
                 }
+                
+                /* Order and detail box styling */
                 .order-details {
                     background-color: #f8f9fa;
                     border-radius: 10px;
@@ -252,6 +331,8 @@ class Mailer {
                     font-weight: bold;
                     color: #667eea;
                 }
+                
+                /* Status badge styling for different states */
                 .status-badge {
                     display: inline-block;
                     padding: 5px 15px;
@@ -294,7 +375,17 @@ class Mailer {
         </html>";
     }
 
-    // OTP Email Template
+    /**
+     * Generate OTP email template
+     * 
+     * Creates HTML content for OTP verification emails with security
+     * warnings and expiration information.
+     * 
+     * @param string $userName Name of the user for personalization
+     * @param string $otp 6-digit verification code
+     * @param string $purpose Purpose of the OTP (verification or password_reset)
+     * @return string HTML email content
+     */
     private function getOTPTemplate($userName, $otp, $purpose) {
         $purposeText = $purpose === 'password_reset' ? 'reset your password' : 'verify your email address';
         $content = "
@@ -477,8 +568,19 @@ class Mailer {
         return $this->getBaseTemplate($content);
     }
 
-    // Build Request Status Template
+    /**
+     * Generate build request status email template
+     * 
+     * Creates HTML content for notifying customers about build request
+     * status changes with appropriate messaging for each status.
+     * 
+     * @param string $customerName Name of the customer
+     * @param string $status New status of the build request
+     * @param string $technicianName Name of assigned technician
+     * @return string HTML email content
+     */
     private function getBuildRequestStatusTemplate($customerName, $status, $technicianName) {
+        // Define status-specific messages
         $statusMessages = [
             'accepted' => '✅ Your build request has been accepted by our technician team.',
             'in_progress' => '⚙️ Your build is currently in progress. Our technicians are working hard to complete it.',
@@ -508,8 +610,18 @@ class Mailer {
         return $this->getBaseTemplate($content);
     }
 
-    // Account Status Template
+    /**
+     * Generate account status email template
+     * 
+     * Creates HTML content for notifying users about account status changes
+     * with appropriate support information and styling based on status.
+     * 
+     * @param string $userName Name of the user
+     * @param string $status New account status (enabled/disabled/suspended)
+     * @return string HTML email content
+     */
     private function getAccountStatusTemplate($userName, $status) {
+        // Define status-specific information
         $statusMessages = [
             'disabled' => [
                 'icon' => '🚫',
@@ -538,6 +650,7 @@ class Mailer {
             'color' => '#6c757d'
         ];
         
+        // Add support section for disabled/suspended accounts
         $supportSection = $status === 'disabled' || $status === 'suspended' ? "
             <div class='order-details' style='border-left: 4px solid {$statusInfo['color']};'>
                 <h3 style='color: {$statusInfo['color']}; margin-bottom: 15px;'>📞 Need Help?</h3>
@@ -572,12 +685,20 @@ class Mailer {
         return $this->getBaseTemplate($content);
     }
 
-    // Send the email
+    /**
+     * Send the configured email
+     * 
+     * Attempts to send the email using PHPMailer and handles any errors
+     * that occur during the sending process.
+     * 
+     * @return bool True if email sent successfully, false otherwise
+     */
     public function send() {
         try {
             $this->mail->send();
             return true;
         } catch (Exception $e) {
+            // Log error for debugging purposes
             error_log("Mailer Error: {$this->mail->ErrorInfo}");
             return false;
         }
