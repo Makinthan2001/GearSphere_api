@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'corsConfig.php';
 initializeEndpoint();
 
@@ -20,6 +21,12 @@ $checkEmail = new Customer();
 
 if ($checkEmail->checkEmailExists($email)) {
     $otp = random_int(100000, 999999);
+
+    // Store OTP in session with expiry (5 minutes) for password reset
+    $_SESSION['password_reset_otp'] = $otp;
+    $_SESSION['password_reset_email'] = $email;
+    $_SESSION['password_reset_expire'] = time() + 300; // 5 minutes
+
     $mailer = new Mailer();
     // Use the new password reset template
     $mailer->sendPasswordResetEmail($email, 'User', $otp);
@@ -28,8 +35,7 @@ if ($checkEmail->checkEmailExists($email)) {
         http_response_code(200);
         echo json_encode([
             "success" => true,
-            "message" => "OTP sent to your email. Check your inbox.",
-            "otp" => $otp
+            "message" => "OTP sent to your email. Check your inbox."
         ]);
     } else {
         http_response_code(500);
