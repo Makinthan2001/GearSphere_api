@@ -104,6 +104,8 @@ class Cart
         }
     }
 
+
+    
     /**
      * Clears all items from a user's cart.
      *
