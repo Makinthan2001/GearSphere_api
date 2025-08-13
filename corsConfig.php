@@ -80,35 +80,40 @@ if (!function_exists('getPortSpecificSessionName')) {
 if (!function_exists('initializeEndpoint')) {
     function initializeEndpoint()
     {
-        // Use port-specific session names to allow multiple concurrent logins
-        $sessionName = getPortSpecificSessionName();
+        // Set CORS headers first
+        setCorsHeaders();
 
-        // Configure session settings with longer lifetime for stability
-        session_set_cookie_params([
-            'lifetime' => 10800, // 3 hours
-            'path' => '/',
-            'domain' => '',
-            'secure' => false,
-            'httponly' => true,
-            'samesite' => 'Lax'
-        ]);
+        // Handle preflight requests
+        handlePreflightRequest();
 
-        // Set port-specific session name (each port gets its own session)
-        session_name($sessionName);
-
-        // Start session if not already started
+        // Only configure session if not already active
         if (session_status() === PHP_SESSION_NONE) {
+            // Use port-specific session names to allow multiple concurrent logins
+            $sessionName = getPortSpecificSessionName();
+
+            // Configure session settings with longer lifetime for stability
+            session_set_cookie_params([
+                'lifetime' => 10800, // 3 hours
+                'path' => '/',
+                'domain' => '',
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+
+            // Set port-specific session name (each port gets its own session)
+            session_name($sessionName);
+
+            // Start session
             session_start();
 
             // Debug: Log session startup with port info
             $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'Unknown';
             error_log("GearSphere: Session started - ID: " . session_id() . ", Name: " . session_name() . ", Origin: " . $origin);
+        } else {
+            // Session already active, just log the info
+            $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'Unknown';
+            error_log("GearSphere: Using existing session - ID: " . session_id() . ", Name: " . session_name() . ", Origin: " . $origin);
         }
-
-        // Set CORS headers
-        setCorsHeaders();
-
-        // Handle preflight requests
-        handlePreflightRequest();
     }
 }
