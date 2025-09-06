@@ -11,18 +11,19 @@ class Orders
         $this->pdo = $db->connect();
     }
 
-    public function createOrder($user_id, $total_amount, $assignment_id = null, $status = 'pending', $delivery_charge = 0.00)
+    public function createOrder($user_id, $total_amount, $assignment_id = null, $status = 'pending', $delivery_charge = 0.00, $delivery_address = null)
     {
         try {
-            $sql = "INSERT INTO orders (user_id, total_amount, assignment_id, status, delivery_charge) 
-                    VALUES (:user_id, :total_amount, :assignment_id, :status, :delivery_charge)";
+            $sql = "INSERT INTO orders (user_id, total_amount, assignment_id, status, delivery_charge, delivery_address) 
+                    VALUES (:user_id, :total_amount, :assignment_id, :status, :delivery_charge, :delivery_address)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
                 ':user_id' => $user_id,
                 ':total_amount' => $total_amount,
                 ':assignment_id' => $assignment_id,
                 ':status' => $status,
-                ':delivery_charge' => $delivery_charge
+                ':delivery_charge' => $delivery_charge,
+                ':delivery_address' => $delivery_address
             ]);
             return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
