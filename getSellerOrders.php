@@ -20,7 +20,7 @@ try {
     $pdo = (new DBConnector())->connect();
     $stmt = $pdo->prepare(
         "SELECT o.order_id, o.order_date, o.status AS order_status, o.total_amount,
-                o.delivery_charge,
+                o.delivery_charge, o.delivery_address,
                 u.user_id AS customer_id, u.name AS customer_name, u.email AS customer_email, u.contact_number AS customer_phone, u.address AS customer_address,
                 oi.order_item_id, oi.product_id, oi.quantity, oi.price,
                 p.name AS product_name, p.category, p.image_url,
@@ -46,7 +46,7 @@ try {
                 'status' => ucfirst($row['order_status']),
                 'total' => $row['total_amount'],
                 'delivery_charge' => $row['delivery_charge'] ?? 0,
-                'delivery_address' => $row['customer_address'] ?? '', // Get from user table
+                'delivery_address' => $row['delivery_address'] ?: $row['customer_address'], // Use order delivery address or fallback to user address
                 'customer' => [
                     'id' => $row['customer_id'],
                     'name' => $row['customer_name'],

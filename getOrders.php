@@ -35,17 +35,26 @@ try {
         $shippingAddress = '';
         $phoneNumber = '';
         $technicianId = null;
-        // Fetch shipping address and phone number from users table
-        $stmtAddr = $pdo->prepare("SELECT address, contact_number FROM users WHERE user_id = :user_id");
-        $stmtAddr->execute([':user_id' => $order['user_id']]);
-        $rowAddr = $stmtAddr->fetch(PDO::FETCH_ASSOC);
-        if ($rowAddr) {
-            if (!empty($rowAddr['address'])) {
+        
+        // Use delivery address from orders table if available, otherwise fallback to users table
+        if (!empty($order['delivery_address'])) {
+            $shippingAddress = $order['delivery_address'];
+        } else {
+            // Fallback to address from users table for old orders
+            $stmtAddr = $pdo->prepare("SELECT address FROM users WHERE user_id = :user_id");
+            $stmtAddr->execute([':user_id' => $order['user_id']]);
+            $rowAddr = $stmtAddr->fetch(PDO::FETCH_ASSOC);
+            if ($rowAddr && !empty($rowAddr['address'])) {
                 $shippingAddress = $rowAddr['address'];
             }
-            if (!empty($rowAddr['contact_number'])) {
-                $phoneNumber = $rowAddr['contact_number'];
-            }
+        }
+        
+        // Fetch phone number from users table (this doesn't change with orders)
+        $stmtPhone = $pdo->prepare("SELECT contact_number FROM users WHERE user_id = :user_id");
+        $stmtPhone->execute([':user_id' => $order['user_id']]);
+        $rowPhone = $stmtPhone->fetch(PDO::FETCH_ASSOC);
+        if ($rowPhone && !empty($rowPhone['contact_number'])) {
+            $phoneNumber = $rowPhone['contact_number'];
         }
         if (!empty($order['assignment_id'])) {
             $stmt = $pdo->prepare("SELECT status, technician_id FROM technician_assignments WHERE assignment_id = :assignment_id");
