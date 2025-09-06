@@ -60,6 +60,8 @@ try {
             'orderStatus' => ucfirst($order['status']),
             'requestStatus' => $assignmentStatus ? ucfirst($assignmentStatus) : null,
             'total' => $order['total_amount'],
+            'deliveryCharge' => $order['delivery_charge'] ?? 0,
+            'deliveryAddress' => $shippingAddress, // Use address from user table
             'items' => $items,
             'paymentMethod' => $payment['payment_method'] ?? '',
             'paymentStatus' => $payment['payment_status'] ?? '',

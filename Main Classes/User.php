@@ -231,52 +231,48 @@ abstract class User
 
     public function updateDetails($user_id, $name, $contact_number, $address, $profile_image)
     {
-        $this->user_id = $user_id;
-        $this->name = $name;
-        $this->contact_number = $contact_number;
-        $this->address = $address;
-        $this->profile_image = $profile_image;
-
         try {
-            error_log('Updating user_id: ' . $this->user_id . ' with: ' . print_r([
-                'name' => $this->name,
-                'contact_number' => $this->contact_number,
-                'address' => $this->address,
-                'profile_image' => $this->profile_image
-            ], true));
-
-            if ($this->profile_image) {
-                $sql = "UPDATE users SET name = :name,  contact_number = :contact_number, address = :address, profile_image = :profile_image WHERE user_id = :user_id";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([
-                    'name' => $this->name,
-                    'contact_number' => $this->contact_number,
-                    'address' => $this->address,
-                    'profile_image' => $this->profile_image,
-                    'user_id' => $this->user_id,
-                ]);
-            } else {
-                $sql = "UPDATE users SET name = :name,  contact_number = :contact_number, address = :address WHERE user_id = :user_id";
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([
-                    'name' => $this->name,
-                    'contact_number' => $this->contact_number,
-                    'address' => $this->address,
-                    'user_id' => $this->user_id,
-                ]);
+            // Build dynamic SQL based on provided fields
+            $setParts = [];
+            $params = ['user_id' => $user_id];
+            
+            if ($name !== null) {
+                $setParts[] = "name = :name";
+                $params['name'] = $name;
             }
+            
+            if ($contact_number !== null) {
+                $setParts[] = "contact_number = :contact_number";
+                $params['contact_number'] = $contact_number;
+            }
+            
+            if ($address !== null) {
+                $setParts[] = "address = :address";
+                $params['address'] = $address;
+            }
+            
+            if ($profile_image !== null) {
+                $setParts[] = "profile_image = :profile_image";
+                $params['profile_image'] = $profile_image;
+            }
+            
+            // If no fields to update, return success
+            if (empty($setParts)) {
+                return ['success' => true, 'message' => 'No fields to update'];
+            }
+            
+            $sql = "UPDATE users SET " . implode(', ', $setParts) . " WHERE user_id = :user_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
 
             if ($stmt->rowCount() > 0) {
-                error_log('Update successful for user_id: ' . $this->user_id);
-                return ['success' => true];
+                return ['success' => true, 'message' => 'User details updated successfully'];
             } else {
-                error_log('No rows updated for user_id: ' . $this->user_id);
-                return ['success' => false, 'message' => 'No rows updated'];
+                return ['success' => true, 'message' => 'No changes made - values may be the same'];
             }
         } catch (PDOException $e) {
-            http_response_code(500);
-            error_log('PDOException: ' . $e->getMessage());
-            return ['success' => false, 'message' => $e->getMessage()];
+            error_log('updateDetails error: ' . $e->getMessage());
+            return ['success' => false, 'message' => 'Database error occurred'];
         }
     }
 

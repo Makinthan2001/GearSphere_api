@@ -31,6 +31,7 @@ $items = $data['items']; // array of [product_id, quantity, price]
 $total_amount = $data['total_amount'];
 $payment_method = $data['payment_method'];
 $assignment_id = isset($data['assignment_id']) && is_numeric($data['assignment_id']) ? (int)$data['assignment_id'] : null;
+$delivery_charge = isset($data['delivery_charge']) ? floatval($data['delivery_charge']) : 0.00;
 
 $orderObj = new Orders();
 $orderItemsObj = new OrderItems();
@@ -38,8 +39,8 @@ $paymentObj = new Payment();
 $productObj = new Product();
 $notificationObj = new Notification();
 
-// 1. Create order
-$order_id = $orderObj->createOrder($user_id, $total_amount, $assignment_id);
+// 1. Create order (delivery address will be fetched from user table using user_id)
+$order_id = $orderObj->createOrder($user_id, $total_amount, $assignment_id, 'pending', $delivery_charge);
 if (!$order_id) {
     echo json_encode(['success' => false, 'message' => 'Failed to create order.']);
     exit;
