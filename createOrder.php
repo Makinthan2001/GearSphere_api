@@ -77,10 +77,10 @@ foreach ($items as $item) {
         
         $minStock = 5; // Low stock threshold
         if ($newStock <= $minStock && $newStock >= 0) {
-            $sellerId = 28; // Admin/Seller user ID
+            // Send low stock alert to all sellers for inventory management
             $productName = $product['name'] ?? 'Unknown Product';
-            $message = "Low Stock Alert!\nProduct stock reduced due to customer order:\n\n$productName - Current Stock: $newStock (Min: $minStock)\n\nOrder ID: $order_id";
-            $notificationObj->addUniqueNotification($sellerId, $message, 24);
+            $message = "⚠️ Low Stock Alert!\nProduct stock reduced due to customer order:\n\n$productName - Current Stock: $newStock (Min: $minStock)\n\nOrder ID: $order_id";
+            $notificationObj->notifyAllSellers($message);
         }
     }
 }
@@ -90,6 +90,21 @@ $payment_id = $paymentObj->addPayment($order_id, $user_id, $total_amount, $payme
 if (!$payment_id) {
     echo json_encode(['success' => false, 'message' => 'Failed to add payment.']);
     exit;
+}
+
+// 4. Send new order notification to sellers
+try {
+    $item_count = count($items);
+    $notification_sent = $notificationObj->createNewOrderNotification($order_id, $user_id, $total_amount, $item_count);
+    
+    if ($notification_sent) {
+        error_log("Seller notification sent successfully for order {$order_id}");
+    } else {
+        error_log("Failed to send seller notification for order {$order_id}");
+    }
+} catch (Exception $e) {
+    // Don't fail the order if notification fails
+    error_log("Error sending seller notification for order {$order_id}: " . $e->getMessage());
 }
 
 echo json_encode(['success' => true, 'order_id' => $order_id, 'payment_id' => $payment_id]);

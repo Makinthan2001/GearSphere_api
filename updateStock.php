@@ -33,21 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product = new Product();
     $result = $product->updateStock($productId, $newStock, $newStatus, $lastRestockDate);
 
-    // Get the actual seller ID from session instead of hardcoding
-    $sellerId = $_SESSION['user_id'] ?? null;
-    
-    if ($sellerId) {
-        // Fetch product details to get product info
-        $productDetails = $product->getProductById($productId);
-        $productName = $productDetails['name'] ?? '';
-        $minStock = 5; // You can make this dynamic if needed
-        
-        if ($newStock == 0 || $newStock <= $minStock) {
-            $notif = new Notification();
-            $message = "Low Stock Alert!\nYou have 1 items that need attention:\n\n$productName - Current Stock: $newStock (Min: $minStock)";
-            $notif->addUniqueNotification($sellerId, $message, 24); // Use unique notification with 24-hour window
-        }
-    }
+    // Note: Low stock notifications are handled by createOrder.php for order-related updates
+    // Manual stock updates by sellers can be handled separately if needed
     
     echo json_encode($result);
 } else {
