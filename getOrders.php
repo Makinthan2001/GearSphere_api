@@ -15,9 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
-if (!$user_id) {
+$assignment_id = isset($_GET['assignment_id']) ? intval($_GET['assignment_id']) : null;
+
+// Either user_id or assignment_id must be provided
+if (!$user_id && !$assignment_id) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Missing or invalid user_id']);
+    echo json_encode(['success' => false, 'message' => 'Missing user_id or assignment_id']);
     exit;
 }
 
@@ -25,7 +28,14 @@ try {
     $ordersObj = new Orders();
     $orderItemsObj = new OrderItems();
     $paymentObj = new Payment();
-    $orders = $ordersObj->getOrdersByUserId($user_id);
+    
+    // Get orders either by user_id or assignment_id
+    if ($assignment_id) {
+        $orders = $ordersObj->getOrdersByAssignmentId($assignment_id);
+    } else {
+        $orders = $ordersObj->getOrdersByUserId($user_id);
+    }
+    
     $pdo = (new DBConnector())->connect();
     $result = [];
     foreach ($orders as $order) {

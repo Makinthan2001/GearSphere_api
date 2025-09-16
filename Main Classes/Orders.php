@@ -63,6 +63,15 @@ class Orders
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Fetch orders by assignment ID (for technician build requests)
+    public function getOrdersByAssignmentId($assignment_id)
+    {
+        $sql = "SELECT * FROM orders WHERE assignment_id = :assignment_id ORDER BY order_date DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':assignment_id' => $assignment_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // --- Analytics Methods ---
     public function getTotalRevenue()
     {
