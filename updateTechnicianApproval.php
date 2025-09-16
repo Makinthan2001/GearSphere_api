@@ -3,6 +3,7 @@ require_once 'corsConfig.php';
 initializeEndpoint();
 
 require_once __DIR__ . '/DbConnector.php';
+require_once __DIR__ . '/Main Classes/Notification.php';
 
 header("Content-Type: application/json");
 
@@ -91,6 +92,29 @@ try {
         // Log the approval action (handle case where session user_id might not be set)
         $admin_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'unknown';
         error_log("Admin " . $admin_id . " updated technician " . $technician_id . " approval status to: " . $approve_status);
+
+        // Send notification to the technician about approval status change
+        try {
+            $notification = new Notification();
+            
+            if ($approve_status === 'approved') {
+                $message = "🎉 Congratulations! Your technician account has been approved by the admin.\n\nYou can now start accepting build requests from customers. Welcome to the GearSphere technician community!";
+            } else {
+                $message = "❌ Your technician account approval has been revoked by the admin.\n\nIf you believe this is an error, please contact the admin for clarification. You will not be able to accept new build requests until your account is re-approved.";
+            }
+            
+            $notificationSent = $notification->addNotification($technician_id, $message);
+            
+            if ($notificationSent) {
+                error_log("Notification sent to technician " . $technician_id . " about approval status change");
+            } else {
+                error_log("Failed to send notification to technician " . $technician_id);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error sending notification to technician: " . $e->getMessage());
+            // Don't fail the approval update if notification fails
+        }
 
         echo json_encode([
             'success' => true,
