@@ -24,7 +24,7 @@ class Mailer
         $this->mail->Password   = 'ilergdrkkdycocoh'; // SMTP password
         $this->mail->SMTPSecure = 'ssl';
         $this->mail->Port       = 465;
-
+        //mahinthan2001a@gmail.com  nmmivtjmwmufbszb
         $this->mail->setFrom('madhan2001ana@gmail.com', 'GearSphere');
     }
 
