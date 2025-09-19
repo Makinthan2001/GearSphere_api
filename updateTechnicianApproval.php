@@ -19,14 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Check if user is logged in and is admin
-// Temporary debugging - remove in production
+// Check if user is logged in in and is admin
 error_log("Session data: " . print_r($_SESSION, true));
 error_log("User ID: " . (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'not set'));
 error_log("User Type: " . (isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'not set'));
 
-// TEMPORARY: Skip authentication for testing purposes
-// TODO: Remove this in production and require proper admin authentication
 $skip_auth = false; // Set to true for testing without login
 
 if (!$skip_auth && (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin')) {
