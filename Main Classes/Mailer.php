@@ -20,12 +20,11 @@ class Mailer
         $this->mail->isSMTP();
         $this->mail->Host       = 'smtp.gmail.com';
         $this->mail->SMTPAuth   = true;
-        $this->mail->Username   = 'madhan2001ana@gmail.com'; // SMTP email
-        $this->mail->Password   = 'ilergdrkkdycocoh'; // SMTP password
+        $this->mail->Username   = '*************'; // SMTP email
+        $this->mail->Password   = '*************'; // SMTP password
         $this->mail->SMTPSecure = 'ssl';
         $this->mail->Port       = 465;
-        //mahinthan2001a@gmail.com  nmmivtjmwmufbszb
-        $this->mail->setFrom('madhan2001ana@gmail.com', 'GearSphere');
+        $this->mail->setFrom('*************', 'GearSphere');
     }
 
     // Enhanced method with neat templates
